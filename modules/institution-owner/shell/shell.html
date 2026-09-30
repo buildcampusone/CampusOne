@@ -1,0 +1,77 @@
+<!--
+  shell.html
+  ---------------------------------------------------------
+  Standalone static preview of the Institution Owner Shell —
+  mirrors modules/institution-admin/shell/shell.html and
+  modules/super-admin/shell/shell.html's role and <head>
+  stylesheet order 1:1 (fonts, shell.css, then each chrome
+  region's own CSS). Not part of the live app's routing
+  (main.js -> router.js -> shell.controller.js is the real
+  entry point, exactly as for Institution Admin) — this file
+  exists purely so the shell can be opened directly in a
+  browser to check layout without going through Firebase auth.
+
+  Phase 2A — renders the same SidebarPage/TopbarPage/
+  ActivityPanelPage/StatusBarPage/BottomNavPage templates the
+  real controller mounts, into the same #ioSidebar/#ioTopbar/
+  #ioContent/#ioActivityPanel/#ioStatusBar/#ioBottomNav slots
+  shell.page.js already defines — same pattern as Institution
+  Admin's shell.html. Previously (Part 1.1) these components
+  didn't exist yet for Owner, so this file rendered placeholder
+  labels into each slot instead; that is no longer the case for
+  Sidebar/Topbar/Activity Panel/Bottom Nav (wired since Part
+  1.4B-2.3) or Status Bar (wired since Phase 2A), so the
+  placeholder markup below has been replaced with the real
+  templates. #ioContent keeps a simple static stub, same as
+  Institution Admin's #iaContent does in its own preview —
+  the real router only takes over via shell.controller.js in
+  the live app.
+  ---------------------------------------------------------
+-->
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>CampusOne — Institution Owner</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="./shell.css" />
+  <!-- shell.css @imports this module's own Premium Bottom Nav
+       stylesheet (components/bottom-nav/bottom-nav.css) —
+       no separate link needed here. -->
+  <link rel="stylesheet" href="../components/sidebar/sidebar.css" />
+  <link rel="stylesheet" href="../topbar/topbar.css" />
+  <link rel="stylesheet" href="../activity-panel/activity-panel.css" />
+  <link rel="stylesheet" href="../status-bar/status-bar.css" />
+</head>
+<body>
+
+  <div id="app"></div>
+
+  <script type="module">
+    import { InstitutionOwnerShellPage } from "./shell.page.js";
+    import { SidebarPage } from "../components/sidebar/sidebar.page.js";
+    import { TopbarPage } from "../topbar/topbar.page.js";
+    import { ActivityPanelPage } from "../activity-panel/activity-panel.page.js";
+    import { StatusBarPage } from "../status-bar/status-bar.page.js";
+    import { BottomNavPage } from "../components/bottom-nav/bottom-nav.page.js";
+    import { BOTTOM_NAV_ITEMS } from "../components/bottom-nav/bottom-nav.config.js";
+
+    const app = document.getElementById("app");
+    app.innerHTML = InstitutionOwnerShellPage();
+
+    document.getElementById("ioSidebar").innerHTML = SidebarPage();
+    document.getElementById("ioTopbar").innerHTML = TopbarPage();
+    document.getElementById("ioActivityPanel").innerHTML = ActivityPanelPage();
+    document.getElementById("ioStatusBar").innerHTML = StatusBarPage();
+    document.getElementById("ioBottomNav").innerHTML = BottomNavPage(BOTTOM_NAV_ITEMS);
+    document.getElementById("ioContent").innerHTML =
+      '<div class="io-workspace-placeholder"><h2>Owner Workspace</h2><p>Static preview only — no auth, no live data. Open the app through index.html for the real flow.</p></div>';
+  </script>
+
+</body>
+</html>

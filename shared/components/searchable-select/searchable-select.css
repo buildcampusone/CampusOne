@@ -1,0 +1,98 @@
+/* ==========================================================
+   CampusOne
+   Searchable Select
+========================================================== */
+
+.sa-searchable-select-wrap{
+
+    position:relative;
+
+}
+
+.sa-searchable-select-list{
+
+    position:absolute;
+
+    top:calc(100% + 6px);
+
+    left:0;
+
+    right:0;
+
+    z-index:40;
+
+    max-height:220px;
+
+    overflow-y:auto;
+
+    margin:0;
+
+    padding:6px;
+
+    list-style:none;
+
+    background:var(--surface);
+
+    border:1px solid var(--border);
+
+    border-radius:var(--radius-md);
+
+    box-shadow:var(--shadow-md);
+
+}
+
+.sa-searchable-select-list li{
+
+    padding:9px 12px;
+
+    border-radius:var(--radius-sm);
+
+    font-size:14px;
+
+    color:var(--text);
+
+    cursor:pointer;
+
+}
+
+.sa-searchable-select-list li:hover{
+
+    background:var(--surface-secondary);
+
+}
+
+.sa-searchable-select-list li.is-selected{
+
+    background:rgba(37,99,235,.10);
+
+    color:var(--primary);
+
+    font-weight:600;
+
+}
+
+.sa-searchable-select-empty{
+
+    padding:9px 12px;
+
+    font-size:13px;
+
+    color:var(--text-light);
+
+    cursor:default !important;
+
+}
+
+.sa-searchable-select-empty:hover{
+
+    background:transparent !important;
+
+}
+
+.sa-searchable-select input:disabled{
+
+    opacity:.6;
+
+    cursor:not-allowed;
+
+}

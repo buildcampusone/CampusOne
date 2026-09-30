@@ -1,0 +1,119 @@
+/*=========================================
+=      SUPER ADMIN SHELL SKELETON          =
+-------------------------------------------
+ Sizing for these regions (sidebar width,
+ topbar/statusbar height, activity panel
+ width) already comes for free from
+ sidebar.css / topbar.css / status-bar.css
+ / activity-panel.css, because
+ shell.skeleton.js reuses their real class
+ names (.sa-sidebar-inner, .sa-topbar-layout,
+ .sa-activity-layout, .sa-statusbar-layout).
+ Everything in this file is purely internal
+ spacing for the skeleton shapes themselves.
+=========================================*/
+
+.skel-shell-sidebar-brand-text{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:6px;
+
+    min-width:0;
+
+}
+
+.skel-shell-sidebar-nav{
+
+    padding:20px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:28px;
+
+    overflow:hidden;
+
+}
+
+.skel-shell-sidebar-group{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:12px;
+
+}
+
+.skel-shell-bottomnav-item{
+
+    flex:1;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:12px 4px;
+
+}
+
+/*=========================================
+=      QUICK ACTIONS (Dashboard content)   =
+-------------------------------------------
+ Mirrors #quickActions' real grid in
+ dashboard.css (repeat(4,1fr), gap:20px) so
+ there is no jump when the real Quick
+ Actions cards replace this row.
+=========================================*/
+
+.skel-shell-quick-actions{
+
+    display:grid;
+
+    grid-template-columns:repeat(4, 1fr);
+
+    gap:20px;
+
+}
+
+@media (max-width:768px){
+
+    .skel-shell-quick-actions{
+
+        grid-template-columns:1fr;
+
+    }
+
+}
+
+/*=========================================
+=      ROUTER HAND-OFF PLACEHOLDER         =
+-------------------------------------------
+ router.super.js briefly mounts
+ <div class="sa-skeleton-page"> for the
+ instant between "shell skeleton was
+ showing" and "the dashboard module's own
+ render() has taken over" (dynamic import
+ resolving). Styling it here — rather than
+ leaving it as a bare, unstyled div — means
+ that instant reads as a continuation of the
+ same surface tone instead of a blank/white
+ flash. Router logic itself is untouched;
+ this only styles a class it already emits.
+=========================================*/
+
+.sa-skeleton-page{
+
+    min-height:60vh;
+
+    background:var(--surface);
+
+    border-radius:var(--radius-lg);
+
+}

@@ -1,0 +1,616 @@
+/* ==========================================================
+   CampusOne
+   Institution Owner Topbar
+   ----------------------------------------------------------
+   Part 1.3 — Owner Topbar V1
+   Same layout, spacing, typography, dropdown-panel pattern and
+   animation timing as modules/institution-admin/topbar/
+   topbar.css (io- instead of ia- namespace, built on the same
+   shared design tokens). No Search block — not in V1 scope for
+   Owner (see topbar.page.js header).
+========================================================== */
+
+.io-topbar-layout{
+
+    position:sticky;
+
+    top:0;
+
+    z-index:100;
+
+    /* Safe-area support, same as Institution Admin's Topbar —
+       height grows by the inset instead of a fixed value eating
+       into it. */
+    height:calc(72px + env(safe-area-inset-top, 0px));
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:24px;
+
+    padding:env(safe-area-inset-top, 0px) 28px 0;
+
+    background:var(--surface);
+
+    border-bottom:1px solid var(--border);
+
+}
+
+/* ==========================================================
+   Left
+========================================================== */
+
+.io-topbar-left{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
+
+    min-width:0;
+
+    flex-shrink:1;
+
+    max-width:min(480px, 60vw);
+
+}
+
+.io-page-title{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:4px;
+
+    min-width:0;
+
+}
+
+.io-page-title h1{
+
+    margin:0;
+
+    font-size:24px;
+
+    font-weight:700;
+
+    color:var(--text);
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+
+    white-space:nowrap;
+
+}
+
+.io-page-title span{
+
+    font-size:13px;
+
+    color:var(--text-secondary);
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+
+    white-space:nowrap;
+
+}
+
+/* ==========================================================
+   Right
+========================================================== */
+
+.io-topbar-right{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:16px;
+
+    /* No Search block competing for space in V1, so this side
+       is free to sit flush right. */
+    margin-left:auto;
+
+}
+
+.io-notification-wrap,
+.io-profile-wrap{
+
+    position:relative;
+
+}
+
+/* ==========================================================
+   Icon Button
+========================================================== */
+
+.io-icon-button{
+
+    position:relative;
+
+    width:44px;
+
+    height:44px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:transparent;
+
+    color:var(--text-secondary);
+
+    cursor:pointer;
+
+    transition:background var(--duration-hover) var(--ease-standard), color var(--duration-hover) var(--ease-standard);
+
+}
+
+.io-icon-button:hover{
+
+    background:color-mix(in srgb, var(--primary) 8%, transparent);
+
+    color:var(--primary);
+
+}
+
+.io-icon-button svg{
+
+    width:20px;
+
+    height:20px;
+
+}
+
+/* ==========================================================
+   Profile
+   ----------------------------------------------------------
+   Avatar sizing/shape itself comes from the shared Avatar
+   component's own co-avatar CSS (shared/components/avatar/
+   avatar.css) — nothing here re-declares that, only the
+   surrounding button chrome.
+========================================================== */
+
+.io-profile-button{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    padding:8px 14px;
+
+    border:none;
+
+    border-radius:14px;
+
+    background:transparent;
+
+    cursor:pointer;
+
+    transition:background var(--duration-hover) var(--ease-standard);
+
+}
+
+.io-profile-button:hover{
+
+    background:color-mix(in srgb, var(--primary) 8%, transparent);
+
+}
+
+.io-profile-info{
+
+    display:flex;
+
+    flex-direction:column;
+
+    min-width:0;
+
+    max-width:160px;
+
+}
+
+.io-profile-info strong{
+
+    font-size:14px;
+
+    color:var(--text);
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+
+    white-space:nowrap;
+
+}
+
+.io-profile-info small{
+
+    color:var(--text-secondary);
+
+    font-size:12px;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+
+    white-space:nowrap;
+
+}
+
+/* ==========================================================
+   Dropdown Panel (shared base — Notification + Profile)
+========================================================== */
+
+.io-dropdown-panel{
+
+    position:absolute;
+
+    top:calc(100% + 10px);
+
+    right:0;
+
+    z-index:200;
+
+    display:flex;
+
+    flex-direction:column;
+
+    background:var(--surface);
+
+    border:1px solid var(--border);
+
+    border-radius:16px;
+
+    box-shadow:0 16px 40px color-mix(in srgb, var(--text) 14%, transparent);
+
+    opacity:0;
+
+    transform:translateY(-8px) scale(.98);
+
+    transform-origin:top right;
+
+    transition:opacity var(--duration-hover) var(--ease-standard), transform var(--duration-hover) var(--ease-standard);
+
+    pointer-events:none;
+
+}
+
+.io-notification-wrap.is-open .io-dropdown-panel,
+.io-profile-wrap.is-open .io-dropdown-panel{
+
+    opacity:1;
+
+    transform:translateY(0) scale(1);
+
+    pointer-events:auto;
+
+}
+
+.io-dropdown-divider{
+
+    height:1px;
+
+    margin:6px 0;
+
+    background:var(--border);
+
+}
+
+/* ==========================================================
+   Notification Panel
+========================================================== */
+
+.io-notification-panel{
+
+    width:300px;
+
+}
+
+.io-dropdown-header{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    padding:16px 18px 12px;
+
+}
+
+.io-dropdown-header h3{
+
+    margin:0;
+
+    font-size:15px;
+
+    font-weight:700;
+
+    color:var(--text);
+
+}
+
+.io-dropdown-empty{
+
+    padding:32px 18px;
+
+    text-align:center;
+
+    color:var(--text-secondary);
+
+    font-size:13.5px;
+
+}
+
+/* ==========================================================
+   Profile Panel
+========================================================== */
+
+.io-profile-panel{
+
+    width:260px;
+
+    padding:8px;
+
+}
+
+.io-profile-panel-header{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    padding:10px 8px 14px;
+
+}
+
+.io-profile-menu-item{
+
+    width:100%;
+
+    text-align:left;
+
+    padding:10px 10px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:transparent;
+
+    color:var(--text);
+
+    font-size:13.5px;
+
+    cursor:pointer;
+
+    transition:background var(--duration-hover) var(--ease-standard);
+
+}
+
+.io-profile-menu-item:hover{
+
+    background:color-mix(in srgb, var(--primary) 8%, transparent);
+
+}
+
+.io-profile-logout-item{
+
+    width:100%;
+
+    text-align:left;
+
+    padding:10px 10px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:transparent;
+
+    color:var(--danger);
+
+    font-size:13.5px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:background var(--duration-hover) var(--ease-standard);
+
+}
+
+.io-profile-logout-item:hover{
+
+    background:color-mix(in srgb, var(--danger) 8%, transparent);
+
+}
+
+/* ==========================================================
+   Premium Mobile Header (<=1024px)
+   ----------------------------------------------------------
+   Final Premium Mobile UI Polish. Replaces the desktop white
+   surface with the official CampusOne Primary Blue on mobile/
+   tablet only — same <=1024px breakpoint the Premium Bottom
+   Nav already uses (components/bottom-nav/bottom-nav.css) —
+   so Header and Bottom Nav read as one continuous brand
+   surface, matching Primary Buttons / the Sidebar's own Active
+   Blue Pill. Desktop keeps today's white topbar untouched;
+   this is mobile-only polish, not a dashboard redesign.
+
+   Comes after every base/hover rule above so it wins the
+   cascade at matching widths without raising specificity or
+   touching a single selector's structure — same technique the
+   existing 768/480/420 responsive blocks below already use.
+
+   Status bar blend: .io-topbar-layout's own
+   padding-top:env(safe-area-inset-top) (declared above) is
+   inside this same background box, so painting the header blue
+   here automatically paints straight through the device status
+   bar inset too — header and status bar read as one continuous
+   surface with no extra markup or height change.
+
+   Rounded bottom corners were intentionally left off: no other
+   header/topbar in the shared design system rounds its bottom
+   edge today, so there's no existing token/pattern to reuse —
+   per the brief's own "only if already supported by the design
+   system" condition.
+========================================================== */
+
+@media (max-width:1024px){
+
+    .io-topbar-layout{
+
+        background:var(--primary);
+
+        border-bottom:none;
+
+        box-shadow:0 4px 16px color-mix(in srgb, var(--primary) 35%, transparent);
+
+    }
+
+    .io-page-title h1{
+
+        color:var(--text-white);
+
+    }
+
+    .io-page-title span{
+
+        color:color-mix(in srgb, var(--text-white) 78%, transparent);
+
+    }
+
+    .io-icon-button{
+
+        color:var(--text-white);
+
+    }
+
+    /* Overrides the base primary-tinted hover above — a blue
+       tint on a blue bar would be invisible, so this uses a
+       translucent white wash instead while keeping the icon
+       itself white. */
+    .io-icon-button:hover{
+
+        background:color-mix(in srgb, var(--text-white) 16%, transparent);
+
+        color:var(--text-white);
+
+    }
+
+    .io-profile-button:hover{
+
+        background:color-mix(in srgb, var(--text-white) 16%, transparent);
+
+    }
+
+    .io-profile-info strong{
+
+        color:var(--text-white);
+
+    }
+
+    .io-profile-info small{
+
+        color:color-mix(in srgb, var(--text-white) 78%, transparent);
+
+    }
+
+}
+
+/* ==========================================================
+   Responsive
+========================================================== */
+
+/* --bp-tablet (768px) */
+@media (max-width:768px){
+
+    .io-topbar-layout{
+
+        padding:0 18px;
+
+        gap:14px;
+
+    }
+
+    .io-page-title span{
+
+        display:none;
+
+    }
+
+}
+
+/* --bp-phone-lg (480px) */
+@media (max-width:480px){
+
+    .io-profile-info{
+
+        display:none;
+
+    }
+
+}
+
+/* --bp-phone (420px) */
+@media (max-width:420px){
+
+    .io-notification-panel,
+    .io-profile-panel{
+
+        position:fixed;
+
+        top:64px;
+
+        right:12px;
+
+        left:12px;
+
+        width:auto;
+
+    }
+
+}
+
+/* ==========================================================
+   Reduced motion
+   ----------------------------------------------------------
+   Same per-component override convention as Institution
+   Admin's own topbar.css — every transition declared above is
+   listed here explicitly. State changes (dropdown open/closed,
+   hover/press feedback) still apply instantly; only the
+   animated transition between states is removed.
+========================================================== */
+
+@media (prefers-reduced-motion:reduce){
+
+    .io-icon-button,
+    .io-profile-button,
+    .io-dropdown-panel,
+    .io-profile-menu-item,
+    .io-profile-logout-item{
+
+        transition:none;
+
+    }
+
+}

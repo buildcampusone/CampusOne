@@ -1,0 +1,62 @@
+<!--
+  shell.html
+  ---------------------------------------------------------
+  Standalone static preview of the Institution Admin Shell —
+  mirrors modules/super-admin/shell/shell.html's role and
+  <head> stylesheet order 1:1 (fonts, shell.css, then each
+  chrome region's own CSS). Not part of the live app's
+  routing (main.js -> router.js -> shell.controller.js is
+  the real entry point, exactly as for Super Admin) — this
+  file exists purely so the shell can be opened directly in
+  a browser to check layout without going through Firebase
+  auth. Renders the same SidebarPage/TopbarPage/
+  ActivityPanelPage/StatusBarPage/BottomNavPage templates the
+  real controller mounts, into the same #iaSidebar/#iaTopbar/
+  #iaContent/#iaActivityPanel/#iaStatusBar/#iaBottomNav slots
+  shell.page.js already defines.
+  ---------------------------------------------------------
+-->
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>CampusOne — Institution Admin</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="./shell.css" />
+  <link rel="stylesheet" href="../components/sidebar/sidebar.css" />
+  <link rel="stylesheet" href="../topbar/topbar.css" />
+  <link rel="stylesheet" href="../activity-panel/activity-panel.css" />
+  <link rel="stylesheet" href="../status-bar/status-bar.css" />
+  <link rel="stylesheet" href="../../../shared/components/bottom-nav/bottom-nav.css" />
+</head>
+<body>
+
+  <div id="app"></div>
+
+  <script type="module">
+    import { InstitutionAdminShellPage } from "./shell.page.js";
+    import { SidebarPage } from "../components/sidebar/sidebar.page.js";
+    import { TopbarPage } from "../topbar/topbar.page.js";
+    import { ActivityPanelPage } from "../activity-panel/activity-panel.page.js";
+    import { StatusBarPage } from "../status-bar/status-bar.page.js";
+    import { BottomNavPage } from "../components/bottom-nav/bottom-nav.page.js";
+
+    const app = document.getElementById("app");
+    app.innerHTML = InstitutionAdminShellPage();
+
+    document.getElementById("iaSidebar").innerHTML = SidebarPage();
+    document.getElementById("iaTopbar").innerHTML = TopbarPage();
+    document.getElementById("iaActivityPanel").innerHTML = ActivityPanelPage();
+    document.getElementById("iaStatusBar").innerHTML = StatusBarPage();
+    document.getElementById("iaBottomNav").innerHTML = BottomNavPage();
+    document.getElementById("iaContent").innerHTML =
+      '<div class="ia-dashboard-stub"><h2>Dashboard</h2><p>Static preview only — no auth, no live data. Open the app through index.html for the real flow.</p></div>';
+  </script>
+
+</body>
+</html>

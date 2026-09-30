@@ -1,0 +1,10 @@
+# Never commit local environment values (real email, service
+# account path) — copy .env.example to .env instead.
+.env
+
+# Never commit any service account / credential JSON that might
+# get placed in this folder. package.json and package-lock.json
+# are explicitly allowed back through.
+*.json
+!package.json
+!package-lock.json

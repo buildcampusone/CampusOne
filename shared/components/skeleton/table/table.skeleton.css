@@ -1,0 +1,27 @@
+/*=========================================
+=         TABLE SKELETON                  =
+=========================================*/
+
+.skel-table{
+
+    width:100%;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:16px;
+
+}
+
+.skel-table-row{
+
+    display:grid;
+
+    grid-template-columns:repeat(var(--skel-table-columns), 1fr);
+
+    gap:16px;
+
+    align-items:center;
+
+}

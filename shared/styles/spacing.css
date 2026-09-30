@@ -1,0 +1,46 @@
+/*=========================================
+=         SPACING UTILITIES               =
+=========================================*/
+
+/* Padding */
+
+.co-p-4{padding:var(--space-4);}
+.co-p-8{padding:var(--space-8);}
+.co-p-12{padding:var(--space-12);}
+.co-p-16{padding:var(--space-16);}
+.co-p-20{padding:var(--space-20);}
+.co-p-24{padding:var(--space-24);}
+.co-p-32{padding:var(--space-32);}
+
+/* Margin */
+
+.co-m-4{margin:var(--space-4);}
+.co-m-8{margin:var(--space-8);}
+.co-m-12{margin:var(--space-12);}
+.co-m-16{margin:var(--space-16);}
+.co-m-20{margin:var(--space-20);}
+.co-m-24{margin:var(--space-24);}
+.co-m-32{margin:var(--space-32);}
+
+/* Margin Top */
+
+.co-mt-8{margin-top:var(--space-8);}
+.co-mt-16{margin-top:var(--space-16);}
+.co-mt-24{margin-top:var(--space-24);}
+.co-mt-32{margin-top:var(--space-32);}
+
+/* Margin Bottom */
+
+.co-mb-8{margin-bottom:var(--space-8);}
+.co-mb-16{margin-bottom:var(--space-16);}
+.co-mb-24{margin-bottom:var(--space-24);}
+.co-mb-32{margin-bottom:var(--space-32);}
+
+/* Gap */
+
+.co-gap-8{gap:var(--space-8);}
+.co-gap-12{gap:var(--space-12);}
+.co-gap-16{gap:var(--space-16);}
+.co-gap-20{gap:var(--space-20);}
+.co-gap-24{gap:var(--space-24);}
+.co-gap-32{gap:var(--space-32);}

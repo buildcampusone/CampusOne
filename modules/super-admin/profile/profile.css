@@ -1,0 +1,1057 @@
+/* ==========================================================
+   CampusOne
+   Super Admin Profile
+========================================================== */
+
+.sa-profile{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:24px;
+
+    padding:28px;
+
+}
+
+.sa-profile-header h2{
+
+    margin:0;
+
+    font-size:28px;
+
+    font-weight:700;
+
+    color:var(--text);
+
+}
+
+.sa-profile-header p{
+
+    margin-top:6px;
+
+    color:var(--text-secondary);
+
+    font-size:14px;
+
+}
+
+/* ==========================================================
+   Layout — tabs (left) + content (right)
+========================================================== */
+
+.sa-profile-layout{
+
+    display:grid;
+
+    grid-template-columns:220px 1fr;
+
+    gap:24px;
+
+    align-items:start;
+
+}
+
+@media (max-width:900px){
+
+    .sa-profile-layout{
+
+        grid-template-columns:1fr;
+
+    }
+
+}
+
+.sa-profile-tabs{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:4px;
+
+    background:var(--surface);
+
+    border:1px solid var(--border);
+
+    border-radius:var(--radius-lg);
+
+    padding:10px;
+
+    position:sticky;
+
+    top:28px;
+
+}
+
+@media (max-width:900px){
+
+    .sa-profile-tabs{
+
+        position:static;
+
+        flex-direction:row;
+
+        overflow-x:auto;
+
+    }
+
+}
+
+.sa-profile-tab{
+
+    text-align:left;
+
+    padding:10px 14px;
+
+    border:none;
+
+    background:transparent;
+
+    border-radius:var(--radius-sm);
+
+    font-size:14px;
+
+    font-weight:500;
+
+    color:var(--text-secondary);
+
+    cursor:pointer;
+
+    white-space:nowrap;
+
+    transition:background var(--transition-fast, .2s ease), color var(--transition-fast, .2s ease);
+
+}
+
+.sa-profile-tab:hover{
+
+    background:var(--surface-secondary);
+
+    color:var(--text);
+
+}
+
+.sa-profile-tab.active{
+
+    background:var(--primary);
+
+    color:var(--text-white);
+
+}
+
+.sa-profile-content{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:20px;
+
+    min-width:0;
+
+}
+
+.sa-profile-tab-panel{
+
+    display:none;
+
+}
+
+.sa-profile-tab-panel.active{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:20px;
+
+}
+
+/* ==========================================================
+   Profile Card (Overview)
+========================================================== */
+
+.sa-profile-card{
+
+    display:flex;
+
+    gap:24px;
+
+    padding:28px;
+
+    background:var(--surface);
+
+    border:1px solid var(--border);
+
+    border-radius:var(--radius-lg);
+
+    flex-wrap:wrap;
+
+}
+
+.sa-profile-avatar-wrap{
+
+    position:relative;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    gap:12px;
+
+}
+
+.sa-profile-avatar-lg{
+
+    position:relative;
+
+    width:96px;
+
+    height:96px;
+
+    border-radius:50%;
+
+    background:var(--primary-gradient, var(--primary));
+
+    color:var(--text-white);
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:32px;
+
+    font-weight:700;
+
+    overflow:hidden;
+
+}
+
+.sa-profile-avatar-lg img{
+
+    width:100%;
+
+    height:100%;
+
+    object-fit:cover;
+
+}
+
+/* ----------------------------------------------------------
+   Avatar hover/click overlay — full-circle button that sits
+   on top of the photo. Invisible until hover/focus on desktop;
+   always tappable on touch devices since the whole circle is
+   the hit target.
+---------------------------------------------------------- */
+
+.sa-avatar-hover-btn{
+
+    position:absolute;
+
+    inset:0;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:4px;
+
+    border:none;
+
+    border-radius:50%;
+
+    background:rgba(15,23,42,.55);
+
+    color:#fff;
+
+    cursor:pointer;
+
+    opacity:0;
+
+    transition:opacity var(--transition-fast);
+
+}
+
+.sa-avatar-hover-btn svg{
+
+    width:20px;
+
+    height:20px;
+
+}
+
+.sa-avatar-hover-btn span{
+
+    font-size:10px;
+
+    font-weight:600;
+
+    letter-spacing:.02em;
+
+}
+
+.sa-profile-avatar-lg:hover .sa-avatar-hover-btn,
+.sa-avatar-hover-btn:focus-visible,
+.sa-avatar-hover-btn[aria-expanded="true"]{
+
+    opacity:1;
+
+}
+
+.sa-avatar-menu{
+
+    position:absolute;
+
+    top:100%;
+
+    left:50%;
+
+    transform:translateX(-50%);
+
+    margin-top:8px;
+
+    z-index:30;
+
+    min-width:190px;
+
+    padding:6px;
+
+    background:var(--surface);
+
+    border:1px solid var(--border);
+
+    border-radius:var(--radius-md);
+
+    box-shadow:var(--shadow-md);
+
+}
+
+.sa-avatar-menu button{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    width:100%;
+
+    padding:9px 10px;
+
+    border:none;
+
+    background:transparent;
+
+    color:var(--text);
+
+    font-size:13.5px;
+
+    font-weight:500;
+
+    border-radius:var(--radius-sm);
+
+    cursor:pointer;
+
+    text-align:left;
+
+}
+
+.sa-avatar-menu button svg{
+
+    width:16px;
+
+    height:16px;
+
+    flex-shrink:0;
+
+}
+
+.sa-avatar-menu button:hover{
+
+    background:var(--surface-secondary);
+
+}
+
+.sa-avatar-menu-danger{
+
+    color:var(--danger) !important;
+
+}
+
+/* ----------------------------------------------------------
+   Avatar Preview Lightbox
+---------------------------------------------------------- */
+
+.sa-avatar-lightbox{
+
+    position:fixed;
+
+    inset:0;
+
+    z-index:1100;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+}
+
+.sa-avatar-lightbox[hidden]{
+
+    display:none;
+
+}
+
+.sa-avatar-lightbox-backdrop{
+
+    position:absolute;
+
+    inset:0;
+
+    background:rgba(3,7,18,.72);
+
+}
+
+.sa-avatar-lightbox-content{
+
+    position:relative;
+
+    z-index:1;
+
+    max-width:min(420px,86vw);
+
+    max-height:86vh;
+
+}
+
+.sa-avatar-lightbox-content img{
+
+    display:block;
+
+    width:100%;
+
+    height:100%;
+
+    max-height:86vh;
+
+    object-fit:contain;
+
+    border-radius:var(--radius-lg);
+
+    box-shadow:var(--shadow-lg);
+
+}
+
+.sa-avatar-lightbox-close{
+
+    position:absolute;
+
+    top:-14px;
+
+    right:-14px;
+
+    width:32px;
+
+    height:32px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border:none;
+
+    border-radius:50%;
+
+    background:var(--surface);
+
+    color:var(--text);
+
+    cursor:pointer;
+
+    box-shadow:var(--shadow-md);
+
+}
+
+.sa-avatar-lightbox-close svg{
+
+    width:16px;
+
+    height:16px;
+
+}
+
+.sa-profile-identity{
+
+    flex:1;
+
+    min-width:240px;
+
+}
+
+.sa-profile-identity-row{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    flex-wrap:wrap;
+
+}
+
+.sa-profile-identity-row h3{
+
+    margin:0;
+
+    font-size:22px;
+
+    font-weight:700;
+
+    color:var(--text);
+
+}
+
+.sa-badge{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    padding:3px 10px;
+
+    border-radius:var(--radius-full);
+
+    font-size:12px;
+
+    font-weight:600;
+
+}
+
+.sa-badge-primary{
+
+    background:rgba(37,99,235,.12);
+
+    color:var(--primary);
+
+}
+
+.sa-badge-success{
+
+    background:rgba(16,185,129,.14);
+
+    color:var(--success);
+
+}
+
+.sa-badge-danger{
+
+    background:rgba(239,68,68,.14);
+
+    color:var(--danger);
+
+}
+
+.sa-profile-meta-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:16px;
+
+    margin-top:18px;
+
+}
+
+@media (max-width:640px){
+
+    .sa-profile-meta-grid{
+
+        grid-template-columns:1fr 1fr;
+
+    }
+
+}
+
+.sa-profile-meta-item{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:4px;
+
+}
+
+.sa-meta-label{
+
+    font-size:12px;
+
+    color:var(--text-light);
+
+}
+
+.sa-meta-value{
+
+    font-size:14px;
+
+    font-weight:500;
+
+    color:var(--text);
+
+    word-break:break-word;
+
+}
+
+/* ==========================================================
+   Section wrapper (reused across tabs)
+========================================================== */
+
+.sa-profile-section{
+
+    padding:24px;
+
+    background:var(--surface);
+
+    border:1px solid var(--border);
+
+    border-radius:var(--radius-lg);
+
+}
+
+.sa-profile-section h3{
+
+    margin:0 0 4px;
+
+    font-size:17px;
+
+    font-weight:700;
+
+    color:var(--text);
+
+}
+
+.sa-section-hint{
+
+    margin:0 0 16px;
+
+    font-size:13px;
+
+    color:var(--text-secondary);
+
+}
+
+.sa-profile-section-header{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    margin-bottom:16px;
+
+    flex-wrap:wrap;
+
+    gap:10px;
+
+}
+
+.sa-profile-section-header h3{
+
+    margin:0;
+
+}
+
+/* ==========================================================
+   Personal Info Form
+========================================================== */
+
+.sa-form-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:16px;
+
+    margin-top:16px;
+
+}
+
+@media (max-width:640px){
+
+    .sa-form-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+}
+
+.sa-profile-form-actions{
+
+    display:flex;
+
+    justify-content:flex-end;
+
+    gap:10px;
+
+    margin-top:18px;
+
+}
+
+/* ==========================================================
+   Themed Input Override (Profile module only)
+   ----------------------------------------------------------
+   BUG (fixed): Personal Information + Change Password reuse
+   the shared Input component (.input-group / .input-label /
+   .input-wrapper / .input) from
+   shared/components/input/input.css. That component was
+   built for Login/Register/Forgot-Password/Institution-
+   Registration — pages that are ALWAYS dark, theme-toggle
+   independent — so its text/background colors are hardcoded
+   to white (color:#FFFFFF, background:rgba(255,255,255,.06),
+   etc). Profile IS theme-aware, so:
+     - Dark mode: white text on dark --surface -> visible ✅
+     - Light mode: same white text/near-white translucent bg,
+       now on a WHITE --surface -> invisible ❌
+   Fix: re-theme the same classes using CSS variables, scoped
+   to .sa-profile-section only. Dark mode looks unchanged
+   (the var() values are close to the old hardcoded ones);
+   Login/Register/etc are untouched since they don't have a
+   .sa-profile-section ancestor.
+========================================================== */
+
+.sa-profile-section .input-label{
+
+    color:var(--text-secondary);
+
+}
+
+.sa-profile-section .input-icon{
+
+    color:var(--text-light);
+
+}
+
+.sa-profile-section .input-action{
+
+    color:var(--text-secondary);
+
+}
+
+.sa-profile-section .input-action:hover{
+
+    color:var(--text);
+
+}
+
+.sa-profile-section .input{
+
+    background:var(--surface-secondary);
+
+    border:1px solid var(--border);
+
+    color:var(--text);
+
+}
+
+.sa-profile-section .input::placeholder{
+
+    color:var(--text-light);
+
+}
+
+.sa-profile-section .input:focus{
+
+    background:var(--surface-secondary);
+
+    border-color:var(--primary);
+
+    box-shadow:0 0 0 4px rgba(37,99,235,.14);
+
+}
+
+.sa-profile-section .input-wrapper:focus-within .input-icon,
+.sa-profile-section .input-wrapper:focus-within .input-action{
+
+    color:var(--primary);
+
+}
+
+.sa-profile-section .input:-webkit-autofill,
+.sa-profile-section .input:-webkit-autofill:hover,
+.sa-profile-section .input:-webkit-autofill:focus{
+
+    -webkit-text-fill-color:var(--text);
+
+    -webkit-box-shadow:0 0 0 1000px var(--surface-secondary) inset;
+
+    transition:background-color 9999s;
+
+}
+
+.sa-field-error{
+
+    min-height:16px;
+
+    font-size:12px;
+
+    color:var(--danger);
+
+    margin:4px 0 0;
+
+}
+
+.sa-form-status{
+
+    min-height:18px;
+
+    font-size:13px;
+
+    margin:12px 0 0;
+
+}
+
+.sa-form-status-success{
+
+    color:var(--success);
+
+}
+
+.sa-form-status-error{
+
+    color:var(--danger);
+
+}
+
+/* ==========================================================
+   Login History Table
+========================================================== */
+
+.sa-table-wrap{
+
+    overflow-x:auto;
+
+}
+
+.sa-table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    font-size:13px;
+
+}
+
+.sa-table th{
+
+    text-align:left;
+
+    padding:10px 12px;
+
+    color:var(--text-light);
+
+    font-weight:600;
+
+    border-bottom:1px solid var(--border);
+
+    white-space:nowrap;
+
+}
+
+.sa-table td{
+
+    padding:12px;
+
+    color:var(--text);
+
+    border-bottom:1px solid var(--border);
+
+    white-space:nowrap;
+
+}
+
+/* ==========================================================
+   Active Sessions
+========================================================== */
+
+.sa-session-list{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:10px;
+
+}
+
+.sa-session-item{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    padding:14px 16px;
+
+    background:var(--surface-secondary);
+
+    border-radius:var(--radius-md);
+
+    gap:12px;
+
+    flex-wrap:wrap;
+
+}
+
+.sa-session-device{
+
+    margin:0;
+
+    font-size:14px;
+
+    font-weight:600;
+
+    color:var(--text);
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+}
+
+.sa-session-meta{
+
+    margin:2px 0 0;
+
+    font-size:12px;
+
+    color:var(--text-secondary);
+
+}
+
+/* ==========================================================
+   Appearance — Theme Switch
+========================================================== */
+
+.sa-theme-switch{
+
+    display:flex;
+
+    gap:14px;
+
+}
+
+.sa-theme-option{
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    gap:8px;
+
+    padding:14px;
+
+    border:2px solid var(--border);
+
+    border-radius:var(--radius-md);
+
+    background:var(--surface-secondary);
+
+    cursor:pointer;
+
+    font-size:13px;
+
+    font-weight:500;
+
+    color:var(--text-secondary);
+
+    min-width:100px;
+
+}
+
+.sa-theme-option.active{
+
+    border-color:var(--primary);
+
+    color:var(--text);
+
+}
+
+.sa-theme-swatch{
+
+    width:48px;
+
+    height:32px;
+
+    border-radius:8px;
+
+    border:1px solid var(--border);
+
+}
+
+.sa-theme-swatch-light{
+
+    background:#F8FAFC;
+
+}
+
+.sa-theme-swatch-dark{
+
+    background:#030712;
+
+}
+
+/* ==========================================================
+   Buttons used only in Profile (ghost / danger outline)
+   Reuses .btn base class already defined globally.
+========================================================== */
+
+.btn-ghost{
+
+    background:transparent;
+
+    border:1px solid var(--border);
+
+    color:var(--text);
+
+}
+
+.btn-danger-outline{
+
+    background:transparent;
+
+    border:1px solid var(--danger);
+
+    color:var(--danger);
+
+}
+
+.btn-danger-outline:hover{
+
+    background:rgba(239,68,68,.08);
+
+}

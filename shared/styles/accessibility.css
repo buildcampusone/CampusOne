@@ -1,0 +1,119 @@
+/*=========================================
+=         CAMPUSONE ACCESSIBILITY          =
+=========================================*/
+
+/* Screen-reader-only content — visually hidden, still read by
+   assistive tech. Use for text that gives context an icon-only
+   control needs but a sighted user already gets from layout. */
+
+.sr-only{
+
+    position:absolute;
+    width:1px;
+    height:1px;
+    padding:0;
+    margin:-1px;
+    overflow:hidden;
+    clip:rect(0,0,0,0);
+    white-space:nowrap;
+    border:0;
+
+}
+
+/* Skip Link — first focusable element on any page that has a
+   persistent sidebar/topbar, so keyboard users can jump past
+   navigation straight to the main content. Off-screen until
+   focused. */
+
+.co-skip-link{
+
+    position:absolute;
+    left:-9999px;
+    top:0;
+    z-index:var(--z-loading);
+    background:var(--primary);
+    color:var(--text-white);
+    padding:var(--space-12) var(--space-16);
+    border-radius:var(--radius-sm);
+
+}
+
+.co-skip-link:focus{
+
+    left:var(--space-16);
+    top:var(--space-16);
+
+}
+
+/* Global focus-visible fallback — every native form control /
+   .btn already has its own richer focus treatment (input.css,
+   button.css). This is the catch-all for anything that doesn't
+   go through those, so keyboard focus is never invisible
+   anywhere in the app. */
+
+:focus-visible{
+
+    outline:2px solid var(--primary);
+    outline-offset:2px;
+
+}
+
+/* ----------------------------------------------------------
+   Reduced Motion — master switch for the Motion System
+   ----------------------------------------------------------
+   Each component (button.css, active-pill.css, toast.css) also
+   carries its own @media block next to the rule it's guarding —
+   co-located on purpose, so nobody adds a new hover transform
+   there without immediately seeing the reduced-motion line
+   right above/below it. This block is the second,
+   belt-and-suspenders layer specifically for the utility
+   classes in motion.css, consolidated here because "does the
+   user want less motion" is an accessibility concern, not a
+   timing one — motion.css owns curves/durations, this file
+   owns the accessibility override on top of them.
+---------------------------------------------------------- */
+
+@media (prefers-reduced-motion:reduce){
+
+    .co-card-hover,
+    .co-press,
+    .co-spring-in,
+    .co-shake,
+    .co-toast-in,
+    .co-page-in,
+    .co-page-out,
+    .co-modal-in,
+    .co-drawer-in,
+    .co-bottom-sheet-in,
+    .co-stagger-item{
+
+        animation:none !important;
+        transition:none !important;
+
+    }
+
+    .co-card-hover:hover,
+    .co-press:hover,
+    .co-press:active{
+
+        transform:none !important;
+
+    }
+
+    .co-stagger-item{
+
+        opacity:1 !important;
+
+    }
+
+    /* Ripple (shared/core/ripple) checks prefers-reduced-motion
+       in JS before ever creating a ripple dot, so there's
+       nothing left running here to turn off — this rule just
+       guarantees no stray dot is ever visible if one existed. */
+    .co-ripple-dot{
+
+        display:none;
+
+    }
+
+}

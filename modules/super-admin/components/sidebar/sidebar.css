@@ -1,0 +1,921 @@
+/* ==========================================================
+   CampusOne
+   Super Admin Sidebar
+   ----------------------------------------------------------
+   #saSidebar (rendered by shell.page.js) is the ONE sidebar
+   root element. Everything below targets it directly or via
+   its state classes:
+     .is-collapsed    desktop icon-rail state
+     .is-mobile-open  mobile drawer visible
+   .sa-sidebar-inner is the content rendered by this module.
+========================================================== */
+
+:root{
+
+    --sa-sidebar-w:280px;
+
+    --sa-sidebar-w-collapsed:84px;
+
+    --sa-sidebar-ease:cubic-bezier(.22,1,.36,1);
+
+}
+
+.sa-sidebar{
+
+    width:var(--sa-sidebar-w);
+
+    min-width:var(--sa-sidebar-w);
+
+    height:100vh;
+
+    background:var(--surface);
+
+    border-right:1px solid var(--border);
+
+    overflow:hidden;
+
+    position:relative;
+
+    flex-shrink:0;
+
+    transition:width .28s var(--sa-sidebar-ease), min-width .28s var(--sa-sidebar-ease);
+
+}
+
+.sa-sidebar-inner{
+
+    width:var(--sa-sidebar-w);
+
+    height:100%;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:space-between;
+
+}
+
+/* ==========================================================
+   Brand
+========================================================== */
+
+.sa-sidebar-brand{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:16px;
+
+    padding:24px;
+
+    border-bottom:1px solid var(--border);
+
+    position:relative;
+
+}
+
+.sa-sidebar-logo{
+
+    width:52px;
+
+    height:52px;
+
+    object-fit:contain;
+
+    flex-shrink:0;
+
+}
+
+.sa-sidebar-brand-text{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:4px;
+
+    min-width:0;
+
+    overflow:hidden;
+
+    white-space:nowrap;
+
+    opacity:1;
+
+    transition:opacity .18s var(--sa-sidebar-ease);
+
+}
+
+.sa-sidebar-title{
+
+    margin:0;
+
+    font-size:20px;
+
+    font-weight:700;
+
+    color:var(--text);
+
+}
+
+.sa-sidebar-subtitle{
+
+    font-size:13px;
+
+    color:var(--text-secondary);
+
+}
+
+/* ==========================================================
+   Desktop Collapse Button
+========================================================== */
+
+.sa-sidebar-collapse-btn{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    width:28px;
+
+    height:28px;
+
+    flex-shrink:0;
+
+    margin-left:auto;
+
+    border:1px solid var(--border);
+
+    border-radius:50%;
+
+    background:var(--surface);
+
+    color:var(--text-secondary);
+
+    cursor:pointer;
+
+    transition:background .2s var(--sa-sidebar-ease), color .2s var(--sa-sidebar-ease), transform .28s var(--sa-sidebar-ease), box-shadow .2s var(--sa-sidebar-ease);
+
+}
+
+.sa-sidebar-mobile-close{
+
+    display:none;
+
+}
+
+.sa-sidebar-collapse-btn:hover{
+
+    background:rgba(37,99,235,.08);
+
+    color:var(--primary);
+
+}
+
+.sa-sidebar-collapse-btn:active{
+
+    transform:scale(.92);
+
+}
+
+.sa-collapse-icon{
+
+    width:16px;
+
+    height:16px;
+
+    transition:transform .28s var(--sa-sidebar-ease);
+
+}
+
+.sa-sidebar.is-collapsed .sa-collapse-icon{
+
+    transform:rotate(180deg);
+
+}
+
+/* ==========================================================
+   Navigation
+========================================================== */
+
+.sa-sidebar-nav{
+
+    flex:1;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:8px;
+
+    padding:20px 16px;
+
+    overflow-y:auto;
+
+    overflow-x:hidden;
+
+}
+
+.sa-nav-item{
+
+    position:relative;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+    width:100%;
+
+    padding:14px 18px;
+
+    border:none;
+
+    border-radius:14px;
+
+    background:transparent;
+
+    color:var(--text-secondary);
+
+    cursor:pointer;
+
+    overflow:hidden;
+
+    isolation:isolate;
+
+    transition:background .22s var(--sa-sidebar-ease), color .22s var(--sa-sidebar-ease), box-shadow .22s var(--sa-sidebar-ease);
+
+}
+
+.sa-nav-item:hover{
+
+    background:rgba(37,99,235,.08);
+
+    color:var(--primary);
+
+}
+
+.sa-nav-item:focus-visible{
+
+    outline:2px solid var(--primary);
+
+    outline-offset:2px;
+
+}
+
+.sa-nav-item.active{
+
+    background:var(--primary);
+
+    color:#fff;
+
+    box-shadow:0 10px 24px rgba(37,99,235,.28);
+
+}
+
+/* Active indicator bar — a subtle premium accent, not just a
+   solid fill, so the active state reads clearly even when a
+   theme's primary color is muted. */
+
+.sa-nav-active-indicator{
+
+    position:absolute;
+
+    left:0;
+
+    top:50%;
+
+    transform:translateY(-50%) scaleY(0);
+
+    width:4px;
+
+    height:60%;
+
+    border-radius:0 4px 4px 0;
+
+    background:#fff;
+
+    opacity:.9;
+
+    transition:transform .22s var(--sa-sidebar-ease);
+
+}
+
+.sa-nav-item.active .sa-nav-active-indicator{
+
+    transform:translateY(-50%) scaleY(1);
+
+}
+
+/* Ripple — a lightweight radial pulse on click, CSS-only via
+   a pseudo-element driven by :active so no JS timers/cleanup
+   are needed to keep the sidebar's event-listener count flat. */
+
+.sa-nav-item::after{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    border-radius:inherit;
+
+    background:radial-gradient(circle, rgba(255,255,255,.35) 0%, transparent 70%);
+
+    opacity:0;
+
+    transform:scale(.4);
+
+    transition:opacity .5s ease, transform .5s ease;
+
+    pointer-events:none;
+
+}
+
+.sa-nav-item:active::after{
+
+    opacity:1;
+
+    transform:scale(1.4);
+
+    transition-duration:0s;
+
+}
+
+.sa-nav-icon{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    width:22px;
+
+    height:22px;
+
+    flex-shrink:0;
+
+}
+
+.sa-nav-icon svg{
+
+    width:20px;
+
+    height:20px;
+
+}
+
+.sa-nav-label{
+
+    font-size:15px;
+
+    font-weight:600;
+
+    white-space:nowrap;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+
+}
+
+.sa-nav-group-title{
+
+    margin:8px 18px 4px;
+
+    font-size:11px;
+
+    font-weight:700;
+
+    letter-spacing:.06em;
+
+    text-transform:uppercase;
+
+    color:var(--text-light, var(--text-secondary));
+
+    white-space:nowrap;
+
+    overflow:hidden;
+
+}
+
+/* ==========================================================
+   Footer
+========================================================== */
+
+.sa-sidebar-footer{
+
+    padding:20px;
+
+    border-top:1px solid var(--border);
+
+    display:flex;
+
+    justify-content:flex-start;
+
+    align-items:center;
+
+}
+
+.sa-logout-btn{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:12px;
+
+    width:auto;
+
+    min-width:170px;
+
+    height:56px;
+
+    padding:0 20px;
+
+    border:1px solid rgba(239,68,68,.22);
+
+    border-radius:18px;
+
+    background:rgba(239,68,68,.06);
+
+    color:#ef4444;
+
+    cursor:pointer;
+
+    transition:all .25s var(--sa-sidebar-ease);
+
+}
+
+.sa-logout-btn:hover{
+
+    background:rgba(239,68,68,.12);
+
+    border-color:#ef4444;
+
+    transform:translateY(-2px);
+
+    box-shadow:0 10px 24px rgba(239,68,68,.18);
+
+}
+
+.sa-logout-btn:active{
+
+    transform:scale(.97);
+
+}
+
+.sa-logout-btn:focus-visible{
+
+    outline:2px solid #ef4444;
+
+    outline-offset:2px;
+
+}
+
+.sa-logout-btn svg{
+
+    width:26px;
+
+    height:26px;
+
+    flex-shrink:0;
+
+}
+
+.sa-logout-label{
+
+    white-space:nowrap;
+
+    overflow:hidden;
+
+    font-size:16px;
+
+    font-weight:600;
+
+    line-height:1;
+
+}
+
+/* ==========================================================
+   Desktop Collapsed (icon rail) — Phase 2B.2 / 2B.6
+========================================================== */
+
+@media (min-width:1025px){
+
+    .sa-sidebar.is-collapsed{
+
+        width:var(--sa-sidebar-w-collapsed);
+
+        min-width:var(--sa-sidebar-w-collapsed);
+
+    }
+
+    .sa-sidebar.is-collapsed .sa-sidebar-inner{
+
+        width:var(--sa-sidebar-w-collapsed);
+
+    }
+
+    .sa-sidebar.is-collapsed .sa-sidebar-brand-text,
+    .sa-sidebar.is-collapsed .sa-nav-label,
+    .sa-sidebar.is-collapsed .sa-nav-group-title,
+    .sa-sidebar.is-collapsed .sa-logout-label{
+
+        opacity:0;
+
+        width:0;
+
+        pointer-events:none;
+
+    }
+
+    .sa-sidebar.is-collapsed .sa-sidebar-brand{
+
+        justify-content:center;
+
+        padding:24px 12px;
+
+    }
+
+    .sa-sidebar.is-collapsed .sa-sidebar-collapse-btn{
+
+        position:absolute;
+
+        right:-14px;
+
+        top:24px;
+
+        background:var(--surface);
+
+        box-shadow:0 2px 8px rgba(16,24,40,.12);
+
+    }
+
+    .sa-sidebar.is-collapsed .sa-nav-item,
+    .sa-sidebar.is-collapsed .sa-logout-btn{
+
+        justify-content:center;
+
+        padding:14px;
+
+    }
+
+    /* Glass-effect tooltip on hover while collapsed, so the
+       icon rail stays usable without opening it back up. */
+
+    .sa-sidebar.is-collapsed .sa-nav-item{
+
+        position:relative;
+
+    }
+
+    .sa-sidebar.is-collapsed .sa-nav-item:hover::before{
+
+        content:attr(aria-label);
+
+        position:absolute;
+
+        left:calc(100% + 12px);
+
+        top:50%;
+
+        transform:translateY(-50%);
+
+        padding:8px 14px;
+
+        border-radius:10px;
+
+        background:rgba(15,23,42,.92);
+
+        -webkit-backdrop-filter:blur(6px);
+
+        backdrop-filter:blur(6px);
+
+        color:#fff;
+
+        font-size:13px;
+
+        font-weight:600;
+
+        white-space:nowrap;
+
+        box-shadow:0 8px 24px rgba(16,24,40,.24);
+
+        z-index:1200;
+
+        pointer-events:none;
+
+    }
+
+}
+
+/* ==========================================================
+   Mobile Drawer — Phase 2B.2 / 2B.4
+========================================================== */
+
+@media (max-width:1024px){
+
+    .sa-sidebar{
+
+        position:fixed;
+
+        inset:0;
+
+        z-index:1000;
+
+        transform:translateY(12px);
+
+        opacity:0;
+
+        visibility:hidden;
+
+        box-shadow:none;
+
+        transition:opacity .32s var(--sa-sidebar-ease), transform .32s var(--sa-sidebar-ease), visibility 0s linear .32s;
+
+        width:100vw;
+
+        min-width:100vw;
+
+        height:100dvh;
+
+    }
+
+    .sa-sidebar.is-mobile-open{
+
+        transform:translateY(0);
+
+        opacity:1;
+
+        visibility:visible;
+
+        transition:opacity .32s var(--sa-sidebar-ease), transform .32s var(--sa-sidebar-ease);
+
+    }
+
+    .sa-sidebar-inner{
+
+        width:100%;
+
+        height:100%;
+
+        padding-top:env(safe-area-inset-top);
+
+    }
+
+    /* Desktop-only rail toggle has no meaning on a full
+       overlay drawer — a dedicated Topbar hamburger already
+       owns open/close there. */
+
+    .sa-sidebar-collapse-btn{
+
+        display:none;
+
+    }
+
+    /* Full-screen page needs its own explicit close control —
+       there's no "outside" to tap anymore. */
+
+    .sa-sidebar-mobile-close{
+
+        display:flex;
+
+        align-items:center;
+
+        justify-content:center;
+
+        width:40px;
+
+        height:40px;
+
+        margin-left:auto;
+
+        border:1px solid var(--border);
+
+        border-radius:50%;
+
+        background:var(--surface);
+
+        color:var(--text-secondary);
+
+        cursor:pointer;
+
+        transition:background .2s var(--sa-sidebar-ease), color .2s var(--sa-sidebar-ease), transform .2s var(--sa-sidebar-ease);
+
+    }
+
+    .sa-sidebar-mobile-close svg{
+
+        width:18px;
+
+        height:18px;
+
+    }
+
+    .sa-sidebar-mobile-close:hover{
+
+        background:rgba(239,68,68,.08);
+
+        color:#ef4444;
+
+    }
+
+    .sa-sidebar-mobile-close:active{
+
+        transform:scale(.92);
+
+    }
+
+    /* Skeleton-engine reveal — nav groups fade/slide up one
+       after another the instant the full-screen page becomes
+       visible, instead of the whole menu appearing as one flat
+       block. Delay is driven purely by DOM order (nth-child),
+       no JS timers involved. */
+
+    .sa-sidebar:not(.is-mobile-open) .sa-nav-group{
+
+        opacity:0;
+
+        transform:translateY(14px);
+
+    }
+
+    .sa-sidebar.is-mobile-open .sa-nav-group{
+
+        animation:sa-sidebar-item-in .38s var(--sa-sidebar-ease) both;
+
+    }
+
+    .sa-sidebar.is-mobile-open .sa-nav-group:nth-child(1){ animation-delay:.05s; }
+    .sa-sidebar.is-mobile-open .sa-nav-group:nth-child(2){ animation-delay:.10s; }
+    .sa-sidebar.is-mobile-open .sa-nav-group:nth-child(3){ animation-delay:.15s; }
+    .sa-sidebar.is-mobile-open .sa-nav-group:nth-child(4){ animation-delay:.20s; }
+    .sa-sidebar.is-mobile-open .sa-nav-group:nth-child(5){ animation-delay:.25s; }
+    .sa-sidebar.is-mobile-open .sa-nav-group:nth-child(6){ animation-delay:.30s; }
+    .sa-sidebar.is-mobile-open .sa-nav-group:nth-child(n+7){ animation-delay:.34s; }
+
+    @keyframes sa-sidebar-item-in{
+
+        from{
+
+            opacity:0;
+
+            transform:translateY(14px);
+
+        }
+
+        to{
+
+            opacity:1;
+
+            transform:translateY(0);
+
+        }
+
+    }
+
+}
+
+/* Overlay (scrim) — created dynamically by the controller so
+   it always exists exactly once, independent of shell markup. */
+
+.sa-sidebar-overlay{
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(15,23,42,.5);
+
+    z-index:999;
+
+    opacity:0;
+
+    visibility:hidden;
+
+    transition:opacity .25s ease, visibility 0s linear .25s;
+
+}
+
+.sa-sidebar-overlay.is-visible{
+
+    opacity:1;
+
+    visibility:visible;
+
+    transition:opacity .25s ease;
+
+}
+
+@media (max-width:1024px){
+
+    .sa-sidebar-overlay{
+
+        display:none;
+
+    }
+
+}
+
+@media (min-width:1025px){
+
+    .sa-sidebar-overlay{
+
+        display:none;
+
+    }
+
+}
+
+/* ==========================================================
+   Tablet fine-tuning
+========================================================== */
+
+/* ==========================================================
+   Tablet fine-tuning — sidebar is full-screen at every width
+   in this breakpoint now, so no separate rail width is needed
+   here anymore; kept as a no-op section marker for future
+   tablet-specific tweaks (e.g. multi-column nav groups).
+========================================================== */
+
+/* ==========================================================
+   Landscape phones — shorter viewport, tighten vertical
+   rhythm so the nav list doesn't force scrolling before it
+   needs to.
+========================================================== */
+
+@media (max-width:1024px) and (orientation:landscape) and (max-height:480px){
+
+    .sa-sidebar-brand{
+
+        padding:14px 20px;
+
+    }
+
+    .sa-sidebar-nav{
+
+        padding:12px 16px;
+
+        gap:4px;
+
+    }
+
+    .sa-nav-item{
+
+        padding:10px 16px;
+
+    }
+
+}
+
+/* ==========================================================
+   Foldables / very narrow widths
+========================================================== */
+
+@media (max-width:360px){
+
+    .sa-sidebar{
+
+        width:100vw;
+
+        min-width:100vw;
+
+    }
+
+}
+
+/* ==========================================================
+   Reduced motion — global rule in shell.css already zeroes
+   transition/animation durations; this only removes the
+   collapsed-rail hover tooltip's implied motion assumption.
+========================================================== */
+
+@media (prefers-reduced-motion:reduce){
+
+    .sa-sidebar.is-collapsed .sa-nav-item:hover::before{
+
+        transition:none;
+
+    }
+
+    .sa-sidebar.is-mobile-open .sa-nav-group{
+
+        animation:none;
+
+        opacity:1;
+
+        transform:none;
+
+    }
+
+}

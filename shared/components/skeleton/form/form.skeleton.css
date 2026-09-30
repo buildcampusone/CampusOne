@@ -1,0 +1,23 @@
+/*=========================================
+=         FORM / INPUT SKELETON           =
+=========================================*/
+
+.skel-input-group{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:8px;
+
+}
+
+.skel-form{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:20px;
+
+}

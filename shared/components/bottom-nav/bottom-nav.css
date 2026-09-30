@@ -1,0 +1,682 @@
+/**
+ * ==========================================================
+ * CampusOne
+ * Shared Bottom Navigation — Styling (Phase 7)
+ * ----------------------------------------------------------
+ * The ONE stylesheet for the platform's Bottom Navigation.
+ * Previously Super Admin (.sa-bottomnav-*) and Institution
+ * Admin (.ia-bottomnav-*) each shipped a near-identical copy of
+ * this file under their own prefix. This replaces both — every
+ * role's `<nav>` mount (#saBottomNav, #iaBottomNav, and any
+ * future role's own root id) renders the same "bn-" classes and
+ * gets the same premium floating pill, active indicator,
+ * motion, and accessibility treatment for free.
+ *
+ * Mobile/tablet only, hidden entirely on desktop — the sidebar
+ * remains the only navigation there for every role, completely
+ * unaffected by anything in this file. "Mobile" means the same
+ * 1024px breakpoint sidebar.controller.js already uses to
+ * switch into a full-screen drawer, so the two never disagree.
+ *
+ * Every color, radius, shadow, spacing and motion value below
+ * comes from shared/styles/variables.css — the app's single
+ * design-token source. Nothing here is a hardcoded color, and
+ * dark/light mode both fall out for free because those tokens
+ * already flip on [data-theme="dark"].
+ * ==========================================================
+ */
+
+/* ==========================================================
+   Root — fixed overlay, mobile/tablet only
+========================================================== */
+
+.bn-root{
+
+    display:none;
+
+    position:fixed;
+    left:0;
+    right:0;
+    bottom:0;
+
+    z-index:var(--z-header);
+
+    justify-content:center;
+
+    /* Comfortable horizontal margins, safe-area respected on
+       every device, notch or not. */
+    padding:0 20px calc(16px + env(safe-area-inset-bottom));
+
+    pointer-events:none;
+
+}
+
+/* --bp-laptop (1024px) */
+@media (max-width:1024px){
+
+    .bn-root{
+
+        display:flex;
+
+        transition:transform var(--animation-normal) var(--ease-premium), opacity var(--animation-normal) var(--ease-premium);
+
+    }
+
+    /* Full-screen sidebar menu (sidebar.css) is a separate fixed
+       layer above this pill — while it's open there is nothing
+       beneath it to navigate via, so the pill tucks itself away
+       instead of floating uselessly on top of the menu. Driven
+       by "sidebar:statechange" (see shared bottom-nav.controller.js's
+       createBottomNav()'s sidebar sync) — no polling, no
+       duplicate state, shared by every role. */
+
+    .bn-root.bn-hidden{
+
+        transform:translateY(140%);
+
+        opacity:0;
+
+        pointer-events:none;
+
+    }
+
+    /* Sub-Phase 1.3B: scroll-direction auto-hide, matching
+       Institution Owner's bottom-nav.autohide.js behaviour
+       (shared/core/navigation/bottom-nav-autohide.engine.js
+       drives this via createBottomNav()'s `autoHide` option).
+       Deliberately its own class rather than reusing bn-hidden
+       above — that one is driven by the sidebar drawer's
+       open/close state; this one by scroll position. Two
+       independent triggers toggling the same class could fight
+       each other (e.g. scrolling while the drawer is open); a
+       separate class with the identical hide treatment avoids
+       that while looking and feeling like the exact same
+       "tuck away" motion. */
+
+    .bn-root.bn-autohidden{
+
+        transform:translateY(140%);
+
+        opacity:0;
+
+        pointer-events:none;
+
+    }
+
+}
+
+/* ==========================================================
+   Floating Pill
+========================================================== */
+
+.bn-pill{
+
+    position:relative;
+
+    display:flex;
+    align-items:stretch;
+
+    width:100%;
+    max-width:420px;
+
+    pointer-events:auto;
+
+    border-radius:var(--radius-full);
+
+    background:color-mix(in srgb, var(--surface) 72%, transparent);
+    border:1px solid color-mix(in srgb, var(--border) 80%, transparent);
+
+    box-shadow:var(--shadow-lg);
+
+    backdrop-filter:blur(20px) saturate(160%);
+    -webkit-backdrop-filter:blur(20px) saturate(160%);
+
+    overflow:hidden;
+
+    transform:translateZ(0);
+
+    transition:box-shadow var(--animation-normal) var(--ease-premium);
+
+}
+
+/* Graceful fallback for browsers without backdrop-filter or
+   color-mix support — solid surface instead of glass, still
+   fully functional and theme-correct. */
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+
+    .bn-pill{
+
+        background:var(--surface);
+
+    }
+
+}
+
+/* ==========================================================
+   Active Blue Pill Indicator
+   ----------------------------------------------------------
+   Pure CSS, position derived only from which item currently
+   carries `.is-active` (set by the shared engine's setActive(),
+   shared/core/navigation/bottom-nav.engine.js). No inline
+   styles, no per-frame JS layout math; only a GPU-composited
+   transform ever animates. Same blue gradient / rounded-pill
+   treatment as the sidebar's own Active Blue Pill — reused
+   here, never redesigned.
+========================================================== */
+
+.bn-indicator{
+
+    position:absolute;
+    top:6px;
+    bottom:6px;
+    left:0;
+
+    /* Up to 5 equal-width items -> 20% each */
+    width:20%;
+
+    transform:translateX(0);
+
+    transition:transform var(--animation-normal) var(--ease-premium);
+
+    will-change:transform;
+
+    pointer-events:none;
+
+    z-index:0;
+
+}
+
+.bn-indicator::after{
+
+    content:"";
+
+    position:absolute;
+    inset:0 6px;
+
+    border-radius:var(--radius-full);
+
+    background:linear-gradient(135deg, var(--primary), var(--primary-light));
+
+    box-shadow:0 6px 16px color-mix(in srgb, var(--primary) 45%, transparent);
+
+}
+
+/* Indicator is the pill's 1st child, so up to 5 nav buttons are
+   nth-child(2) through nth-child(6). */
+
+.bn-pill:has(.bn-item:nth-child(2).is-active) .bn-indicator{ transform:translateX(0%); }
+.bn-pill:has(.bn-item:nth-child(3).is-active) .bn-indicator{ transform:translateX(100%); }
+.bn-pill:has(.bn-item:nth-child(4).is-active) .bn-indicator{ transform:translateX(200%); }
+.bn-pill:has(.bn-item:nth-child(5).is-active) .bn-indicator{ transform:translateX(300%); }
+.bn-pill:has(.bn-item:nth-child(6).is-active) .bn-indicator{ transform:translateX(400%); }
+
+/* Browsers without :has() support (pre-2023 Firefox/Safari):
+   indicator simply stays hidden instead of sitting mis-aligned
+   under the wrong tab — active state is still fully visible via
+   .bn-item.is-active's own color/weight change below. */
+@supports not selector(:has(a)){
+
+    .bn-indicator{
+
+        display:none;
+
+    }
+
+}
+
+/* ==========================================================
+   Nav Item — equal width, equal spacing, equal alignment
+========================================================== */
+
+.bn-item{
+
+    position:relative;
+    z-index:1;
+
+    flex:1 1 0;
+    min-width:0;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:2px;
+
+    padding:10px 4px 9px;
+
+    background:transparent;
+    border:none;
+
+    color:var(--text-light);
+
+    font-family:inherit;
+    cursor:pointer;
+
+    -webkit-tap-highlight-color:transparent;
+
+    /* Phase 1.4: transform's own 90ms/--ease-premium baseline
+       matches Institution Owner's press timing exactly. The
+       200ms spring release is applied inline per-item by the
+       press engine at pointer-release, same as Institution
+       Owner — a single CSS transition can't express two
+       different durations for the same property depending on
+       direction. */
+    transition:color var(--animation-fast) var(--ease-premium), transform 90ms var(--ease-premium);
+
+    transform:translateZ(0) scale(1);
+
+}
+
+.bn-item:hover{
+
+    color:var(--primary);
+
+}
+
+.bn-item.is-active:hover{
+
+    color:var(--text-white);
+
+}
+
+/* Phase 1.4: replaced by the press engine's class-based
+   .is-pressed (below) — matches Institution Owner, which drives
+   press-scale entirely off pointerdown/up, not the native
+   :active pseudo-class, so a mouse and a touch press always
+   read identically instead of native :active fighting with the
+   JS-timed release spring. */
+.bn-item.is-pressed{
+
+    transform:translateZ(0) scale(.95);
+
+}
+
+.bn-item:focus-visible{
+
+    outline:2px solid var(--primary);
+    outline-offset:-2px;
+    border-radius:var(--radius-md);
+
+}
+
+.bn-item.is-active{
+
+    color:var(--text-white);
+
+}
+
+/* ==========================================================
+   Content — icon + label as a single unit
+   ----------------------------------------------------------
+   Phase 1.4: the active-lift (translateY(-1px)) that used to
+   live directly on .bn-icon now lives here instead — mirrors
+   Institution Owner's own .io-bottomnav-content split. Keeps
+   active-lift and the press engine's press-scale (below, on
+   .bn-item/.bn-icon/.bn-label) permanently on different
+   elements so the two transforms can never overwrite each
+   other for the common case of pressing the currently-active
+   tab (the exact collision Sub-Phase 1.3C's architecture pass
+   identified and stopped on).
+========================================================== */
+
+.bn-content{
+
+    position:relative;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:2px;
+
+    transform:translateY(0);
+
+    transition:transform var(--animation-fast) var(--ease-premium);
+
+}
+
+.bn-item.is-active .bn-content{
+
+    transform:translateY(-1px);
+
+}
+
+/* ==========================================================
+   Icon + Tap Feedback
+========================================================== */
+
+.bn-icon-wrap{
+
+    position:relative;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    width:40px;
+    height:32px;
+
+}
+
+.bn-icon{
+
+    position:relative;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    width:22px;
+    height:22px;
+
+    transform:translateZ(0);
+
+    /* Phase 1.4: 90ms baseline matches Institution Owner's icon
+       press timing exactly; the 200ms spring release is applied
+       inline by the press engine, same pattern as .bn-item. */
+    transition:transform 90ms var(--ease-premium);
+
+}
+
+.bn-icon svg{
+
+    width:100%;
+    height:100%;
+
+}
+
+@keyframes bn-tap{
+
+    0%{ transform:scale(1); }
+    45%{ transform:scale(1.24); }
+    100%{ transform:scale(1); }
+
+}
+
+.bn-icon.is-tapped{
+
+    animation:bn-tap .38s var(--ease-premium);
+
+}
+
+/* Phase 1.4: press-scale, matching Institution Owner's
+   .io-bottomnav-item.is-pressed .io-bottomnav-icon exactly.
+   Driven by the press engine's .is-pressed class — never by
+   :active — so it can't collide with .bn-item.is-active's own
+   lift on .bn-content above (different element entirely). */
+.bn-item.is-pressed .bn-icon{
+
+    transform:scale(.92);
+
+}
+
+/* ==========================================================
+   Label
+========================================================== */
+
+.bn-label{
+
+    font-size:10.5px;
+    font-weight:600;
+    letter-spacing:.01em;
+    line-height:1;
+
+    max-width:100%;
+
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+
+    transform:scale(1);
+    transition:transform 90ms var(--ease-premium);
+
+}
+
+/* Phase 1.4: follows the icon's press/release scale exactly
+   (same transform, same transition swap by the press engine),
+   matching Institution Owner's .io-bottomnav-label. */
+.bn-item.is-pressed .bn-label{
+
+    transform:scale(.92);
+
+}
+
+/* ==========================================================
+   Ripple System
+   ----------------------------------------------------------
+   Phase 1.4. Originates at the touch point (the press engine
+   sets --tap-x/--tap-y from the pointer event), clipped via
+   overflow:hidden on .bn-ripple-layer so it can never spill
+   outside the item. Timing/easing/keyframe shape identical to
+   Institution Owner's .io-bottomnav-ripple.
+========================================================== */
+
+.bn-ripple-layer{
+
+    position:absolute;
+    inset:0;
+
+    overflow:hidden;
+
+    pointer-events:none;
+
+}
+
+.bn-ripple{
+
+    position:absolute;
+    top:var(--tap-y, 50%);
+    left:var(--tap-x, 50%);
+
+    width:120px;
+    height:120px;
+    margin:-60px 0 0 -60px;
+
+    border-radius:var(--radius-full);
+
+    background:color-mix(in srgb, var(--primary) 45%, transparent);
+
+    opacity:0;
+    transform:scale(0);
+    transform-origin:center;
+
+    pointer-events:none;
+
+}
+
+@keyframes bn-ripple{
+
+    0%{ opacity:1; transform:scale(0); }
+    100%{ opacity:0; transform:scale(2.2); }
+
+}
+
+.bn-ripple.is-rippling{
+
+    animation:bn-ripple 350ms var(--ease-out) forwards;
+
+}
+
+/* ==========================================================
+   Wave Glow — soft bloom that follows the ripple. Entirely
+   separate from the active-state indicator (.bn-indicator), so
+   activating a tab never interrupts a tap's wave. Timing/easing/
+   keyframe shape identical to Institution Owner's
+   .io-bottomnav-wave.
+========================================================== */
+
+.bn-wave{
+
+    position:absolute;
+    inset:0;
+
+    border-radius:var(--radius-full);
+
+    background:color-mix(in srgb, var(--primary) 25%, transparent);
+
+    opacity:0;
+    transform:scale(.6);
+
+    pointer-events:none;
+
+}
+
+@keyframes bn-wave{
+
+    0%{ opacity:.32; transform:scale(.6); }
+    100%{ opacity:0; transform:scale(1.9); }
+
+}
+
+.bn-wave.is-waving{
+
+    animation:bn-wave 420ms var(--ease-out) 40ms forwards;
+
+}
+
+/* ==========================================================
+   Notification Badge — Future-Ready Hook
+   ----------------------------------------------------------
+   Markup exists (bottom-nav.page.js) and is styled here, but
+   ships hidden with no data source wired to it in this pass.
+   Any future unread-count feature only needs to un-hide and set
+   textContent on its own `#bottomNav<Id>Badge` span — no CSS or
+   markup changes, and it works identically for every role.
+========================================================== */
+
+.bn-badge{
+
+    position:absolute;
+    top:-3px;
+    right:-7px;
+
+    min-width:15px;
+    height:15px;
+    padding:0 3px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:var(--radius-full);
+
+    background:var(--danger);
+    border:2px solid var(--surface);
+
+    color:var(--text-white);
+    font-size:8.5px;
+    font-weight:700;
+    line-height:1;
+
+}
+
+.bn-badge[hidden]{
+
+    display:none;
+
+}
+
+/* ==========================================================
+   Tablet fine-tuning
+========================================================== */
+
+/* --bp-phone-lg (481px) to --bp-laptop (1024px) */
+@media (min-width:481px) and (max-width:1024px){
+
+    .bn-pill{
+
+        max-width:480px;
+
+    }
+
+}
+
+/* ==========================================================
+   Foldables / very narrow widths — keep equal spacing intact
+   instead of letting labels clip.
+========================================================== */
+
+/* --bp-phone-xs (340px) */
+@media (max-width:340px){
+
+    .bn-root{
+
+        padding-left:12px;
+        padding-right:12px;
+
+    }
+
+    .bn-label{
+
+        font-size:9.5px;
+
+    }
+
+}
+
+/* ==========================================================
+   Reduced motion
+========================================================== */
+
+@media (prefers-reduced-motion:reduce){
+
+    .bn-root,
+    .bn-pill,
+    .bn-indicator,
+    .bn-item,
+    .bn-content,
+    .bn-icon,
+    .bn-label{
+
+        transition:none;
+
+    }
+
+    .bn-icon.is-tapped{
+
+        animation:none;
+
+    }
+
+    /* Phase 1.4: lift, press-scale, ripple, and wave all off
+       entirely; only the existing color feedback (.bn-item:hover /
+       .is-active) remains — matches Institution Owner's own
+       reduced-motion contract. The press engine also checks this
+       same media query before spawning any effect, so this is
+       belt-and-braces. */
+    .bn-item.is-active .bn-content{
+
+        transform:none;
+
+    }
+
+    .bn-item.is-pressed,
+    .bn-item.is-pressed .bn-icon,
+    .bn-item.is-pressed .bn-label{
+
+        transform:none;
+
+    }
+
+    .bn-ripple,
+    .bn-ripple.is-rippling,
+    .bn-wave,
+    .bn-wave.is-waving{
+
+        animation:none;
+        opacity:0;
+
+    }
+
+}
+
+/* --bp-laptop (1024px) + 1 */
+@media (min-width:1025px){
+
+    .bn-root{
+
+        display:none !important;
+
+    }
+
+}

@@ -1,0 +1,47 @@
+/* =========================================
+   Register — Success State
+
+   Note: layout (.login, .login-hero, .auth-card,
+   .login-divider, .login-register, .btn) is already
+   styled by login.css / component CSS. This file only
+   adds the success-state block, same approach as
+   forgot-password.css.
+========================================= */
+
+.register-success {
+
+    text-align: center;
+
+    padding: 24px 16px;
+
+    border-radius: 16px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 16px;
+
+    background: rgba(255, 255, 255, 0.06);
+
+    border: 1px solid rgba(255, 255, 255, 0.12);
+
+}
+
+.register-success-title {
+
+    font-size: 1.3rem;
+
+    font-weight: 700;
+
+}
+
+.register-success-text {
+
+    font-size: 0.9rem;
+
+    opacity: 0.8;
+
+    line-height: 1.5;
+
+}

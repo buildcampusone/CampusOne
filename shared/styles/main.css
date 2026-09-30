@@ -1,0 +1,188 @@
+/* =====================================================
+   CampusOne Global Styles
+   ===================================================== */
+
+/* =====================================================
+   DESIGN TOKENS
+   ===================================================== */
+
+@import url("variables.css");
+@import url("reset.css");
+@import url("typography.css");
+
+/* =====================================================
+   DESIGN SYSTEM
+   ===================================================== */
+
+@import url("animations.css");
+@import url("motion.css");
+@import url("shadows.css");
+@import url("elevation.css");
+@import url("spacing.css");
+@import url("colors.css");
+@import url("components.css");
+@import url("interaction.css");
+@import url("accessibility.css");
+@import url("utilities.css");
+
+/* =====================================================
+   SHARED COMPONENTS
+   ===================================================== */
+
+@import url("../components/background/background.css");
+@import url("../components/button/button.css");
+@import url("../components/input/input.css");
+@import url("../components/link/link.css");
+@import url("../components/error/error.css");
+@import url("../components/auth-card/auth-card.css");
+@import url("../components/live-header/live-header.css");
+@import url("../components/searchable-select/searchable-select.css");
+@import url("../components/toast/toast.css");
+@import url("../components/modal/modal.css");
+@import url("../components/bottom-nav/bottom-nav.css");
+@import url("../components/avatar/avatar.css");
+@import url("../components/badge/badge.css");
+@import url("../components/profile/profile.css");
+@import url("../components/skeleton/base/base.skeleton.css");
+@import url("../components/skeleton/avatar/avatar.skeleton.css");
+@import url("../components/skeleton/button/button.skeleton.css");
+@import url("../components/skeleton/form/form.skeleton.css");
+@import url("../components/skeleton/card/card.skeleton.css");
+@import url("../components/skeleton/profile/profile.skeleton.css");
+@import url("../components/skeleton/table/table.skeleton.css");
+@import url("../components/skeleton/chart/chart.skeleton.css");
+@import url("../components/skeleton/list/list.skeleton.css");
+@import url("../components/skeleton/dashboard/dashboard.skeleton.css");
+@import url("../components/skeleton/shell/shell.skeleton.css");
+
+/* =====================================================
+   AUTHENTICATION
+   ===================================================== */
+
+@import url("../../modules/splash/splash.css");
+@import url("../../modules/auth/login/login.css");
+@import url("../../modules/auth/register/register.css");
+@import url("../../modules/auth/forgot-password/forgot-password.css");
+
+/* =====================================================
+   INSTITUTION
+   ===================================================== */
+
+@import url("../../modules/institution/registration/registration.css");
+
+/* =====================================================
+   SUPER ADMIN
+   ===================================================== */
+
+@import url("../../modules/super-admin/login/login.css");
+@import url("../../modules/super-admin/shell/shell.css");
+@import url("../../modules/super-admin/components/active-pill/active-pill.css");
+@import url("../../modules/super-admin/components/sidebar/sidebar.css");
+@import url("../../modules/super-admin/components/empty-state/empty-state.css");
+@import url("../../modules/super-admin/topbar/topbar.css");
+@import url("../../modules/super-admin/dashboard/dashboard.css");
+@import url("../../modules/super-admin/profile/profile.css");
+@import url("../../modules/super-admin/activity-panel/activity-panel.css");
+@import url("../../modules/super-admin/status-bar/status-bar.css");
+
+/* =====================================================
+   INSTITUTION ADMIN
+   ===================================================== */
+
+@import url("../../modules/institution-admin/shell/shell.css");
+@import url("../../modules/institution-admin/components/sidebar/sidebar.css");
+@import url("../../modules/institution-admin/topbar/topbar.css");
+@import url("../../modules/institution-admin/activity-panel/activity-panel.css");
+@import url("../../modules/institution-admin/status-bar/status-bar.css");
+@import url("../../modules/institution-admin/dashboard/dashboard.css");
+@import url("../../modules/institution-admin/profile/profile.css");
+
+/* =====================================================
+   INSTITUTION OWNER
+   -----------------------------------------------------
+   Part 2.2 — Executive Dashboard Implementation.
+   Topbar and Activity Panel CSS existed since Part 1.3/1.4
+   but were never linked here — added alongside the new
+   dashboard.css so the Part 1.4B shell integration actually
+   renders styled.
+   Phase 2A — Owner Shell Unblock. Status Bar CSS now exists
+   (mirrors Institution Admin's/Super Admin's status-bar.css,
+   io- namespaced) and is linked below.
+   ===================================================== */
+
+@import url("../../modules/institution-owner/shell/shell.css");
+@import url("../../modules/institution-owner/components/sidebar/sidebar.css");
+@import url("../../modules/institution-owner/topbar/topbar.css");
+@import url("../../modules/institution-owner/activity-panel/activity-panel.css");
+@import url("../../modules/institution-owner/status-bar/status-bar.css");
+@import url("../../modules/institution-owner/dashboard/dashboard.css");
+@import url("../../modules/institution-owner/profile/profile.css");
+@import url("../../modules/institution-owner/institution-profile/institution-profile.css");
+@import url("../../modules/institution-owner/admin-management/admin-management.css");
+@import url("../../modules/institution-owner/admin-management/create-admin.css");
+
+/* =====================================================
+   Global
+   ===================================================== */
+
+html,
+body{
+
+    width:100%;
+
+    min-height:100%;
+
+}
+
+body{
+
+    margin:0;
+
+    overflow-x:hidden;
+
+    overflow-y:auto;
+
+    background:var(--background);
+
+    color:var(--text);
+
+    font-family:"Inter",sans-serif;
+
+    -webkit-font-smoothing:antialiased;
+
+    -moz-osx-font-smoothing:grayscale;
+
+}
+
+*{
+
+    box-sizing:border-box;
+
+}
+
+img{
+
+    display:block;
+
+    max-width:100%;
+
+    height:auto;
+
+}
+
+button,
+input,
+textarea,
+select{
+
+    font:inherit;
+
+}
+
+a{
+
+    color:inherit;
+
+    text-decoration:none;
+
+}

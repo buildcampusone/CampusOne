@@ -1,0 +1,58 @@
+/* ==========================================================
+   CampusOne Institution Owner Status Bar
+   ----------------------------------------------------------
+   Phase 2A — Owner Shell Unblock
+   Mirrors modules/institution-admin/status-bar/status-bar.css
+   1:1 (which itself mirrors modules/super-admin/status-bar/
+   status-bar.css 1:1) — same height, spacing, typography, and
+   the same max-width:768px hide documented in
+   shell/shell.css's own breakpoint table ("Mobile (<=768px) —
+   Status Bar hides"). Only the class namespace (io- instead
+   of ia-/sa-) differs. No new values introduced — every
+   property below already exists in shared/styles/variables.css.
+========================================================== */
+
+.io-statusbar-layout{
+
+    height:48px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    padding:0 24px;
+
+    background:var(--surface);
+
+    border-top:1px solid var(--border);
+
+    color:var(--text-secondary);
+
+    font-size:13px;
+
+}
+
+.io-status-left,
+.io-status-center,
+.io-status-right{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+}
+
+/* --bp-tablet (768px) */
+@media (max-width:768px){
+
+    .io-statusbar-layout{
+
+        display:none;
+
+    }
+
+}

@@ -1,0 +1,72 @@
+/**
+ * ==========================================================
+ * CampusOne — Avatar Component Styles
+ * Phase 8 — role-agnostic, tokens only, dark mode free
+ * (all colors derive from variables.css and flip
+ * automatically under [data-theme="dark"]).
+ * ==========================================================
+ */
+
+.co-avatar{
+
+    position:relative;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    flex-shrink:0;
+    border-radius:var(--radius-full);
+    background:var(--primary-gradient);
+    color:var(--text-white);
+    overflow:hidden;
+    user-select:none;
+
+}
+
+.co-avatar-img{
+
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+
+}
+
+.co-avatar-initial{
+
+    font-weight:var(--weight-semibold);
+    line-height:1;
+
+}
+
+/* Sizes */
+
+.co-avatar--sm{ width:32px; height:32px; }
+.co-avatar--sm .co-avatar-initial{ font-size:var(--text-sm); }
+
+.co-avatar--md{ width:48px; height:48px; }
+.co-avatar--md .co-avatar-initial{ font-size:var(--text-lg); }
+
+.co-avatar--lg{ width:64px; height:64px; }
+.co-avatar--lg .co-avatar-initial{ font-size:var(--text-xl); }
+
+.co-avatar--xl{ width:96px; height:96px; }
+.co-avatar--xl .co-avatar-initial{ font-size:var(--text-3xl); }
+
+/* Online status dot */
+
+.co-avatar-status{
+
+    position:absolute;
+    right:2px;
+    bottom:2px;
+    width:22%;
+    height:22%;
+    min-width:10px;
+    min-height:10px;
+    border-radius:var(--radius-full);
+    border:2px solid var(--surface);
+
+}
+
+.co-avatar-status--online{ background:var(--success); }
+.co-avatar-status--offline{ background:var(--text-light); }

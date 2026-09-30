@@ -1,0 +1,101 @@
+/*=========================================
+=         DISPLAY                         =
+=========================================*/
+
+.co-hidden{display:none!important;}
+.co-block{display:block;}
+.co-inline{display:inline-block;}
+
+.co-flex{display:flex;}
+.co-inline-flex{display:inline-flex;}
+.co-grid{display:grid;}
+
+/*=========================================
+=         FLEX                            =
+=========================================*/
+
+.co-row{flex-direction:row;}
+.co-column{flex-direction:column;}
+
+.co-center{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.co-between{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.co-around{
+    display:flex;
+    align-items:center;
+    justify-content:space-around;
+}
+
+.co-evenly{
+    display:flex;
+    align-items:center;
+    justify-content:space-evenly;
+}
+
+.co-align-center{
+    align-items:center;
+}
+
+.co-justify-center{
+    justify-content:center;
+}
+
+/*=========================================
+=         WIDTH / HEIGHT                  =
+=========================================*/
+
+.co-w-full{width:100%;}
+.co-h-full{height:100%;}
+
+.co-min-vh{
+    min-height:100vh;
+}
+
+/*=========================================
+=         POSITION                        =
+=========================================*/
+
+.co-relative{position:relative;}
+.co-absolute{position:absolute;}
+.co-fixed{position:fixed;}
+.co-sticky{position:sticky;}
+
+/*=========================================
+=         OVERFLOW                        =
+=========================================*/
+
+.co-overflow-hidden{
+    overflow:hidden;
+}
+
+.co-overflow-auto{
+    overflow:auto;
+}
+
+/*=========================================
+=         TEXT                            =
+=========================================*/
+
+.co-text-center{text-align:center;}
+.co-text-left{text-align:left;}
+.co-text-right{text-align:right;}
+
+.co-uppercase{text-transform:uppercase;}
+.co-capitalize{text-transform:capitalize;}
+
+.co-pointer{
+    cursor:pointer;
+}
+
+.co-select-none{
+    user-select:none;
+}

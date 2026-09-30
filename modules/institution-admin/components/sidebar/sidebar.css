@@ -1,0 +1,995 @@
+/* ==========================================================
+   CampusOne
+   Institution Admin Sidebar
+   ----------------------------------------------------------
+   #iaSidebar (rendered by shell.page.js) is the ONE sidebar
+   root element. Everything below targets it directly or via
+   its state classes:
+     .is-collapsed    desktop icon-rail state
+     .is-mobile-open  mobile drawer visible
+   .ia-sidebar-inner is the content rendered by this module.
+========================================================== */
+
+:root{
+
+    --ia-sidebar-w:280px;
+
+    --ia-sidebar-w-collapsed:84px;
+
+    --ia-sidebar-ease:var(--ease-premium);
+
+}
+
+.ia-sidebar{
+
+    width:var(--ia-sidebar-w);
+
+    min-width:var(--ia-sidebar-w);
+
+    height:100vh;
+
+    background:var(--surface);
+
+    border-right:1px solid var(--border);
+
+    overflow:hidden;
+
+    position:relative;
+
+    flex-shrink:0;
+
+    transition:width .28s var(--ia-sidebar-ease), min-width .28s var(--ia-sidebar-ease);
+
+}
+
+.ia-sidebar-inner{
+
+    width:var(--ia-sidebar-w);
+
+    height:100%;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:space-between;
+
+}
+
+/* ==========================================================
+   Brand
+========================================================== */
+
+.ia-sidebar-brand{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:16px;
+
+    padding:24px;
+
+    border-bottom:1px solid var(--border);
+
+    position:relative;
+
+}
+
+.ia-sidebar-logo{
+
+    width:52px;
+
+    height:52px;
+
+    object-fit:contain;
+
+    flex-shrink:0;
+
+}
+
+.ia-sidebar-brand-text{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:4px;
+
+    min-width:0;
+
+    overflow:hidden;
+
+    white-space:nowrap;
+
+    opacity:1;
+
+    transition:opacity .18s var(--ia-sidebar-ease);
+
+}
+
+.ia-sidebar-title{
+
+    margin:0;
+
+    font-size:20px;
+
+    font-weight:700;
+
+    color:var(--text);
+
+}
+
+.ia-sidebar-subtitle{
+
+    font-size:13px;
+
+    color:var(--text-secondary);
+
+}
+
+/* ==========================================================
+   Desktop Collapse Button
+========================================================== */
+
+.ia-sidebar-collapse-btn{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    width:28px;
+
+    height:28px;
+
+    flex-shrink:0;
+
+    margin-left:auto;
+
+    border:1px solid var(--border);
+
+    border-radius:50%;
+
+    background:var(--surface);
+
+    color:var(--text-secondary);
+
+    cursor:pointer;
+
+    transition:background .2s var(--ia-sidebar-ease), color .2s var(--ia-sidebar-ease), transform .28s var(--ia-sidebar-ease), box-shadow .2s var(--ia-sidebar-ease);
+
+}
+
+.ia-sidebar-mobile-close{
+
+    display:none;
+
+}
+
+.ia-sidebar-collapse-btn:hover{
+
+    background:color-mix(in srgb, var(--primary) 8%, transparent);
+
+    color:var(--primary);
+
+}
+
+.ia-sidebar-collapse-btn:active{
+
+    transform:scale(.92);
+
+}
+
+.ia-collapse-icon{
+
+    width:16px;
+
+    height:16px;
+
+    transition:transform .28s var(--ia-sidebar-ease);
+
+}
+
+.ia-sidebar.is-collapsed .ia-collapse-icon{
+
+    transform:rotate(180deg);
+
+}
+
+/* ==========================================================
+   Navigation
+========================================================== */
+
+.ia-sidebar-nav{
+
+    flex:1;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:8px;
+
+    padding:20px 16px;
+
+    overflow-y:auto;
+
+    overflow-x:hidden;
+
+}
+
+.ia-nav-item{
+
+    position:relative;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+    width:100%;
+
+    padding:14px 18px;
+
+    border:none;
+
+    border-radius:14px;
+
+    background:transparent;
+
+    color:var(--text-secondary);
+
+    cursor:pointer;
+
+    overflow:hidden;
+
+    isolation:isolate;
+
+    transition:background .22s var(--ia-sidebar-ease), color .22s var(--ia-sidebar-ease), box-shadow .22s var(--ia-sidebar-ease);
+
+}
+
+.ia-nav-item:hover{
+
+    background:color-mix(in srgb, var(--primary) 8%, transparent);
+
+    color:var(--primary);
+
+}
+
+.ia-nav-item.active{
+
+    background:var(--primary);
+
+    color:var(--text-white);
+
+    box-shadow:0 10px 24px color-mix(in srgb, var(--primary) 28%, transparent);
+
+}
+
+/* Active indicator bar — a subtle premium accent, not just a
+   solid fill, so the active state reads clearly even when a
+   theme's primary color is muted. */
+
+.ia-nav-active-indicator{
+
+    position:absolute;
+
+    left:0;
+
+    top:50%;
+
+    transform:translateY(-50%) scaleY(0);
+
+    width:4px;
+
+    height:60%;
+
+    border-radius:0 4px 4px 0;
+
+    background:var(--text-white);
+
+    opacity:.9;
+
+    transition:transform .22s var(--ia-sidebar-ease);
+
+}
+
+.ia-nav-item.active .ia-nav-active-indicator{
+
+    transform:translateY(-50%) scaleY(1);
+
+}
+
+/* Ripple — a lightweight radial pulse on click, CSS-only via
+   a pseudo-element driven by :active so no JS timers/cleanup
+   are needed to keep the sidebar's event-listener count flat. */
+
+.ia-nav-item::after{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    border-radius:inherit;
+
+    background:radial-gradient(circle, color-mix(in srgb, var(--text-white) 35%, transparent) 0%, transparent 70%);
+
+    opacity:0;
+
+    transform:scale(.4);
+
+    transition:opacity .5s ease, transform .5s ease;
+
+    pointer-events:none;
+
+}
+
+.ia-nav-item:active::after{
+
+    opacity:1;
+
+    transform:scale(1.4);
+
+    transition-duration:0s;
+
+}
+
+.ia-nav-icon{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    width:22px;
+
+    height:22px;
+
+    flex-shrink:0;
+
+}
+
+.ia-nav-icon svg{
+
+    width:20px;
+
+    height:20px;
+
+}
+
+.ia-nav-label{
+
+    font-size:15px;
+
+    font-weight:600;
+
+    white-space:nowrap;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+
+}
+
+/* Soon badge — layout only; .co-badge (shared/components/badge)
+   already owns color, padding, radius, and typography, so
+   nothing about its appearance is redefined here. */
+
+.ia-nav-soon-badge{
+
+    margin-left:auto;
+
+    flex-shrink:0;
+
+    display:inline-flex;
+
+    transition:opacity .18s var(--ia-sidebar-ease);
+
+}
+
+.ia-nav-group{
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+.ia-nav-group + .ia-nav-group{
+
+    margin-top:var(--space-16);
+
+    padding-top:var(--space-16);
+
+    border-top:1px solid var(--border);
+
+}
+
+.ia-nav-group-title{
+
+    margin:8px 18px 4px;
+
+    font-size:11px;
+
+    font-weight:700;
+
+    letter-spacing:.06em;
+
+    text-transform:uppercase;
+
+    color:var(--text-light, var(--text-secondary));
+
+    white-space:nowrap;
+
+    overflow:hidden;
+
+}
+
+/* ==========================================================
+   Footer
+========================================================== */
+
+.ia-sidebar-footer{
+
+    padding:20px;
+
+    border-top:1px solid var(--border);
+
+    display:flex;
+
+    justify-content:flex-start;
+
+    align-items:center;
+
+}
+
+.ia-logout-btn{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:12px;
+
+    width:auto;
+
+    min-width:170px;
+
+    height:56px;
+
+    padding:0 20px;
+
+    border:1px solid color-mix(in srgb, var(--danger) 22%, transparent);
+
+    border-radius:18px;
+
+    background:color-mix(in srgb, var(--danger) 6%, transparent);
+
+    color:var(--danger);
+
+    cursor:pointer;
+
+    transition:all .25s var(--ia-sidebar-ease);
+
+}
+
+.ia-logout-btn:hover{
+
+    background:color-mix(in srgb, var(--danger) 12%, transparent);
+
+    border-color:var(--danger);
+
+    transform:translateY(-2px);
+
+    box-shadow:0 10px 24px color-mix(in srgb, var(--danger) 18%, transparent);
+
+}
+
+.ia-logout-btn:active{
+
+    transform:scale(.97);
+
+}
+
+.ia-logout-btn svg{
+
+    width:26px;
+
+    height:26px;
+
+    flex-shrink:0;
+
+}
+
+.ia-logout-label{
+
+    white-space:nowrap;
+
+    overflow:hidden;
+
+    font-size:16px;
+
+    font-weight:600;
+
+    line-height:1;
+
+}
+
+/* ==========================================================
+   Desktop Collapsed (icon rail) — Phase 2B.2 / 2B.6
+========================================================== */
+
+/* --bp-laptop (1024px) + 1 */
+@media (min-width:1025px){
+
+    .ia-sidebar.is-collapsed{
+
+        width:var(--ia-sidebar-w-collapsed);
+
+        min-width:var(--ia-sidebar-w-collapsed);
+
+    }
+
+    .ia-sidebar.is-collapsed .ia-sidebar-inner{
+
+        width:var(--ia-sidebar-w-collapsed);
+
+    }
+
+    .ia-sidebar.is-collapsed .ia-sidebar-brand-text,
+    .ia-sidebar.is-collapsed .ia-nav-label,
+    .ia-sidebar.is-collapsed .ia-nav-group-title,
+    .ia-sidebar.is-collapsed .ia-logout-label,
+    .ia-sidebar.is-collapsed .ia-nav-soon-badge{
+
+        opacity:0;
+
+        width:0;
+
+        pointer-events:none;
+
+    }
+
+    .ia-sidebar.is-collapsed .ia-sidebar-brand{
+
+        justify-content:center;
+
+        padding:24px 12px;
+
+    }
+
+    .ia-sidebar.is-collapsed .ia-sidebar-collapse-btn{
+
+        position:absolute;
+
+        right:-14px;
+
+        top:24px;
+
+        background:var(--surface);
+
+        box-shadow:0 2px 8px color-mix(in srgb, var(--text) 12%, transparent);
+
+    }
+
+    .ia-sidebar.is-collapsed .ia-nav-item,
+    .ia-sidebar.is-collapsed .ia-logout-btn{
+
+        justify-content:center;
+
+        padding:14px;
+
+    }
+
+    /* Glass-effect tooltip on hover while collapsed, so the
+       icon rail stays usable without opening it back up. */
+
+    .ia-sidebar.is-collapsed .ia-nav-item{
+
+        position:relative;
+
+    }
+
+    .ia-sidebar.is-collapsed .ia-nav-item:hover::before{
+
+        content:attr(aria-label);
+
+        position:absolute;
+
+        left:calc(100% + 12px);
+
+        top:50%;
+
+        transform:translateY(-50%);
+
+        padding:8px 14px;
+
+        border-radius:10px;
+
+        background:color-mix(in srgb, var(--text) 92%, transparent);
+
+        -webkit-backdrop-filter:blur(6px);
+
+        backdrop-filter:blur(6px);
+
+        color:var(--text-white);
+
+        font-size:13px;
+
+        font-weight:600;
+
+        white-space:nowrap;
+
+        box-shadow:0 8px 24px color-mix(in srgb, var(--text) 24%, transparent);
+
+        z-index:1200;
+
+        pointer-events:none;
+
+    }
+
+}
+
+/* ==========================================================
+   Mobile Drawer — Phase 2B.2 / 2B.4
+========================================================== */
+
+/* --bp-laptop (1024px) */
+@media (max-width:1024px){
+
+    .ia-sidebar{
+
+        position:fixed;
+
+        inset:0;
+
+        z-index:1000;
+
+        transform:translateY(12px);
+
+        opacity:0;
+
+        visibility:hidden;
+
+        box-shadow:none;
+
+        transition:opacity .32s var(--ia-sidebar-ease), transform .32s var(--ia-sidebar-ease), visibility 0s linear .32s;
+
+        width:100vw;
+
+        min-width:100vw;
+
+        height:100dvh;
+
+    }
+
+    .ia-sidebar.is-mobile-open{
+
+        transform:translateY(0);
+
+        opacity:1;
+
+        visibility:visible;
+
+        transition:opacity .32s var(--ia-sidebar-ease), transform .32s var(--ia-sidebar-ease);
+
+    }
+
+    .ia-sidebar-inner{
+
+        width:100%;
+
+        height:100%;
+
+        padding-top:env(safe-area-inset-top);
+
+    }
+
+    /* Desktop-only rail toggle has no meaning on a full
+       overlay drawer — a dedicated Topbar hamburger already
+       owns open/close there. */
+
+    .ia-sidebar-collapse-btn{
+
+        display:none;
+
+    }
+
+    /* Full-screen page needs its own explicit close control —
+       there's no "outside" to tap anymore. */
+
+    .ia-sidebar-mobile-close{
+
+        display:flex;
+
+        align-items:center;
+
+        justify-content:center;
+
+        width:40px;
+
+        height:40px;
+
+        margin-left:auto;
+
+        border:1px solid var(--border);
+
+        border-radius:50%;
+
+        background:var(--surface);
+
+        color:var(--text-secondary);
+
+        cursor:pointer;
+
+        transition:background .2s var(--ia-sidebar-ease), color .2s var(--ia-sidebar-ease), transform .2s var(--ia-sidebar-ease);
+
+    }
+
+    .ia-sidebar-mobile-close svg{
+
+        width:18px;
+
+        height:18px;
+
+    }
+
+    .ia-sidebar-mobile-close:hover{
+
+        background:color-mix(in srgb, var(--danger) 8%, transparent);
+
+        color:var(--danger);
+
+    }
+
+    .ia-sidebar-mobile-close:active{
+
+        transform:scale(.92);
+
+    }
+
+    /* Skeleton-engine reveal — nav groups fade/slide up one
+       after another the instant the full-screen page becomes
+       visible, instead of the whole menu appearing as one flat
+       block. Delay is driven purely by DOM order (nth-child),
+       no JS timers involved. */
+
+    .ia-sidebar:not(.is-mobile-open) .ia-nav-group{
+
+        opacity:0;
+
+        transform:translateY(14px);
+
+    }
+
+    .ia-sidebar.is-mobile-open .ia-nav-group{
+
+        animation:ia-sidebar-item-in .38s var(--ia-sidebar-ease) both;
+
+    }
+
+    .ia-sidebar.is-mobile-open .ia-nav-group:nth-child(1){ animation-delay:.05s; }
+    .ia-sidebar.is-mobile-open .ia-nav-group:nth-child(2){ animation-delay:.09s; }
+    .ia-sidebar.is-mobile-open .ia-nav-group:nth-child(3){ animation-delay:.13s; }
+    .ia-sidebar.is-mobile-open .ia-nav-group:nth-child(4){ animation-delay:.17s; }
+    .ia-sidebar.is-mobile-open .ia-nav-group:nth-child(5){ animation-delay:.21s; }
+    .ia-sidebar.is-mobile-open .ia-nav-group:nth-child(6){ animation-delay:.25s; }
+    .ia-sidebar.is-mobile-open .ia-nav-group:nth-child(7){ animation-delay:.29s; }
+    .ia-sidebar.is-mobile-open .ia-nav-group:nth-child(8){ animation-delay:.33s; }
+    .ia-sidebar.is-mobile-open .ia-nav-group:nth-child(9){ animation-delay:.37s; }
+    .ia-sidebar.is-mobile-open .ia-nav-group:nth-child(n+10){ animation-delay:.40s; }
+
+    @keyframes ia-sidebar-item-in{
+
+        from{
+
+            opacity:0;
+
+            transform:translateY(14px);
+
+        }
+
+        to{
+
+            opacity:1;
+
+            transform:translateY(0);
+
+        }
+
+    }
+
+}
+
+/* Overlay (scrim) — created dynamically by the controller so
+   it always exists exactly once, independent of shell markup. */
+
+.ia-sidebar-overlay{
+
+    position:fixed;
+
+    inset:0;
+
+    background:color-mix(in srgb, var(--text) 50%, transparent);
+
+    z-index:999;
+
+    opacity:0;
+
+    visibility:hidden;
+
+    transition:opacity .25s ease, visibility 0s linear .25s;
+
+}
+
+.ia-sidebar-overlay.is-visible{
+
+    opacity:1;
+
+    visibility:visible;
+
+    transition:opacity .25s ease;
+
+}
+
+@media (max-width:1024px){
+
+    .ia-sidebar-overlay{
+
+        display:none;
+
+    }
+
+}
+
+/* --bp-laptop (1024px) + 1 */
+@media (min-width:1025px){
+
+    .ia-sidebar-overlay{
+
+        display:none;
+
+    }
+
+}
+
+/* ==========================================================
+   Tablet fine-tuning
+========================================================== */
+
+/* ==========================================================
+   Tablet fine-tuning — sidebar is full-screen at every width
+   in this breakpoint now, so no separate rail width is needed
+   here anymore; kept as a no-op section marker for future
+   tablet-specific tweaks (e.g. multi-column nav groups).
+========================================================== */
+
+/* ==========================================================
+   Landscape phones — shorter viewport, tighten vertical
+   rhythm so the nav list doesn't force scrolling before it
+   needs to.
+========================================================== */
+
+/* --bp-laptop (1024px), landscape edge case */
+@media (max-width:1024px) and (orientation:landscape) and (max-height:480px){
+
+    .ia-sidebar-brand{
+
+        padding:14px 20px;
+
+    }
+
+    .ia-sidebar-nav{
+
+        padding:12px 16px;
+
+        gap:4px;
+
+    }
+
+    .ia-nav-item{
+
+        padding:10px 16px;
+
+    }
+
+}
+
+/* ==========================================================
+   Foldables / very narrow widths
+========================================================== */
+
+/* --bp-phone-sm (360px) */
+@media (max-width:360px){
+
+    .ia-sidebar{
+
+        width:100vw;
+
+        min-width:100vw;
+
+    }
+
+}
+
+/* ==========================================================
+   Reduced motion — global rule in shell.css already zeroes
+   transition/animation durations; this only removes the
+   collapsed-rail hover tooltip's implied motion assumption.
+========================================================== */
+
+@media (prefers-reduced-motion:reduce){
+
+    /* Width/collapse transition (desktop) and slide/fade
+       transition (mobile drawer) — state still changes
+       (collapsed/expanded, open/closed), just instantly
+       instead of animated. */
+
+    .ia-sidebar,
+    .ia-sidebar.is-mobile-open{
+
+        transition:none;
+
+    }
+
+    .ia-sidebar-brand-text,
+    .ia-sidebar-collapse-btn,
+    .ia-collapse-icon,
+    .ia-nav-item,
+    .ia-nav-active-indicator,
+    .ia-nav-item::after,
+    .ia-logout-btn,
+    .ia-sidebar-mobile-close,
+    .ia-nav-soon-badge{
+
+        transition:none;
+
+    }
+
+    /* Decorative hover/press transforms (lift, scale, ripple
+       pulse) are removed outright rather than instant-applied
+       — same treatment the shared .co-press/.co-card-hover
+       utilities already use in accessibility.css. The
+       underlying click/hover functionality is unaffected. */
+
+    .ia-sidebar-collapse-btn:active,
+    .ia-sidebar-mobile-close:active,
+    .ia-logout-btn:hover,
+    .ia-logout-btn:active{
+
+        transform:none !important;
+
+    }
+
+    .ia-nav-item::after{
+
+        opacity:0 !important;
+
+    }
+
+    .ia-sidebar.is-collapsed .ia-nav-item:hover::before{
+
+        transition:none;
+
+    }
+
+    .ia-sidebar.is-mobile-open .ia-nav-group{
+
+        animation:none;
+
+        opacity:1;
+
+        transform:none;
+
+    }
+
+}

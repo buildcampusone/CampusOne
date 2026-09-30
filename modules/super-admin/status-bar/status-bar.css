@@ -1,0 +1,47 @@
+/* ==========================================================
+   CampusOne Status Bar
+========================================================== */
+
+.sa-statusbar-layout{
+
+    height:48px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    padding:0 24px;
+
+    background:var(--surface);
+
+    border-top:1px solid var(--border);
+
+    color:var(--text-secondary);
+
+    font-size:13px;
+
+}
+
+.sa-status-left,
+.sa-status-center,
+.sa-status-right{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+}
+
+@media (max-width:768px){
+
+    .sa-statusbar-layout{
+
+        display:none;
+
+    }
+
+}

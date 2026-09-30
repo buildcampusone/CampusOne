@@ -1,0 +1,78 @@
+.splash{
+
+    min-height:100vh;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:center;
+
+    padding:24px;
+
+    background:linear-gradient(
+        135deg,
+        #2563EB 0%,
+        #7C3AED 100%
+    );
+
+}
+
+.logo-image{
+
+    width:var(--logo-size);
+
+    height:var(--logo-size);
+
+    object-fit:contain;
+
+    border-radius:var(--radius-xl);
+
+    box-shadow:
+        0 25px 60px rgba(0,0,0,.20);
+
+    animation:logoAnimation .8s ease;
+
+}
+
+.app-name{
+
+    margin-top:var(--space-24);
+
+    color:#FFFFFF;
+
+    letter-spacing:-1px;
+
+}
+
+.tagline{
+
+    margin-top:10px;
+
+    color:rgba(255,255,255,.88);
+
+    text-align:center;
+
+}
+
+@keyframes logoAnimation{
+
+    from{
+
+        opacity:0;
+
+        transform:scale(.8);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:scale(1);
+
+    }
+
+}

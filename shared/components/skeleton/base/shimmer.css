@@ -1,0 +1,87 @@
+/*=========================================
+=         CAMPUSONE SHIMMER               =
+=========================================*/
+
+@keyframes campusone-shimmer {
+
+    0%{
+        transform:translateX(-100%);
+    }
+
+    100%{
+        transform:translateX(100%);
+    }
+
+}
+
+.co-skeleton{
+
+    position:relative;
+
+    overflow:hidden;
+
+    background:var(--skeleton-bg);
+
+    border-radius:var(--skeleton-radius);
+
+    opacity:var(--skeleton-opacity);
+
+}
+
+.co-skeleton::after{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    transform:translateX(-100%);
+
+    background:linear-gradient(
+
+        90deg,
+
+        transparent,
+
+        var(--skeleton-highlight),
+
+        transparent
+
+    );
+
+    /* linear, not ease — a shimmer that speeds up/slows down
+       reads as stuttery. Constant velocity is what makes it feel
+       smooth even though it's the same duration either way. */
+    animation:campusone-shimmer var(--skeleton-speed) linear infinite;
+
+    /* This animation runs for as long as the skeleton is on
+       screen (infinite), unlike the one-shot fade/cross-fade
+       transitions in animations.css — so, unlike those, it's
+       safe to leave will-change on for its whole lifetime
+       instead of toggling it per-run. */
+    will-change:transform;
+
+}
+
+@media (prefers-reduced-motion: reduce){
+
+    .co-skeleton::after{
+
+        animation:none;
+
+        opacity:0;
+
+    }
+
+}
+
+/* Toggled by AnimationEngine.shimmer(el, false) — e.g. the tab
+   went to background, or a row scrolled off-screen. Pausing
+   instead of removing the animation means it resumes from the
+   same point instead of restarting/jumping. */
+.co-skeleton--paused::after{
+
+    animation-play-state:paused;
+
+}

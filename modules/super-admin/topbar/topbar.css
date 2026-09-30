@@ -1,0 +1,757 @@
+/* ==========================================================
+   CampusOne
+   Super Admin Topbar
+========================================================== */
+
+.sa-topbar-layout{
+
+    position:sticky;
+
+    top:0;
+
+    z-index:100;
+
+    /* Safe-area support, same as Institution Admin's / Institution
+       Owner's Topbar — height grows by the inset instead of a fixed
+       value eating into it, so existing content sizing/vertical
+       centering is unaffected on non-notched devices. */
+    height:calc(72px + env(safe-area-inset-top, 0px));
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:24px;
+
+    padding:env(safe-area-inset-top, 0px) 28px 0;
+
+    background:var(--surface);
+
+    border-bottom:1px solid var(--border);
+
+}
+
+/* ==========================================================
+   Left
+========================================================== */
+
+.sa-topbar-left{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
+
+    flex-shrink:0;
+
+}
+
+.sa-page-title{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:4px;
+
+}
+
+.sa-page-title h1{
+
+    margin:0;
+
+    font-size:24px;
+
+    font-weight:700;
+
+    color:var(--text);
+
+}
+
+.sa-page-title span{
+
+    font-size:13px;
+
+    color:var(--text-secondary);
+
+}
+
+/* ==========================================================
+   Search
+========================================================== */
+
+.sa-topbar-search{
+
+    flex:1;
+
+    max-width:520px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    padding:0 18px;
+
+    height:48px;
+
+    border:1px solid var(--border);
+
+    border-radius:14px;
+
+    background:var(--background);
+
+}
+
+.sa-search-icon{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    color:var(--text-secondary);
+
+}
+
+.sa-search-icon svg{
+
+    width:18px;
+
+    height:18px;
+
+}
+
+.sa-topbar-search input{
+
+    flex:1;
+
+    border:none;
+
+    outline:none;
+
+    background:transparent;
+
+    color:var(--text);
+
+    font-size:15px;
+
+}
+
+.sa-topbar-search input::placeholder{
+
+    color:var(--text-secondary);
+
+}
+
+/* ==========================================================
+   Right
+========================================================== */
+
+.sa-topbar-right{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:16px;
+
+}
+
+.sa-notification-wrap,
+.sa-profile-wrap{
+
+    position:relative;
+
+}
+
+/* ==========================================================
+   Icon Button
+========================================================== */
+
+.sa-icon-button{
+
+    position:relative;
+
+    width:44px;
+
+    height:44px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:transparent;
+
+    color:var(--text-secondary);
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+.sa-icon-button:hover{
+
+    background:rgba(37,99,235,.08);
+
+    color:var(--primary);
+
+}
+
+.sa-icon-button svg{
+
+    width:20px;
+
+    height:20px;
+
+}
+
+/* ==========================================================
+   Notification Badge
+========================================================== */
+
+.sa-notification-badge{
+
+    position:absolute;
+
+    top:6px;
+
+    right:6px;
+
+    min-width:16px;
+
+    height:16px;
+
+    padding:0 4px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border-radius:999px;
+
+    background:#ef4444;
+
+    color:#fff;
+
+    font-size:10px;
+
+    font-weight:700;
+
+    line-height:1;
+
+    border:2px solid var(--surface);
+
+}
+
+/* ==========================================================
+   Profile
+========================================================== */
+
+.sa-profile-button{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    padding:8px 14px;
+
+    border:none;
+
+    border-radius:14px;
+
+    background:transparent;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+.sa-profile-button:hover{
+
+    background:rgba(37,99,235,.08);
+
+}
+
+.sa-profile-avatar{
+
+    width:42px;
+
+    height:42px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border-radius:50%;
+
+    background:var(--primary);
+
+    color:#fff;
+
+}
+
+.sa-profile-avatar svg{
+
+    width:20px;
+
+    height:20px;
+
+}
+
+.sa-profile-avatar img{
+
+    width:100%;
+
+    height:100%;
+
+    border-radius:50%;
+
+    object-fit:cover;
+
+}
+
+.sa-profile-avatar{
+
+    font-size:14px;
+
+    font-weight:700;
+
+    overflow:hidden;
+
+}
+
+.sa-profile-info{
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+.sa-profile-info strong{
+
+    font-size:14px;
+
+    color:var(--text);
+
+}
+
+.sa-profile-info small{
+
+    color:var(--text-secondary);
+
+    font-size:12px;
+
+}
+
+/* ==========================================================
+   Dropdown Panel (shared base — Notification + Profile)
+========================================================== */
+
+.sa-dropdown-panel{
+
+    position:absolute;
+
+    top:calc(100% + 10px);
+
+    right:0;
+
+    z-index:200;
+
+    display:flex;
+
+    flex-direction:column;
+
+    background:var(--surface);
+
+    border:1px solid var(--border);
+
+    border-radius:16px;
+
+    box-shadow:0 16px 40px rgba(16,24,40,.14);
+
+    opacity:0;
+
+    transform:translateY(-8px) scale(.98);
+
+    transform-origin:top right;
+
+    transition:opacity .18s ease, transform .18s ease;
+
+    pointer-events:none;
+
+}
+
+.sa-notification-wrap.is-open .sa-dropdown-panel,
+.sa-profile-wrap.is-open .sa-dropdown-panel{
+
+    opacity:1;
+
+    transform:translateY(0) scale(1);
+
+    pointer-events:auto;
+
+}
+
+.sa-dropdown-divider{
+
+    height:1px;
+
+    margin:6px 0;
+
+    background:var(--border);
+
+}
+
+.sa-text-btn{
+
+    border:none;
+
+    background:transparent;
+
+    color:var(--primary);
+
+    font-size:13px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    padding:4px 6px;
+
+    border-radius:8px;
+
+    transition:background .2s;
+
+}
+
+.sa-text-btn:hover{
+
+    background:rgba(37,99,235,.08);
+
+}
+
+/* ==========================================================
+   Notification Panel
+========================================================== */
+
+.sa-notification-panel{
+
+    width:340px;
+
+    max-height:420px;
+
+}
+
+.sa-dropdown-header{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    padding:16px 18px 12px;
+
+}
+
+.sa-dropdown-header h3{
+
+    margin:0;
+
+    font-size:15px;
+
+    font-weight:700;
+
+    color:var(--text);
+
+}
+
+.sa-notification-list{
+
+    list-style:none;
+
+    margin:0;
+
+    padding:0 8px 8px;
+
+    overflow-y:auto;
+
+    max-height:300px;
+
+}
+
+.sa-notification-item{
+
+    display:flex;
+
+    align-items:flex-start;
+
+    gap:10px;
+
+    padding:10px 10px;
+
+    border-radius:12px;
+
+    cursor:default;
+
+    transition:background .2s;
+
+}
+
+.sa-notification-item:hover{
+
+    background:rgba(37,99,235,.06);
+
+}
+
+.sa-notification-dot{
+
+    width:8px;
+
+    height:8px;
+
+    margin-top:6px;
+
+    border-radius:50%;
+
+    background:transparent;
+
+    flex-shrink:0;
+
+}
+
+.sa-notification-item.is-unread .sa-notification-dot{
+
+    background:var(--primary);
+
+}
+
+.sa-notification-item.is-unread{
+
+    background:rgba(37,99,235,.04);
+
+}
+
+.sa-notification-content p{
+
+    margin:0 0 2px;
+
+    font-size:13.5px;
+
+    color:var(--text);
+
+}
+
+.sa-notification-content small{
+
+    font-size:11.5px;
+
+    color:var(--text-secondary);
+
+}
+
+.sa-dropdown-empty{
+
+    padding:32px 18px;
+
+    text-align:center;
+
+    color:var(--text-secondary);
+
+    font-size:13.5px;
+
+}
+
+.sa-dropdown-footer{
+
+    display:flex;
+
+    justify-content:center;
+
+    padding:10px 12px;
+
+    border-top:1px solid var(--border);
+
+}
+
+/* ==========================================================
+   Profile Panel
+========================================================== */
+
+.sa-profile-panel{
+
+    width:260px;
+
+    padding:8px;
+
+}
+
+.sa-profile-panel-header{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    padding:10px 8px 14px;
+
+}
+
+.sa-profile-menu-list{
+
+    list-style:none;
+
+    margin:0;
+
+    padding:0;
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+.sa-profile-menu-list button{
+
+    width:100%;
+
+    text-align:left;
+
+    padding:10px 10px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:transparent;
+
+    color:var(--text);
+
+    font-size:13.5px;
+
+    cursor:pointer;
+
+    transition:background .2s;
+
+}
+
+.sa-profile-menu-list button:hover{
+
+    background:rgba(37,99,235,.08);
+
+}
+
+.sa-profile-logout-item{
+
+    width:100%;
+
+    text-align:left;
+
+    padding:10px 10px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:transparent;
+
+    color:#ef4444;
+
+    font-size:13.5px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:background .2s;
+
+}
+
+.sa-profile-logout-item:hover{
+
+    background:rgba(239,68,68,.08);
+
+}
+
+/* ==========================================================
+   Responsive
+========================================================== */
+
+@media (max-width:992px){
+
+    .sa-topbar-search{
+
+        display:none;
+
+    }
+
+}
+
+@media (max-width:768px){
+
+    .sa-topbar-layout{
+
+        padding:0 18px;
+
+        gap:14px;
+
+    }
+
+    .sa-page-title span{
+
+        display:none;
+
+    }
+
+}
+
+@media (max-width:480px){
+
+    .sa-profile-info{
+
+        display:none;
+
+    }
+
+}
+
+@media (max-width:420px){
+
+    .sa-notification-panel,
+    .sa-profile-panel{
+
+        position:fixed;
+
+        top:64px;
+
+        right:12px;
+
+        left:12px;
+
+        width:auto;
+
+    }
+
+}

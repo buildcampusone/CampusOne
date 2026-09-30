@@ -1,0 +1,23 @@
+/*=========================================
+=         PROFILE SKELETON                =
+=========================================*/
+
+.skel-profile{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:16px;
+
+}
+
+.skel-profile-meta{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:8px;
+
+}

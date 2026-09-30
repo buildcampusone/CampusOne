@@ -1,0 +1,232 @@
+/*=========================================
+=         CAMPUSONE ANIMATIONS            =
+=========================================*/
+
+/* Fade In */
+
+@keyframes co-fade-in{
+
+    from{
+
+        opacity:0;
+
+    }
+
+    to{
+
+        opacity:1;
+
+    }
+
+}
+
+/* Fade Out */
+
+@keyframes co-fade-out{
+
+    from{
+
+        opacity:1;
+
+    }
+
+    to{
+
+        opacity:0;
+
+    }
+
+}
+
+/* Fade Up */
+
+@keyframes co-fade-up{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(18px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}
+
+/* Fade Down */
+
+@keyframes co-fade-down{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(-18px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}
+
+/* Scale */
+
+@keyframes co-scale{
+
+    from{
+
+        opacity:0;
+
+        transform:scale(.96);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:scale(1);
+
+    }
+
+}
+
+/* Pulse */
+
+@keyframes co-pulse{
+
+    0%,100%{
+
+        opacity:1;
+
+    }
+
+    50%{
+
+        opacity:.65;
+
+    }
+
+}
+
+.co-animate-fade-in{
+
+    animation:co-fade-in var(--animation-normal) var(--ease-premium) forwards;
+
+    /* GPU hint scoped to the animation's own lifetime — see
+       "GPU Acceleration" note below. animation-fill-mode:forwards
+       already holds the end state, so nothing else has to. */
+    will-change:opacity;
+
+}
+
+.co-animate-fade-out{
+
+    animation:co-fade-out var(--animation-normal) var(--ease-premium) forwards;
+
+    will-change:opacity;
+
+}
+
+.co-animate-fade-up{
+
+    animation:co-fade-up var(--animation-normal) ease forwards;
+
+}
+
+.co-animate-fade-down{
+
+    animation:co-fade-down var(--animation-normal) ease forwards;
+
+}
+
+.co-animate-scale{
+
+    animation:co-scale var(--animation-normal) ease forwards;
+
+}
+
+.co-animate-pulse{
+
+    animation:co-pulse 2s infinite;
+
+}
+
+/*=========================================
+=         CROSS FADE                      =
+-------------------------------------------
+Two layers stacked on top of each other —
+never a "both gone" frame in between, which
+is what causes flicker when code instead
+removes the old node and *then* inserts the
+new one. The Animation Engine (see
+shared/core/animation/) drives which layer
+is fading in vs out; these classes just give
+it a flicker-proof stage to do it on.
+
+Markup:
+  <div class="co-crossfade">
+    <div class="co-crossfade-layer">old content</div>
+    <div class="co-crossfade-layer">new content</div>
+  </div>
+=========================================*/
+
+.co-crossfade{
+
+    position:relative;
+
+}
+
+.co-crossfade-layer{
+
+    position:absolute;
+
+    inset:0;
+
+    /* Compositor-only property, promoted to its own layer only
+       while a transition is actually in flight — the engine adds
+       will-change right before animating and clears it on finish,
+       so idle layers don't sit around eating GPU memory. */
+    opacity:1;
+
+}
+
+/*=========================================
+=         REDUCED MOTION                  =
+-------------------------------------------
+Respected the same way LinkedIn/Instagram
+degrade for users who've asked the OS for
+less motion — content still appears, it just
+doesn't sweep/fade to get there.
+=========================================*/
+
+@media (prefers-reduced-motion: reduce){
+
+    .co-animate-fade-in,
+    .co-animate-fade-out,
+    .co-animate-fade-up,
+    .co-animate-fade-down,
+    .co-animate-scale,
+    .co-animate-pulse,
+    .co-crossfade-layer{
+
+        animation-duration:1ms !important;
+        animation-iteration-count:1 !important;
+        transition-duration:1ms !important;
+
+    }
+
+}

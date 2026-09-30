@@ -1,0 +1,370 @@
+/* ==========================================================
+   CampusOne
+   Modal
+   ----------------------------------------------------------
+   Motion note: motion.css already ships a one-shot `.co-modal-in`
+   @keyframes for entrances, but a real modal also needs a
+   symmetric CLOSE animation (backdrop click / Escape / \u2715 / Cancel
+   all animate out before the DOM node is removed). A one-shot
+   `animation` can't be reversed by just removing the class, so
+   this file drives both directions off a single `.is-open` class
+   using `transition` instead -- same --duration-modal/--ease-out
+   tokens, same visual entrance (fade + scale from .96), just
+   bidirectional. See modal.js's open()/close().
+
+   Every value below resolves through variables.css tokens --
+   zero hardcoded colors/spacing/radius, dark mode free via
+   [data-theme="dark"] overrides, same discipline every other
+   stylesheet in this codebase follows.
+========================================================== */
+
+.co-modal-root{
+
+    position:fixed;
+
+    inset:0;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:var(--space-16);
+
+    visibility:hidden;
+
+    pointer-events:none;
+
+    transition:visibility 0s linear var(--duration-modal);
+
+}
+
+.co-modal-root.is-open{
+
+    visibility:visible;
+
+    pointer-events:auto;
+
+    transition:visibility 0s linear 0s;
+
+}
+
+.co-modal-backdrop{
+
+    position:absolute;
+
+    inset:0;
+
+    background:color-mix(in srgb, var(--text) 55%, transparent);
+
+    backdrop-filter:blur(3px);
+
+    -webkit-backdrop-filter:blur(3px);
+
+    opacity:0;
+
+    transition:opacity var(--duration-modal) var(--ease-out);
+
+}
+
+.co-modal-root.is-open .co-modal-backdrop{
+
+    opacity:1;
+
+}
+
+.co-modal-panel{
+
+    position:relative;
+
+    display:flex;
+
+    flex-direction:column;
+
+    width:100%;
+
+    max-width:560px;
+
+    max-height:calc(100vh - var(--space-32));
+
+    background:var(--surface);
+
+    border:1px solid var(--border);
+
+    border-radius:var(--radius-lg);
+
+    box-shadow:var(--shadow-lg);
+
+    overflow:hidden;
+
+    opacity:0;
+
+    transform:scale(.96) translateY(8px);
+
+    transition:
+        opacity var(--duration-modal) var(--ease-out),
+        transform var(--duration-modal) var(--ease-out);
+
+}
+
+.co-modal-root.is-open .co-modal-panel{
+
+    opacity:1;
+
+    transform:scale(1) translateY(0);
+
+}
+
+.co-modal-panel:focus{
+
+    outline:none;
+
+}
+
+/* ----------------------------------------------------------
+   Header
+---------------------------------------------------------- */
+
+.co-modal-header{
+
+    display:flex;
+
+    align-items:flex-start;
+
+    justify-content:space-between;
+
+    gap:var(--space-16);
+
+    padding:var(--space-24) var(--space-24) var(--space-16);
+
+    border-bottom:1px solid var(--border);
+
+}
+
+.co-modal-header-text{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:var(--space-4, 4px);
+
+    min-width:0;
+
+}
+
+.co-modal-title{
+
+    margin:0;
+
+    font-size:var(--text-xl);
+
+    font-weight:var(--weight-semibold);
+
+    color:var(--text);
+
+}
+
+.co-modal-subtitle{
+
+    margin:0;
+
+    font-size:var(--text-sm);
+
+    font-weight:var(--weight-regular);
+
+    color:var(--text-secondary);
+
+}
+
+.co-modal-close{
+
+    flex-shrink:0;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    width:36px;
+
+    height:36px;
+
+    padding:0;
+
+    border:none;
+
+    border-radius:var(--radius-full);
+
+    background:var(--surface-secondary);
+
+    color:var(--text-secondary);
+
+    cursor:pointer;
+
+    transition:background var(--transition-fast), color var(--transition-fast);
+
+}
+
+.co-modal-close:hover{
+
+    background:color-mix(in srgb, var(--text) 10%, var(--surface-secondary));
+
+    color:var(--text);
+
+}
+
+/* M1 fix — visual state for setCloseDisabled(true) (modal.js),
+   same opacity/cursor convention button.css's .btn:disabled
+   already uses. */
+.co-modal-close:disabled{
+
+    opacity:.55;
+
+    cursor:not-allowed;
+
+    background:var(--surface-secondary);
+
+    color:var(--text-secondary);
+
+}
+
+.co-modal-close svg{
+
+    width:18px;
+
+    height:18px;
+
+}
+
+/* ----------------------------------------------------------
+   Body -- the only part that scrolls when content overflows
+   the viewport, header/footer stay pinned.
+---------------------------------------------------------- */
+
+.co-modal-body{
+
+    padding:var(--space-24);
+
+    overflow-y:auto;
+
+}
+
+/* ----------------------------------------------------------
+   Footer
+---------------------------------------------------------- */
+
+.co-modal-footer{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:flex-end;
+
+    gap:var(--space-12);
+
+    padding:var(--space-16) var(--space-24) var(--space-24);
+
+    border-top:1px solid var(--border);
+
+}
+
+/* ----------------------------------------------------------
+   Responsive
+---------------------------------------------------------- */
+
+@media (max-width:768px){
+
+    .co-modal-root{
+
+        align-items:flex-end;
+
+        padding:0;
+
+    }
+
+    .co-modal-panel{
+
+        max-width:100%;
+
+        max-height:calc(100vh - var(--space-32));
+
+        border-radius:var(--radius-lg) var(--radius-lg) 0 0;
+
+        transform:translateY(24px);
+
+    }
+
+    .co-modal-root.is-open .co-modal-panel{
+
+        transform:translateY(0);
+
+    }
+
+    .co-modal-footer{
+
+        flex-direction:column-reverse;
+
+        align-items:stretch;
+
+        /* M4 — the panel becomes a bottom-anchored sheet at this
+           breakpoint, so its footer is the edge that can sit under
+           a home-indicator/gesture-bar; extra padding stacks on
+           top of the existing var(--space-24), same
+           calc(base + env(...)) pattern bottom-nav.css/shell.css
+           already use for this exact scenario. */
+        padding-bottom:calc(var(--space-24) + env(safe-area-inset-bottom));
+
+    }
+
+    .co-modal-footer .btn{
+
+        width:100%;
+
+    }
+
+}
+
+@media (max-width:480px){
+
+    .co-modal-header{
+
+        padding:var(--space-20) var(--space-16) var(--space-12);
+
+    }
+
+    .co-modal-body{
+
+        padding:var(--space-16);
+
+    }
+
+    .co-modal-footer{
+
+        padding:var(--space-12) var(--space-16) calc(var(--space-16) + env(safe-area-inset-bottom));
+
+    }
+
+}
+
+/* ----------------------------------------------------------
+   Reduced Motion -- co-located with the rule it guards, same
+   convention every other component in this codebase follows
+   (see accessibility.css's own note on this).
+---------------------------------------------------------- */
+
+@media (prefers-reduced-motion:reduce){
+
+    .co-modal-backdrop,
+    .co-modal-panel{
+
+        transition:opacity var(--duration-modal) linear !important;
+
+        transform:none !important;
+
+    }
+
+}

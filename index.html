@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>CampusOne</title>
+
+<script>
+// Applied before CSS/paint so switching to dark mode never
+// flashes light first. Mirrors shared/utils/theme.js.
+(function () {
+    try {
+        var stored = localStorage.getItem("campusone-theme");
+        var theme = stored === "dark" || stored === "light"
+            ? stored
+            : (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+        document.documentElement.setAttribute("data-theme", theme);
+    } catch (e) {}
+})();
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+rel="stylesheet">
+<link rel="stylesheet"
+href="shared/styles/main.css">
+
+<link rel="icon" href="./assets/favicon/favicon.ico" type="image/x-icon">
+
+<link rel="manifest" href="manifest.webmanifest">
+
+<meta name="theme-color" content="#2563EB">
+
+<link rel="apple-touch-icon" href="assets/pwa/icon-192.png">
+
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="CampusOne"> 
+    
+</head>
+
+<body>
+
+<div id="app"></div>
+
+<script type="module"
+src="main.js"></script>
+
+<script>
+// Relative registration: resolves against this document's own folder,
+// so it works unmodified on localhost, GitHub Pages project subpaths
+// (e.g. /CampusOne/) and any future custom domain — no hardcoded host.
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker
+      .register("./service-worker.js", { scope: "./" })
+      .then((registration) => {
+        console.log("[SW] registered:", registration.scope);
+
+        registration.addEventListener("updatefound", () => {
+          const newWorker = registration.installing;
+          if (!newWorker) return;
+          newWorker.addEventListener("statechange", () => {
+            if (newWorker.state === "installed" && navigator.serviceWorker.controller) {
+              console.log("[SW] new version installed, will activate on next load");
+            }
+          });
+        });
+      })
+      .catch((error) => {
+        console.error("[SW] registration failed:", error);
+      });
+  });
+}
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+<script>
+  eruda.init();
+</script>
+
+</body>
+
+</html>

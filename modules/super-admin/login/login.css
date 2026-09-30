@@ -1,0 +1,1020 @@
+/* ==========================================================
+   CampusOne Super Admin Login v2.0
+   Layout
+========================================================== */
+
+.sa-login{
+
+    position:relative;
+
+    width:100%;
+
+    min-height:100vh;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    padding:32px 20px;
+
+    overflow:hidden;
+
+}
+
+.sa-login-container{
+
+    position:relative;
+
+    width:100%;
+
+    max-width:460px;
+
+    z-index:2;
+
+}
+
+.sa-login-card{
+
+    position:relative;
+
+    overflow:hidden;
+
+    border-radius:32px;
+
+    padding:36px 28px;
+
+    background:rgba(255,255,255,.08);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    backdrop-filter:blur(28px);
+
+    -webkit-backdrop-filter:blur(28px);
+
+    box-shadow:
+
+        0 24px 80px rgba(0,0,0,.30),
+
+        inset 0 1px rgba(255,255,255,.08);
+
+}
+
+/* ==========================================================
+   Decorative Glow
+========================================================== */
+
+.sa-login-card::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:-120px;
+
+    left:50%;
+
+    transform:translateX(-50%);
+
+    width:260px;
+
+    height:260px;
+
+    border-radius:50%;
+
+    background:
+
+        radial-gradient(
+
+            rgba(37,99,235,.30),
+
+            transparent 72%
+
+        );
+
+    pointer-events:none;
+
+}
+
+.sa-login-card::after{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    border-radius:inherit;
+
+    border:1px solid rgba(255,255,255,.05);
+
+    pointer-events:none;
+
+}
+
+/* ==========================================================
+   Header
+========================================================== */
+
+.sa-header{
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    justify-content:center;
+
+    text-align:center;
+
+    margin-bottom:36px;
+
+}
+
+/* ==========================================================
+   Logo
+========================================================== */
+
+.sa-logo{
+
+    display:block;
+
+    width:92px;
+
+    height:92px;
+
+    margin:0 auto 22px;
+
+    object-fit:contain;
+
+    user-select:none;
+
+    -webkit-user-drag:none;
+
+    filter:
+        drop-shadow(0 8px 24px rgba(37,99,235,.28));
+
+    transition:
+        transform .35s ease,
+        filter .35s ease;
+
+}
+
+.sa-logo:hover{
+
+    transform:scale(1.04);
+
+    filter:
+        drop-shadow(0 12px 32px rgba(37,99,235,.40));
+
+}
+
+/* ==========================================================
+   Badge
+========================================================== */
+
+.sa-badge{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    margin:0 auto 22px;
+
+    padding:8px 18px;
+
+    border-radius:999px;
+
+    background:rgba(37,99,235,.14);
+
+    border:1px solid rgba(37,99,235,.22);
+
+    color:#60A5FA;
+
+    font-size:11px;
+
+    font-weight:700;
+
+    letter-spacing:.16em;
+
+    text-transform:uppercase;
+
+    backdrop-filter:blur(12px);
+
+}
+
+/* ==========================================================
+   Title
+========================================================== */
+
+.sa-title{
+
+    margin:0;
+
+    font-size:32px;
+
+    font-weight:800;
+
+    line-height:1.2;
+
+    color:var(--text);
+
+    letter-spacing:-.03em;
+
+}
+
+/* ==========================================================
+   Subtitle
+========================================================== */
+
+.sa-subtitle{
+
+    margin:14px auto 0;
+
+    max-width:320px;
+
+    color:var(--text-secondary);
+
+    font-size:15px;
+
+    line-height:1.7;
+
+    font-weight:500;
+
+}
+
+/* ==========================================================
+   Form
+========================================================== */
+
+.sa-form{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:22px;
+
+}
+
+.sa-form .input-group{
+
+    width:100%;
+
+}
+
+.sa-form .input-wrapper{
+
+    width:100%;
+
+}
+
+.sa-options{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    margin-top:-4px;
+
+    margin-bottom:8px;
+
+}
+
+/* ==========================================================
+   Remember Device
+========================================================== */
+
+.sa-checkbox{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    cursor:pointer;
+
+    user-select:none;
+
+    color:var(--text-secondary);
+
+    font-size:14px;
+
+    font-weight:500;
+
+}
+
+.sa-checkbox input{
+
+    width:18px;
+
+    height:18px;
+
+    accent-color:var(--primary);
+
+    cursor:pointer;
+
+    flex-shrink:0;
+
+}
+
+.sa-checkbox span{
+
+    line-height:1.4;
+
+}
+
+/* ==========================================================
+   Shared Button
+========================================================== */
+
+.sa-form .btn{
+
+    margin-top:8px;
+
+}
+
+/* ==========================================================
+   Footer
+========================================================== */
+
+.sa-footer{
+
+    margin-top:34px;
+
+    padding-top:20px;
+
+    border-top:1px solid rgba(255,255,255,.08);
+
+}
+
+.sa-footer-top{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:14px;
+
+}
+
+.sa-version,
+
+.sa-build{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:6px 12px;
+
+    border-radius:999px;
+
+    background:rgba(255,255,255,.06);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    color:var(--text-secondary);
+
+    font-size:12px;
+
+    font-weight:600;
+
+}
+
+.sa-footer-divider{
+
+    width:100%;
+
+    height:1px;
+
+    background:rgba(255,255,255,.08);
+
+    margin-bottom:14px;
+
+}
+
+.sa-security{
+
+    margin:0;
+
+    text-align:center;
+
+    color:var(--text-light);
+
+    font-size:12px;
+
+    line-height:1.6;
+
+}
+
+/* ==========================================================
+   CampusOne Super Admin Login v2.0
+   Responsive + Animations
+========================================================== */
+
+/* ---------- Card Animation ---------- */
+
+@keyframes saCardFade{
+
+    from{
+
+        opacity:0;
+
+        transform:
+            translateY(24px)
+            scale(.98);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:
+            translateY(0)
+            scale(1);
+
+    }
+
+}
+
+.sa-login-card{
+
+    animation:
+        saCardFade .55s ease-out;
+
+}
+
+/* ---------- Logo Animation ---------- */
+
+@keyframes saLogoFloat{
+
+    0%{
+
+        transform:translateY(0);
+
+    }
+
+    50%{
+
+        transform:translateY(-4px);
+
+    }
+
+    100%{
+
+        transform:translateY(0);
+
+    }
+
+}
+
+.sa-logo{
+
+    animation:
+        saLogoFloat 4s ease-in-out infinite;
+
+}
+
+/* ---------- Input Focus ---------- */
+
+.sa-form .input{
+
+    transition:
+
+        transform .25s ease,
+
+        box-shadow .25s ease,
+
+        border-color .25s ease;
+
+}
+
+.sa-form .input:focus{
+
+    transform:translateY(-1px);
+
+}
+
+/* ---------- Button ---------- */
+
+.sa-form .btn{
+
+    transition:
+
+        transform .25s ease,
+
+        box-shadow .25s ease,
+
+        filter .25s ease;
+
+}
+
+.sa-form .btn:hover{
+
+    transform:translateY(-2px);
+
+}
+
+.sa-form .btn:active{
+
+    transform:scale(.98);
+
+}
+
+/* ---------- Mobile ---------- */
+
+@media (max-width:768px){
+
+    .sa-login{
+
+        padding:24px 18px;
+
+    }
+
+    .sa-login-card{
+
+        padding:32px 22px;
+
+        border-radius:28px;
+
+    }
+
+    .sa-title{
+
+        font-size:28px;
+
+    }
+
+}
+
+@media (max-width:480px){
+
+    .sa-login{
+
+        padding:20px 16px;
+
+    }
+
+    .sa-login-container{
+
+        max-width:100%;
+
+    }
+
+    .sa-login-card{
+
+        padding:28px 18px;
+
+        border-radius:24px;
+
+    }
+
+    .sa-logo{
+
+        width:80px;
+
+        height:80px;
+
+    }
+
+    .sa-title{
+
+        font-size:24px;
+
+    }
+
+    .sa-subtitle{
+
+        font-size:14px;
+
+    }
+
+    .sa-footer-top{
+
+        flex-direction:column;
+
+        gap:10px;
+
+    }
+
+}
+
+@media (max-width:360px){
+
+    .sa-login-card{
+
+        padding:24px 16px;
+
+    }
+
+    .sa-title{
+
+        font-size:22px;
+
+    }
+
+}
+
+/* ---------- Accessibility ---------- */
+
+.sa-login button:focus-visible,
+.sa-login input:focus-visible{
+
+    outline:none;
+
+}
+
+/* ==========================================================
+   Premium Login Loader (Auth + Skeleton Phases)
+========================================================== */
+
+.sa-loader{
+
+    position:fixed;
+    inset:0;
+    z-index:9999;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:
+        radial-gradient(
+            circle at 50% 30%,
+            rgba(37,99,235,.16),
+            transparent 60%
+        ),
+        rgba(6,10,20,.86);
+
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+
+    transition:
+        opacity .35s ease,
+        visibility 0s linear .35s;
+
+}
+
+.sa-loader.show{
+
+    opacity:1;
+    visibility:visible;
+    pointer-events:all;
+
+    transition:
+        opacity .35s ease,
+        visibility 0s linear 0s;
+
+}
+
+.sa-loader-inner{
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:20px;
+
+    width:100%;
+    max-width:380px;
+    padding:0 24px;
+
+}
+
+/* ---------- Auth Phase: Ring + Logo ---------- */
+
+.sa-loader-ring{
+
+    position:relative;
+    width:92px;
+    height:92px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:50%;
+
+    background:
+        conic-gradient(
+            from 0deg,
+            #2563EB,
+            #60A5FA,
+            #2563EB 60%,
+            transparent 100%
+        );
+
+    animation:saLoaderSpin 1.1s linear infinite;
+
+    transition:
+        opacity .3s ease,
+        transform .3s ease;
+
+}
+
+.sa-loader-ring::before{
+
+    content:"";
+    position:absolute;
+    inset:4px;
+
+    border-radius:50%;
+
+    background:#0B1220;
+
+}
+
+.sa-loader-logo{
+
+    position:relative;
+    z-index:1;
+
+    width:44px;
+    height:44px;
+    object-fit:contain;
+
+    animation:saLoaderPulse 1.6s ease-in-out infinite;
+
+}
+
+@keyframes saLoaderSpin{
+
+    to{ transform:rotate(360deg); }
+
+}
+
+@keyframes saLoaderPulse{
+
+    0%,100%{ transform:scale(1); opacity:1; }
+    50%{ transform:scale(.92); opacity:.75; }
+
+}
+
+.sa-loader-text{
+
+    margin:0;
+
+    color:var(--text);
+    font-size:15px;
+    font-weight:600;
+    letter-spacing:.01em;
+
+    transition:opacity .25s ease;
+
+}
+
+.sa-loader-progress{
+
+    width:100%;
+    max-width:220px;
+    height:4px;
+
+    border-radius:999px;
+    overflow:hidden;
+
+    background:rgba(255,255,255,.08);
+
+    transition:opacity .3s ease;
+
+}
+
+.sa-loader-progress span{
+
+    display:block;
+    width:40%;
+    height:100%;
+
+    border-radius:999px;
+
+    background:linear-gradient(90deg,#2563EB,#60A5FA);
+
+    animation:saLoaderProgress 1.2s ease-in-out infinite;
+
+}
+
+@keyframes saLoaderProgress{
+
+    0%{ transform:translateX(-120%); }
+    100%{ transform:translateX(340%); }
+
+}
+
+/* ---------- Skeleton Engine Phase ---------- */
+
+.sa-loader-skeleton{
+
+    width:100%;
+    max-width:340px;
+
+    display:none;
+    flex-direction:column;
+    gap:14px;
+
+    padding:18px;
+    border-radius:20px;
+
+    background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.08);
+
+    opacity:0;
+    transform:translateY(6px);
+
+    transition:
+        opacity .4s ease,
+        transform .4s ease;
+
+}
+
+.sa-skel-topbar{
+
+    display:flex;
+    align-items:center;
+    gap:10px;
+
+}
+
+.sa-skel-avatar{
+
+    width:30px;
+    height:30px;
+    border-radius:50%;
+    flex-shrink:0;
+
+}
+
+.sa-skel-pill{
+
+    margin-left:auto;
+    width:56px;
+    height:20px;
+    border-radius:999px;
+
+}
+
+.sa-skel-body{
+
+    display:flex;
+    gap:14px;
+
+}
+
+.sa-skel-sidebar{
+
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+
+    width:34%;
+
+}
+
+.sa-skel-content{
+
+    flex:1;
+
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+
+}
+
+.sa-skel-row{
+
+    display:flex;
+    gap:10px;
+
+}
+
+.sa-skel{
+
+    border-radius:8px;
+
+    background:rgba(255,255,255,.06);
+
+    position:relative;
+    overflow:hidden;
+
+}
+
+.sa-skel-line{
+
+    height:10px;
+    border-radius:6px;
+
+}
+
+.sa-skel-card{
+
+    height:52px;
+    border-radius:12px;
+
+}
+
+.sa-skel-card.sm{
+
+    flex:1;
+    height:40px;
+
+}
+
+.w-40{ width:40%; }
+.w-50{ width:50%; }
+.w-60{ width:60%; }
+.w-65{ width:65%; }
+.w-70{ width:70%; }
+.w-80{ width:80%; }
+
+/* Shimmer sweep */
+
+.shimmer::after{
+
+    content:"";
+    position:absolute;
+    inset:0;
+
+    background:linear-gradient(
+        100deg,
+        transparent 20%,
+        rgba(255,255,255,.16) 50%,
+        transparent 80%
+    );
+
+    transform:translateX(-100%);
+
+    animation:saShimmerSweep 1.5s ease-in-out infinite;
+
+}
+
+@keyframes saShimmerSweep{
+
+    to{ transform:translateX(100%); }
+
+}
+
+/* ---------- Phase Switch: Auth -> Skeleton ---------- */
+
+.sa-loader.phase-skeleton .sa-loader-ring,
+.sa-loader.phase-skeleton .sa-loader-progress{
+
+    opacity:0;
+    transform:scale(.9);
+    display:none;
+
+}
+
+.sa-loader.phase-skeleton .sa-loader-text{
+
+    font-size:13px;
+    color:var(--text-secondary);
+    font-weight:500;
+
+}
+
+.sa-loader.phase-skeleton .sa-loader-skeleton{
+
+    display:flex;
+    opacity:1;
+    transform:translateY(0);
+
+}
+
+@media (max-width:480px){
+
+    .sa-loader-inner{ max-width:300px; }
+
+    .sa-loader-skeleton{ max-width:280px; padding:14px; }
+
+}
+
+/* ---------- Reduced Motion ---------- */
+
+@media (prefers-reduced-motion:reduce){
+
+    *{
+
+        animation:none !important;
+
+        transition:none !important;
+
+        scroll-behavior:auto !important;
+
+    }
+
+}

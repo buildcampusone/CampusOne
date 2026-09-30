@@ -1,0 +1,23 @@
+/*=========================================
+=         CHART SKELETON                  =
+=========================================*/
+
+.skel-chart{
+
+    width:100%;
+
+    display:flex;
+
+    align-items:flex-end;
+
+    gap:12px;
+
+}
+
+.skel-chart-bar{
+
+    flex:1;
+
+    min-width:0;
+
+}

@@ -1,0 +1,47 @@
+/* =========================================
+   CampusOne Link
+   Version: 2.0
+========================================= */
+
+.link{
+
+    display:inline-flex;
+    align-items:center;
+
+    width:fit-content;
+
+    margin-top:4px;
+    margin-bottom:16px;
+
+    color:#60A5FA;
+
+    text-decoration:none;
+
+    font-size:14px;
+    font-weight:600;
+
+    letter-spacing:.2px;
+
+    transition:.25s ease;
+
+}
+
+.link:hover{
+
+    color:#93C5FD;
+
+}
+
+.link:active{
+
+    transform:scale(.98);
+
+}
+
+.link:focus-visible{
+
+    outline:none;
+
+    color:#BFDBFE;
+
+}

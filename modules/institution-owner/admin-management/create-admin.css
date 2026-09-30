@@ -1,0 +1,476 @@
+/* ==========================================================
+   CampusOne
+   Institution Owner — Create Institution Administrator
+   ----------------------------------------------------------
+   Phase 5.1.2 (Part 1) — Create Institution Administrator
+   UI & Validation Foundation
+   Phase 5.1.2-B — Modal → Full-Screen Page conversion
+
+   Same discipline admin-management.css already established —
+   everything resolves through variables.css tokens, dark mode
+   comes free via [data-theme="dark"] overrides, no separate
+   dark-mode rules needed here.
+
+   The modal shell (backdrop/panel/header/generic footer row,
+   shared/components/modal/modal.css) is no longer used by this
+   page as of 5.1.2-B — the `#createAdminModal`-scoped footer
+   override Part 1 had here is gone with it (see the
+   `.ca-page-footer` rule further down, its direct replacement).
+   Everything else below — the `.ca-form`/`.ca-form-grid` field
+   layout, the field-color overrides, `.ca-footer-actions`/
+   `.ca-reset-link`/`.ca-discard-bar` — is unchanged from Part 1
+   and reused as-is inside the new `.ca-page` shell.
+========================================================== */
+
+/* ==========================================================
+   Full Page Shell
+   ----------------------------------------------------------
+   `.ca-page` renders directly into the routed workspace
+   (#ioContent — see modules/institution-owner/shell/shell.css),
+   which is itself the scrolling ancestor `position: sticky`
+   below resolves against, so the header/footer stick to that
+   scrollport rather than needing a second nested scroll
+   container.
+========================================================== */
+
+.ca-page {
+
+    display: flex;
+    flex-direction: column;
+
+    /* Pulls the sticky header flush against #ioContent's own
+       top padding edge instead of leaving a permanent gap above
+       it once scrolled — #ioContent's padding is what the
+       negative margin/inset pair below cancels out. Kept as a
+       token here (rather than hardcoded 24px) so a future change
+       to shell.css's own padding only needs updating in one
+       place; see the responsive block for the 900px value. */
+    --ca-page-edge: var(--space-24, 24px);
+
+    margin: calc(-1 * var(--ca-page-edge)) calc(-1 * var(--space-28, 28px)) 0;
+
+}
+
+.ca-page-header {
+
+    position: sticky;
+    top: 0;
+    z-index: 2;
+
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-12);
+
+    padding: var(--ca-page-edge) var(--space-28, 28px) var(--space-16);
+
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+
+}
+
+.ca-back-button {
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    width: 40px;
+    height: 40px;
+    margin-top: 2px;
+
+    border: 1px solid var(--border);
+    border-radius: var(--radius-full);
+    background: var(--surface-secondary);
+    color: var(--text);
+
+    cursor: pointer;
+    transition: background var(--transition-fast), border-color var(--transition-fast);
+
+}
+
+.ca-back-button svg {
+
+    width: 20px;
+    height: 20px;
+
+}
+
+.ca-back-button:hover {
+
+    background: var(--surface-tertiary, var(--surface-secondary));
+    border-color: var(--primary);
+    color: var(--primary);
+
+}
+
+.ca-back-button:disabled {
+
+    opacity: 0.5;
+    cursor: not-allowed;
+
+}
+
+.ca-page-header-text {
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4, 4px);
+    min-width: 0;
+
+}
+
+.ca-page-title {
+
+    margin: 0;
+    font-size: var(--text-2xl);
+    font-weight: var(--weight-semibold);
+    color: var(--text);
+
+}
+
+.ca-page-subtitle {
+
+    margin: 0;
+    font-size: var(--text-sm);
+    font-weight: var(--weight-regular);
+    color: var(--text-secondary);
+
+}
+
+.ca-page-body {
+
+    flex: 1;
+    padding: var(--space-24) var(--space-28, 28px);
+
+}
+
+.ca-page-footer {
+
+    position: sticky;
+    bottom: 0;
+    z-index: 2;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--space-12);
+
+    padding: var(--space-16) var(--space-28, 28px) calc(var(--space-16) + env(safe-area-inset-bottom));
+
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+
+}
+
+.ca-form {
+
+    display: flex;
+    flex-direction: column;
+
+}
+
+.ca-form-grid {
+
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-20) var(--space-16);
+
+}
+
+.ca-form-field {
+
+    min-width: 0;
+
+}
+
+.ca-form-field-full {
+
+    grid-column: 1 / -1;
+
+}
+
+/* ==========================================================
+   Light Theme Compatibility — Form Field Colors
+   ----------------------------------------------------------
+   shared/components/input/input.css hardcodes white text/
+   borders/placeholder (rgba(255,255,255,...) + #FFFFFF) for the
+   dark auth-screen surface it was originally built for. This
+   form renders on var(--surface) — white in Light Theme — so
+   those hardcoded values were invisible here (white text on a
+   near-white panel). Scoped, token-based override, same pattern
+   institution-profile.css's `.iop-card--identity .input*` block
+   already establishes for its own light-surface context.
+
+   Only colors change below — height/padding/border-radius/
+   typography are left exactly as shared/input.css defines them,
+   so spacing and layout are untouched per spec. Every dark-theme
+   token below resolves to a value visually equivalent to the
+   hardcoded one it replaces ([data-theme="dark"] in
+   variables.css), so Dark Theme keeps its current look.
+========================================================== */
+
+.ca-form .input-label {
+
+    color: var(--text-secondary);
+
+}
+
+.ca-form .input-icon {
+
+    color: var(--text-light);
+
+}
+
+.ca-form .input-wrapper:focus-within .input-icon {
+
+    color: var(--primary);
+
+}
+
+.ca-form .input-wrapper:focus-within .input-action {
+
+    color: var(--primary);
+
+}
+
+.ca-form .input {
+
+    background: var(--surface-secondary);
+    border: 1px solid var(--border);
+    color: var(--text);
+
+}
+
+.ca-form .input::placeholder {
+
+    color: var(--text-light);
+
+}
+
+.ca-form .input:focus {
+
+    background: var(--surface);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary) 14%, transparent);
+
+}
+
+.ca-form .input:-webkit-autofill,
+.ca-form .input:-webkit-autofill:hover,
+.ca-form .input:-webkit-autofill:focus {
+
+    -webkit-text-fill-color: var(--text);
+    -webkit-box-shadow: 0 0 0 1000px var(--surface-secondary) inset;
+
+}
+
+.ca-form .input.error {
+
+    border-color: var(--danger);
+    background: color-mix(in srgb, var(--danger) 8%, var(--surface-secondary));
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--danger) 12%, transparent);
+
+}
+
+.ca-form .input.success {
+
+    border-color: var(--success);
+    background: color-mix(in srgb, var(--success) 8%, var(--surface-secondary));
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--success) 12%, transparent);
+
+}
+
+.ca-form .input:disabled {
+
+    color: var(--text-light);
+
+}
+
+.ca-form .input[readonly] {
+
+    background: var(--surface-secondary);
+    color: var(--text-secondary);
+
+}
+
+.ca-form .input-hint {
+
+    color: var(--text-secondary);
+
+}
+
+/* ==========================================================
+   Footer — Default State
+   ----------------------------------------------------------
+   `.ca-page-footer` above already lays its contents out as
+   space-between/flex-wrap (this form renders a "Reset Form" link
+   as a footer sibling, alongside the Cancel/Create actions) — no
+   extra override needed the way Part 1's modal-scoped rule did
+   for the shared, right-aligned `.co-modal-footer` default.
+========================================================== */
+
+.ca-reset-link {
+
+    padding: var(--space-8) var(--space-4);
+
+    border: none;
+    background: none;
+
+    font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
+    color: var(--text-secondary);
+
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+
+    transition: color var(--transition-fast);
+
+}
+
+.ca-reset-link:hover {
+
+    color: var(--primary);
+
+}
+
+.ca-reset-link:disabled {
+
+    color: var(--text-light);
+    cursor: not-allowed;
+    text-decoration: none;
+
+}
+
+.ca-footer-actions {
+
+    display: flex;
+    align-items: center;
+    gap: var(--space-12);
+
+}
+
+/* M2 — above the mobile breakpoint, buttons keep their own
+   content width instead of stretching to fill `.ca-footer-actions`
+   (inherited from `.btn`'s base width:100%, meant for full-width
+   auth CTAs). Scoped with min-width so it never fights the
+   intentional full-width mobile rules in the @media(max-width:768px)
+   block below and in modal.css's own mobile footer rule. */
+@media (min-width: 769px) {
+
+    .ca-footer-actions .btn {
+
+        width: auto;
+        flex: 0 0 auto;
+
+    }
+
+}
+
+/* ==========================================================
+   Footer — Discard Confirmation
+========================================================== */
+
+.ca-discard-bar {
+
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-16);
+
+    width: 100%;
+
+}
+
+.ca-discard-text {
+
+    font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
+    color: var(--text);
+
+}
+
+/* ==========================================================
+   Responsive
+========================================================== */
+
+@media (max-width: 640px) {
+
+    .ca-form-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+}
+
+/* --bp-tablet-lg (900px) — matches shell.css's own #ioContent
+   padding step, so `.ca-page`'s negative margin (and the sticky
+   header/footer's edge padding) keep cancelling it out exactly
+   rather than leaving a stray gap once the shell's own padding
+   shrinks. */
+@media (max-width: 900px) {
+
+    .ca-page {
+
+        --ca-page-edge: 18px;
+
+        margin: calc(-1 * var(--ca-page-edge)) -16px 0;
+
+    }
+
+    .ca-page-header,
+    .ca-page-body,
+    .ca-page-footer {
+
+        padding-left: 16px;
+        padding-right: 16px;
+
+    }
+
+}
+
+@media (max-width: 768px) {
+
+    .ca-page-footer {
+
+        flex-direction: column-reverse;
+        align-items: stretch;
+
+    }
+
+    .ca-footer-actions {
+
+        flex-direction: column;
+        width: 100%;
+
+    }
+
+    .ca-reset-link {
+
+        align-self: center;
+
+    }
+
+    .ca-discard-bar {
+
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+
+    }
+
+}
+
+@media (max-width: 480px) {
+
+    .ca-page-title {
+
+        font-size: var(--text-xl);
+
+    }
+
+}

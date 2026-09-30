@@ -1,0 +1,436 @@
+/* =========================================
+   CampusOne - Login Page
+   Version: 3.0
+========================================= */
+
+.login{
+
+    position:relative;
+    z-index:1;
+
+    min-height:100dvh;
+
+    display:flex;
+    flex-direction:column;
+
+    justify-content:flex-start;
+    align-items:center;
+
+    padding:24px 20px 40px;
+
+}
+
+/* =========================================
+   Hero Section
+========================================= */
+
+.login-hero{
+
+    width:100%;
+    max-width:420px;
+
+    display:flex;
+    flex-direction:column;
+
+    align-items:center;
+
+    text-align:center;
+
+    margin-bottom:20px;
+
+}
+
+.login-logo{
+
+    width:72px;
+    height:72px;
+
+    object-fit:contain;
+
+    border-radius:18px;
+
+    box-shadow:
+        0 14px 35px rgba(37,99,235,.30);
+
+}
+
+.login-title{
+
+    margin-top:14px;
+
+    font-size:36px;
+
+    font-weight:800;
+
+    letter-spacing:-1px;
+
+    line-height:1.05;
+
+    color:#FFFFFF;
+
+}
+
+.login-tagline{
+
+    margin-top:6px;
+
+    font-size:14px;
+
+    line-height:1.5;
+
+    color:rgba(255,255,255,.68);
+
+}
+
+/* =========================================
+   Live Time
+========================================= */
+
+.hero-time{
+
+    margin-top:26px;
+
+    text-align:center;
+
+}
+
+.live-time{
+
+    font-size:42px;
+
+    font-weight:800;
+
+    line-height:1;
+
+    color:#FFFFFF;
+
+}
+
+.live-date{
+
+    margin-top:6px;
+
+    font-size:15px;
+
+    color:rgba(255,255,255,.68);
+
+}
+
+/* =========================================
+   Greeting
+========================================= */
+
+.hero-greeting{
+
+    margin-top:24px;
+
+    text-align:center;
+
+}
+
+.live-greeting{
+
+    font-size:34px;
+
+    font-weight:700;
+
+    line-height:1.1;
+
+    color:#FFFFFF;
+
+}
+
+.hero-subtitle{
+
+    margin-top:8px;
+
+    font-size:15px;
+
+    line-height:1.5;
+
+    color:rgba(255,255,255,.65);
+
+}
+
+/* =========================================
+   Auth Card
+========================================= */
+
+.auth-card{
+
+    width:100%;
+
+    max-width:380px;
+
+    margin-top:10px;
+
+    padding:28px 24px;
+
+    border-radius:28px;
+
+    background:rgba(32,40,66,.82);
+
+    backdrop-filter:blur(22px);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    box-shadow:
+        0 20px 60px rgba(0,0,0,.30);
+
+}
+
+/* =========================================
+   Login Form
+========================================= */
+
+.login-form{
+
+    width:100%;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:18px;
+
+}
+
+/* =========================================
+   Remember Me
+========================================= */
+
+.login-options{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-top:4px;
+
+    margin-bottom:8px;
+
+}
+
+.remember-me{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    cursor:pointer;
+
+    color:#E5E7EB;
+
+    font-size:14px;
+
+}
+
+.remember-me input{
+
+    width:18px;
+
+    height:18px;
+
+    accent-color:#2563EB;
+
+}
+
+/* =========================================
+   Divider
+========================================= */
+
+.login-divider{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+    margin:22px 0;
+
+}
+
+.login-divider::before,
+
+.login-divider::after{
+
+    content:"";
+
+    flex:1;
+
+    height:1px;
+
+    background:rgba(255,255,255,.10);
+
+}
+
+.login-divider span{
+
+    color:#94A3B8;
+
+    font-size:13px;
+
+    letter-spacing:1px;
+
+    font-weight:600;
+
+}
+
+/* =========================================
+   Google Button
+========================================= */
+
+.btn-secondary{
+
+    width:100%;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:12px;
+
+    background:#FFFFFF;
+
+    color:#111827;
+
+    border:1px solid #E5E7EB;
+
+}
+
+.btn-secondary:hover{
+
+    background:#F8FAFC;
+
+}
+
+.google-icon{
+
+    width:22px;
+
+    height:22px;
+
+}
+
+/* =========================================
+   Register
+========================================= */
+
+.login-register{
+
+    margin-top:24px;
+
+    text-align:center;
+
+}
+
+.register-text{
+
+    margin-bottom:8px;
+
+    color:#CBD5E1;
+
+    font-size:14px;
+
+}
+
+/* =========================================
+   Institution Register
+========================================= */
+
+.institution-register{
+
+    margin-top:26px;
+
+    padding-top:22px;
+
+    border-top:1px solid rgba(255,255,255,.08);
+
+    text-align:center;
+
+}
+
+.institution-text{
+
+    margin-bottom:10px;
+
+    color:#94A3B8;
+
+    font-size:14px;
+
+}
+
+/* =========================================
+   Action
+========================================= */
+
+.login-action{
+
+    width:100%;
+
+    margin-top:24px;
+
+}
+
+/* =========================================
+   Mobile
+========================================= */
+
+@media (max-width:420px){
+
+    .login{
+
+        padding:20px 16px 32px;
+
+    }
+
+    .login-logo{
+
+        width:64px;
+
+        height:64px;
+
+    }
+
+    .login-title{
+
+        font-size:32px;
+
+    }
+
+    .live-time{
+
+        font-size:36px;
+
+    }
+
+    .live-greeting{
+
+        font-size:30px;
+
+        white-space:normal;
+
+    }
+
+    .auth-card{
+
+        padding:24px 20px;
+
+    }
+
+    .login-options{
+
+        flex-wrap:wrap;
+
+        gap:12px;
+
+    }
+
+}

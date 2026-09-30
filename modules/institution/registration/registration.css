@@ -1,0 +1,1542 @@
+/* =========================================
+   Register Institution — Wizard
+========================================= */
+
+.register-institution {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 24px;
+
+    padding: 24px 16px 48px;
+
+}
+
+.ri-hero {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    text-align: center;
+
+    gap: 6px;
+
+}
+
+.ri-subtitle {
+
+    font-size: 0.9rem;
+
+    opacity: 0.75;
+
+    max-width: 340px;
+
+}
+
+.ri-card {
+
+    width: 100%;
+
+    max-width: 480px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 24px;
+
+}
+
+/* =========================================
+   Step Indicator
+========================================= */
+
+.ri-steps {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    overflow-x: auto;
+
+    gap: 8px;
+
+    padding-bottom: 4px;
+
+}
+
+.ri-step {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 6px;
+
+    flex: 1;
+
+    min-width: 56px;
+
+    opacity: 0.45;
+
+    transition: opacity 0.25s ease;
+
+}
+
+.ri-step.active,
+
+.ri-step.completed {
+
+    opacity: 1;
+
+}
+
+.ri-step-dot {
+
+    width: 28px;
+
+    height: 28px;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    background: rgba(255, 255, 255, 0.08);
+
+    border: 1px solid rgba(255, 255, 255, 0.14);
+
+}
+
+.ri-step.active .ri-step-dot {
+
+    background: #3b82f6;
+
+    border-color: #3b82f6;
+
+    color: #ffffff;
+
+}
+
+.ri-step.completed .ri-step-dot {
+
+    background: #22c55e;
+
+    border-color: #22c55e;
+
+    color: #ffffff;
+
+}
+
+.ri-step-label {
+
+    font-size: 10px;
+
+    font-weight: 600;
+
+    letter-spacing: 0.2px;
+
+    text-align: center;
+
+    white-space: nowrap;
+
+}
+
+/* =========================================
+   Panels
+========================================= */
+
+.ri-panel {
+
+    display: none;
+
+    flex-direction: column;
+
+    gap: 18px;
+
+}
+
+.ri-panel.active {
+
+    display: flex;
+
+}
+
+.ri-panel-title {
+
+    font-size: 1.05rem;
+
+    font-weight: 700;
+
+}
+
+/* =========================================
+   Step Actions
+========================================= */
+
+.ri-actions {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 12px;
+
+    margin-top: 4px;
+
+}
+
+.ri-actions .btn {
+
+    flex: 1;
+
+}
+
+/* =========================================
+   Step 2 — Contact / OTP
+========================================= */
+
+.ri-otp-row {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+}
+
+.ri-otp-row .input-wrapper {
+
+    flex: 1;
+
+}
+
+.ri-otp-row .btn {
+
+    width: auto;
+
+    height: 54px;
+
+    padding: 0 18px;
+
+    white-space: nowrap;
+
+    flex-shrink: 0;
+
+}
+
+.ri-otp-panel {
+
+    padding: 14px;
+
+    border-radius: 14px;
+
+    background: rgba(59, 130, 246, 0.06);
+
+    border: 1px solid rgba(59, 130, 246, 0.18);
+
+}
+
+.ri-otp-panel[hidden] {
+
+    display: none;
+
+}
+
+.ri-resend-link {
+
+    margin-top: 6px;
+
+    background: none;
+
+    border: none;
+
+    color: rgba(255, 255, 255, 0.55);
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    cursor: not-allowed;
+
+}
+
+.ri-resend-link:not(:disabled) {
+
+    color: #3b82f6;
+
+    cursor: pointer;
+
+}
+
+
+/* =========================================
+   Register Institution — Steps 4-8 Styles
+   Merge into your existing register-institution
+   stylesheet (or import it separately).
+========================================= */
+
+.ri-panel-subtitle {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.9rem;
+    margin-top: -0.5rem;
+    margin-bottom: 1.25rem;
+}
+
+.ri-field {
+    margin-bottom: 1.25rem;
+}
+
+.ri-label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+/* ---- File inputs / previews ---- */
+
+.ri-file-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.ri-file-input {
+    flex: 1;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.85rem;
+}
+
+.ri-avatar-preview {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(255, 255, 255, 0.15);
+}
+
+.ri-banner-preview {
+    width: 100%;
+    max-height: 140px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    margin-bottom: 0.5rem;
+}
+
+/* ---- Password strength meter ---- */
+
+.ri-password-strength {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: -0.75rem 0 1rem;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.ri-password-strength::before {
+    content: "";
+    flex: 1;
+    height: 4px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.ri-password-strength-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 4px;
+    width: 0%;
+    border-radius: 4px;
+    background: #ef4444;
+    transition: width 0.2s ease, background-color 0.2s ease;
+}
+
+.ri-password-strength-bar[data-strength="weak"] { background: #ef4444; }
+.ri-password-strength-bar[data-strength="fair"] { background: #f59e0b; }
+.ri-password-strength-bar[data-strength="good"] { background: #3b82f6; }
+.ri-password-strength-bar[data-strength="strong"] { background: #22c55e; }
+
+/* ---- Checkboxes ---- */
+
+.ri-checkbox-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    margin-bottom: 0.75rem;
+}
+
+.ri-checkbox-row input[type="checkbox"] {
+    margin-top: 0.2rem;
+    width: 18px;
+    height: 18px;
+    accent-color: #2563eb;
+    flex-shrink: 0;
+}
+
+.ri-checkbox-row label {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.4;
+}
+
+.ri-checkbox-row a {
+    color: #60a5fa;
+    text-decoration: underline;
+}
+
+/* ---- Colors / theme preview (Step 5) ---- */
+
+.ri-color-row {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 1.25rem;
+}
+
+.ri-color-row .ri-field {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+.ri-color-input {
+    width: 100%;
+    height: 44px;
+    border: none;
+    border-radius: 10px;
+    background: transparent;
+    cursor: pointer;
+}
+
+.ri-theme-preview {
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    margin-bottom: 1.5rem;
+}
+
+.ri-theme-preview-header {
+    padding: 1rem;
+    color: #fff;
+    font-weight: 600;
+    background: #2563eb;
+}
+
+.ri-theme-preview-button {
+    margin: 1rem;
+    padding: 0.6rem 1.25rem;
+    display: inline-block;
+    border-radius: 8px;
+    color: #fff;
+    font-weight: 600;
+    background: #1e293b;
+}
+
+/* ==========================================
+   STEP 6 : SUBSCRIPTION HEADER
+========================================== */
+
+.ri-subscription-header {
+    margin-bottom: 2rem;
+}
+
+.ri-subscription-header h3 {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--ri-text-primary);
+}
+
+.ri-subscription-header p {
+    margin-top: .75rem;
+    line-height: 1.8;
+    color: var(--ri-text-secondary);
+    font-size: .98rem;
+}
+
+/* ==========================================
+   STEP 6 : PLAN GRID
+========================================== */
+
+.plan-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    gap:1rem;
+    margin:1.5rem 0 2rem;
+}
+
+.plan-card{
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    gap:.8rem;
+
+    padding:1.25rem;
+
+    border:1px solid rgba(255,255,255,.12);
+    border-radius:20px;
+
+    background:rgba(255,255,255,.05);
+    backdrop-filter:blur(16px);
+
+    cursor:pointer;
+
+    transition:
+        transform .25s ease,
+        border-color .25s ease,
+        box-shadow .25s ease,
+        background .25s ease;
+}
+
+.plan-card:hover{
+    transform:translateY(-4px);
+
+    border-color:rgba(59,130,246,.45);
+
+    box-shadow:
+        0 10px 30px rgba(37,99,235,.18);
+
+    background:rgba(255,255,255,.08);
+}
+
+.plan-card.selected{
+    border:2px solid #3B82F6;
+
+    background:rgba(59,130,246,.12);
+
+    box-shadow:
+        0 0 0 1px rgba(59,130,246,.20),
+        0 15px 35px rgba(37,99,235,.25);
+}
+
+/* ==========================================
+   STEP 6 : PLAN CARD CONTENT
+========================================== */
+
+.plan-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:.75rem;
+}
+
+.plan-name{
+    margin:0;
+
+    font-size:1.25rem;
+
+    font-weight:700;
+
+    color:var(--ri-text-primary);
+}
+
+.plan-badge{
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:.3rem .75rem;
+
+    border-radius:999px;
+
+    font-size:.72rem;
+
+    font-weight:700;
+
+    color:#ffffff;
+
+    background:linear-gradient(
+        135deg,
+        #2563EB,
+        #0EA5E9
+    );
+
+    white-space:nowrap;
+}
+
+.plan-description{
+
+    margin:0;
+
+    color:var(--ri-text-secondary);
+
+    line-height:1.7;
+
+    font-size:.92rem;
+}
+
+.plan-price{
+
+    display:flex;
+
+    align-items:baseline;
+
+    gap:.35rem;
+
+    margin-top:.4rem;
+
+    font-size:2rem;
+
+    font-weight:800;
+
+    color:var(--ri-text-primary);
+}
+
+.plan-price small{
+
+    font-size:.9rem;
+
+    font-weight:500;
+
+    color:var(--ri-text-secondary);
+}
+
+.plan-yearly{
+
+    font-size:.9rem;
+
+    color:#22C55E;
+
+    font-weight:600;
+}
+
+.plan-features{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:.55rem;
+
+    margin-top:.75rem;
+}
+
+.plan-feature{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:.6rem;
+
+    font-size:.9rem;
+
+    color:var(--ri-text-secondary);
+}
+
+.plan-feature svg{
+
+    width:16px;
+
+    height:16px;
+
+    flex-shrink:0;
+
+    color:#22C55E;
+}
+
+/* ==========================================
+   STEP 6 : BILLING TOGGLE
+========================================== */
+
+.billing-toggle{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:.5rem;
+
+    margin:2rem 0;
+
+    padding:.4rem;
+
+    border:1px solid rgba(255,255,255,.10);
+
+    border-radius:16px;
+
+    background:rgba(255,255,255,.05);
+
+    backdrop-filter:blur(16px);
+}
+
+.billing-btn{
+
+    flex:1;
+
+    border:none;
+
+    outline:none;
+
+    cursor:pointer;
+
+    padding:.9rem 1.2rem;
+
+    border-radius:12px;
+
+    background:transparent;
+
+    color:var(--ri-text-secondary);
+
+    font-size:.95rem;
+
+    font-weight:600;
+
+    transition:all .25s ease;
+}
+
+.billing-btn:hover{
+
+    background:rgba(255,255,255,.08);
+
+    color:var(--ri-text-primary);
+}
+
+.billing-btn.active{
+
+    color:#ffffff;
+
+    background:linear-gradient(
+
+        135deg,
+
+        #2563EB,
+
+        #0EA5E9
+
+    );
+
+    box-shadow:
+
+        0 8px 20px rgba(37,99,235,.30);
+}
+
+.billing-btn span{
+
+    display:block;
+
+    margin-top:.25rem;
+
+    font-size:.72rem;
+
+    font-weight:500;
+
+    color:rgba(255,255,255,.85);
+}
+
+/* ==========================================
+   STEP 6 : INCLUDED MODULES
+========================================== */
+
+.module-list{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(auto-fit,minmax(220px,1fr));
+
+    gap:1rem;
+
+    margin:2rem 0;
+}
+
+.module-item{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:.75rem;
+
+    padding:1rem;
+
+    border-radius:16px;
+
+    border:1px solid rgba(255,255,255,.08);
+
+    background:rgba(255,255,255,.04);
+
+    transition:
+        all .25s ease;
+}
+
+.module-item:hover{
+
+    transform:translateY(-2px);
+
+    border-color:rgba(37,99,235,.25);
+
+    background:rgba(255,255,255,.07);
+}
+
+.module-icon{
+
+    width:42px;
+
+    height:42px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border-radius:12px;
+
+    background:rgba(37,99,235,.15);
+
+    color:#2563EB;
+
+    flex-shrink:0;
+}
+
+.module-content{
+
+    flex:1;
+}
+
+.module-title{
+
+    margin:0;
+
+    font-size:.95rem;
+
+    font-weight:600;
+
+    color:var(--ri-text-primary);
+}
+
+.module-status{
+
+    margin-top:.2rem;
+
+    font-size:.78rem;
+
+    color:#22C55E;
+}
+
+.module-item.locked{
+
+    opacity:.6;
+
+    border-style:dashed;
+}
+
+.module-item.locked
+.module-icon{
+
+    background:rgba(239,68,68,.12);
+
+    color:#EF4444;
+}
+
+.module-item.locked
+.module-status{
+
+    color:#EF4444;
+}
+
+.ri-empty-state{
+
+    padding:1.5rem;
+
+    text-align:center;
+
+    border-radius:16px;
+
+    border:1px dashed rgba(255,255,255,.15);
+
+    background:rgba(255,255,255,.03);
+
+    color:var(--ri-text-secondary);
+
+    font-size:.9rem;
+}
+
+/* ==========================================
+   STEP 6 : SUBSCRIPTION SUMMARY
+========================================== */
+
+.summary-card{
+
+    margin:2rem 0;
+
+    padding:1.5rem;
+
+    border-radius:20px;
+
+    border:1px solid rgba(255,255,255,.10);
+
+    background:rgba(255,255,255,.05);
+
+    backdrop-filter:blur(18px);
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,.08);
+}
+
+.summary-card h3{
+
+    margin:0 0 1.25rem;
+
+    font-size:1.2rem;
+
+    font-weight:700;
+
+    color:var(--ri-text-primary);
+}
+
+.summary-row{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:1rem;
+
+    padding:.9rem 0;
+
+    border-bottom:1px solid rgba(255,255,255,.08);
+}
+
+.summary-row:last-child{
+
+    border-bottom:none;
+}
+
+.summary-label{
+
+    color:var(--ri-text-secondary);
+
+    font-size:.92rem;
+
+    font-weight:500;
+}
+
+.summary-value{
+
+    color:var(--ri-text-primary);
+
+    font-size:.95rem;
+
+    font-weight:700;
+
+    text-align:right;
+}
+
+.summary-status{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:.35rem .8rem;
+
+    border-radius:999px;
+
+    background:rgba(245,158,11,.15);
+
+    color:#F59E0B;
+
+    font-size:.75rem;
+
+    font-weight:700;
+}
+
+/* ==========================================
+   STEP 6 : INFORMATION CARD
+========================================== */
+
+.info-card{
+
+    display:flex;
+
+    gap:1rem;
+
+    margin:2rem 0;
+
+    padding:1.5rem;
+
+    border-radius:20px;
+
+    border:1px solid rgba(37,99,235,.15);
+
+    background:linear-gradient(
+        135deg,
+        rgba(37,99,235,.08),
+        rgba(14,165,233,.06)
+    );
+
+    backdrop-filter:blur(16px);
+}
+
+.info-card-icon{
+
+    width:52px;
+
+    height:52px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    flex-shrink:0;
+
+    border-radius:14px;
+
+    background:rgba(37,99,235,.15);
+
+    color:#2563EB;
+
+    font-size:1.4rem;
+}
+
+.info-card-content{
+
+    flex:1;
+}
+
+.info-card-content h3{
+
+    margin:0 0 .75rem;
+
+    color:var(--ri-text-primary);
+
+    font-size:1.1rem;
+
+    font-weight:700;
+}
+
+.info-card-content p{
+
+    margin:0 0 1rem;
+
+    color:var(--ri-text-secondary);
+
+    line-height:1.7;
+}
+
+.info-card-content ul{
+
+    margin:0;
+
+    padding-left:1.25rem;
+}
+
+.info-card-content li{
+
+    margin-bottom:.6rem;
+
+    color:var(--ri-text-secondary);
+
+    line-height:1.6;
+}
+
+/* ==========================================
+   STEP 6 : REGISTRATION TIMELINE
+========================================== */
+
+.ri-registration-flow{
+
+    margin:2rem 0;
+}
+
+.ri-flow-item{
+
+    display:flex;
+
+    gap:1rem;
+
+    margin-bottom:1.2rem;
+
+    padding:1rem;
+
+    border-radius:18px;
+
+    background:rgba(255,255,255,.04);
+
+    border:1px solid rgba(255,255,255,.08);
+}
+
+.ri-flow-icon{
+
+    width:42px;
+
+    height:42px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    flex-shrink:0;
+
+    border-radius:50%;
+
+    background:linear-gradient(
+        135deg,
+        #2563EB,
+        #0EA5E9
+    );
+
+    color:#fff;
+
+    font-weight:700;
+}
+
+.ri-flow-item strong{
+
+    display:block;
+
+    margin-bottom:.35rem;
+
+    color:var(--ri-text-primary);
+}
+
+.ri-flow-item p{
+
+    margin:0;
+
+    color:var(--ri-text-secondary);
+
+    line-height:1.6;
+}
+
+/* ==========================================
+   STEP 6 : IMPORTANT NOTE
+========================================== */
+
+.ri-important-note{
+
+    margin-top:2rem;
+
+    padding:1.25rem;
+
+    border-left:4px solid #2563EB;
+
+    border-radius:14px;
+
+    background:rgba(37,99,235,.08);
+}
+
+.ri-important-note strong{
+
+    display:block;
+
+    margin-bottom:.5rem;
+
+    color:#2563EB;
+}
+
+.ri-important-note p{
+
+    margin:0;
+
+    color:var(--ri-text-secondary);
+
+    line-height:1.7;
+}
+
+/* ==========================================
+   STEP 6 : RESPONSIVE
+========================================== */
+
+@media (max-width:992px){
+
+    .plan-grid{
+
+        grid-template-columns:repeat(2,1fr);
+
+    }
+
+}
+
+@media (max-width:768px){
+
+    .plan-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .billing-toggle{
+
+        flex-direction:column;
+
+        align-items:stretch;
+    }
+
+    .billing-btn{
+
+        width:100%;
+    }
+
+    .summary-row{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+        gap:.35rem;
+    }
+
+    .summary-value{
+
+        text-align:left;
+    }
+
+    .info-card{
+
+        flex-direction:column;
+    }
+
+    .info-card-icon{
+
+        width:48px;
+
+        height:48px;
+    }
+
+    .ri-flow-item{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+    }
+
+    .ri-flow-icon{
+
+        width:40px;
+
+        height:40px;
+    }
+
+    .module-list{
+
+        grid-template-columns:1fr;
+    }
+
+    .compare-table{
+
+        display:block;
+
+        overflow-x:auto;
+
+        white-space:nowrap;
+    }
+
+}
+
+@media (max-width:480px){
+
+    .plan-card{
+
+        padding:1rem;
+    }
+
+    .summary-card{
+
+        padding:1rem;
+    }
+
+    .info-card{
+
+        padding:1rem;
+    }
+
+    .ri-important-note{
+
+        padding:1rem;
+    }
+
+    .plan-price{
+
+        font-size:1.6rem;
+    }
+
+    .plan-name{
+
+        font-size:1.1rem;
+    }
+
+}
+
+
+/* ---- Modules grid (Step 6) ---- */
+
+.ri-modules-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.ri-module-card {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.75rem;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.03);
+    cursor: pointer;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.85);
+    transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.ri-module-card:has(.ri-module-checkbox:checked) {
+    border-color: #2563eb;
+    background: rgba(37, 99, 235, 0.15);
+}
+
+.ri-module-checkbox {
+    width: 16px;
+    height: 16px;
+    accent-color: #2563eb;
+    flex-shrink: 0;
+}
+
+/* ---- Review summary (Step 7) ---- */
+
+.ri-review-list {
+    margin-bottom: 1.5rem;
+}
+
+.ri-review-section {
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.ri-review-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.ri-review-section-header h3 {
+    font-size: 0.95rem;
+    color: #fff;
+}
+
+.ri-review-edit {
+    background: none;
+    border: none;
+    color: #60a5fa;
+    font-size: 0.8rem;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.ri-review-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.35rem 0;
+    font-size: 0.85rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.ri-review-row:first-of-type {
+    border-top: none;
+}
+
+.ri-review-label {
+    color: rgba(255, 255, 255, 0.55);
+}
+
+.ri-review-value {
+    color: rgba(255, 255, 255, 0.9);
+    text-align: right;
+    word-break: break-word;
+}
+
+/* ---- Success screen (Step 8) ---- */
+
+.ri-success {
+    text-align: center;
+    padding: 1.5rem 0;
+}
+
+.ri-success-icon {
+    width: 72px;
+    height: 72px;
+    line-height: 72px;
+    border-radius: 50%;
+    background: #22c55e;
+    color: #fff;
+    font-size: 2rem;
+    margin: 0 auto 1.25rem;
+    animation: ri-success-pop 0.4s ease;
+}
+
+@keyframes ri-success-pop {
+    0% { transform: scale(0); opacity: 0; }
+    70% { transform: scale(1.1); opacity: 1; }
+    100% { transform: scale(1); }
+}
+
+.ri-success-institution-id {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 1.5rem;
+}
+
+.ri-actions-center {
+    justify-content: center;
+}
+
+/* ===================================
+   Full-Screen Submission Loader
+   (P0 — premium "please wait" state)
+=================================== */
+
+.ri-loader-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(10, 10, 20, 0.72);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    animation: ri-loader-fade-in 0.25s ease;
+}
+
+.ri-loader-overlay[hidden] {
+    display: none;
+}
+
+@keyframes ri-loader-fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.ri-loader-card {
+    width: min(360px, 88vw);
+    padding: 2.25rem 2rem;
+    border-radius: 20px;
+    text-align: center;
+    background: linear-gradient(160deg, rgba(30, 27, 60, 0.95), rgba(20, 18, 40, 0.95));
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+}
+
+.ri-loader-spinner {
+    width: 52px;
+    height: 52px;
+    margin: 0 auto 1.25rem;
+    border-radius: 50%;
+    border: 3px solid rgba(255, 255, 255, 0.12);
+    border-top-color: #7C3AED;
+    animation: ri-loader-spin 0.85s linear infinite;
+}
+
+@keyframes ri-loader-spin {
+    to { transform: rotate(360deg); }
+}
+
+.ri-loader-title {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #fff;
+    margin: 0 0 0.4rem;
+}
+
+.ri-loader-stage {
+    font-size: 0.88rem;
+    color: rgba(255, 255, 255, 0.65);
+    margin: 0 0 1.1rem;
+    min-height: 1.2em;
+    transition: opacity 0.15s ease;
+}
+
+.ri-loader-progress {
+    width: 100%;
+    height: 6px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+    margin-bottom: 1rem;
+}
+
+.ri-loader-progress-bar {
+    height: 100%;
+    width: 10%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #2563EB, #7C3AED);
+    transition: width 0.4s ease;
+}
+
+.ri-loader-note {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.4);
+    margin: 0;
+}
+
+/* ===================================
+   Submission Error + Retry
+   (P0 — friendly error handling)
+=================================== */
+
+.ri-submit-error {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.9rem 1rem;
+    margin-top: 0.75rem;
+    border-radius: 12px;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.35);
+}
+
+.ri-submit-error[hidden] {
+    display: none;
+}
+
+.ri-submit-error p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #fca5a5;
+    flex: 1 1 220px;
+}

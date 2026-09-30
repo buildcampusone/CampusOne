@@ -1,0 +1,292 @@
+/* Premium Mobile Bottom Navigation component styles — kept in
+   its own component file (modules/institution-owner/components/
+   bottom-nav/bottom-nav.css) and pulled in here so it rides
+   along with shell.css's existing entry in shared/styles/
+   main.css's import chain. No change to main.css itself. */
+@import url("../components/bottom-nav/bottom-nav.css");
+
+/* =====================================================
+   Institution Owner Shell
+   -----------------------------------------------------
+   Part 1.1  — Owner Dashboard Shell Configuration
+   Part 1.4B — Sidebar / Topbar / Activity Panel / Bottom Nav
+               wired in (see shell.controller.js)
+   Phase 2A  — Status Bar wired in, stale comments corrected
+   -----------------------------------------------------
+   Mirrors institution-admin/shell/shell.css and
+   super-admin/shell/shell.css's region grid (Sidebar +
+   Main[Topbar + Content + StatusBar] + Activity Panel) so
+   all three shells share one structural language. Every
+   chrome region now has its own CSS file and is a real mount
+   slot rendered by shell.controller.js — this file only lays
+   out the persistent frame and reserves the same breakpoints
+   Institution Admin already validated, so nothing had to be
+   re-derived when that reuse work landed.
+
+     Desktop  (>1200px)  — Sidebar + Main + Activity Panel,
+                            Status Bar visible, full padding.
+     Tablet   (1025–1200px) — Activity Panel hides first,
+                            Sidebar stays put.
+     Small tablet
+     / large phone
+     (769–1024px)        — Sidebar also hides, content
+                            padding tightens, bottom padding
+                            reserves room for the floating
+                            Bottom Nav capsule.
+     Mobile   (<=768px)  — Status Bar hides, same tightened
+                            content padding continues.
+   ===================================================== */
+
+/* Defensive reset — shared/styles/reset.css already sets this
+   globally, but shell.html links only this module's own
+   stylesheets (no reset.css) for its standalone preview use.
+   Mirrors institution-admin/shell/shell.css's own identical
+   rule — harmless, idempotent duplicate when the full app's
+   reset.css is also loaded. */
+
+* {
+
+    box-sizing: border-box;
+
+}
+
+body {
+
+    margin: 0;
+
+}
+
+.io-shell {
+
+    width: 100%;
+    height: 100vh;
+
+    display: flex;
+    overflow: hidden;
+
+}
+
+/* Mobile sidebar drawer no-scroll lock, mirroring
+   institution-admin's body.ia-no-scroll / super-admin's
+   body.sa-no-scroll — toggled by
+   components/sidebar/sidebar.controller.js's noScrollClass
+   option ("io-no-scroll") whenever the mobile drawer opens. */
+
+body.io-no-scroll {
+
+    overflow: hidden;
+
+}
+
+/* ---------- Sidebar ----------
+   modules/institution-owner/components/sidebar/sidebar.css
+   (io- namespaced, mirrors institution-admin's sidebar.css)
+   now styles the contents of #ioSidebar — this shell only
+   reserves the slot; the component owns its own width/collapse/
+   drawer rules via that stylesheet. */
+
+/* ---------- Main Workspace ---------- */
+
+.io-main {
+
+    flex: 1;
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+
+}
+
+/* ---------- Topbar ----------
+   modules/institution-owner/topbar/topbar.css (io- namespaced,
+   mirrors institution-admin's topbar.css) now styles the
+   contents of #ioTopbar — this shell only reserves the slot;
+   the component owns its own height/padding/dropdown rules via
+   that stylesheet. */
+
+/* ---------- Main Content Outlet ---------- */
+
+.io-content {
+
+    flex: 1;
+    min-width: 0;
+    width: 100%;
+
+    overflow-y: auto;
+    padding: 24px 28px 100px;
+
+    /* Same reusable max-content-width system Institution Admin
+       and Super Admin already use — no-ops below the cap. */
+    max-width: var(--content-max-width, 1600px);
+    margin-inline: auto;
+
+}
+
+/* --bp-tablet-lg (900px) */
+@media (max-width: 900px) {
+    .io-content { padding: 18px 16px 90px; }
+}
+
+/* Reserve extra bottom space once Sidebar/Activity Panel give
+   way to the Premium Bottom Nav bar — comes after the 900px
+   rule so it only overrides padding-bottom, same cascade order
+   as institution-admin/shell/shell.css. The bar itself is
+   flush against the viewport edge (not a floating capsule with
+   its own margin), so clearance is the bar's own max height
+   (80px) plus its safe-area padding plus a small breathing
+   gap, computed with env() directly rather than a flat guess. */
+
+/* --bp-laptop (1024px) */
+@media (max-width: 1024px) {
+    .io-content { padding-bottom: calc(80px + env(safe-area-inset-bottom) + 16px); }
+}
+
+/* --bp-desktop-lg (1440px) */
+@media (min-width: 1440px) {
+    .io-content { padding-left: 40px; padding-right: 40px; }
+}
+
+/* --bp-desktop-xl (1600px) */
+@media (min-width: 1600px) {
+    .io-content { padding-left: 56px; padding-right: 56px; }
+}
+
+/* ---------- Status Bar ----------
+   modules/institution-owner/status-bar/status-bar.css
+   (io- namespaced, Phase 2A — mirrors institution-admin's
+   status-bar.css, itself mirrored from super-admin's) now
+   styles the contents of #ioStatusBar — this shell only
+   reserves the slot. Hides at --bp-tablet (768px), matching
+   the breakpoint table above. */
+
+/* ---------- Activity Panel ----------
+   modules/institution-owner/activity-panel/activity-panel.css
+   (io- namespaced, mirrors institution-admin's
+   activity-panel.css) now styles the contents of
+   #ioActivityPanel — this shell only reserves the slot. Left
+   unstyled here (no fixed width) on purpose, same reasoning as
+   institution-admin/shell/shell.css: a fixed width here would
+   leave a gap once that region's own CSS hides it responsively. */
+
+/* =====================================================
+   Workspace Placeholder (Part 1.1 preview only)
+   ===================================================== */
+
+.io-workspace-placeholder {
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+
+    padding: var(--spacing-lg, 24px);
+    min-height: 40vh;
+
+    color: var(--text-muted, #6b7280);
+
+}
+
+/* =====================================================
+   Official Primary Button — Design System Polish Pass
+   -----------------------------------------------------
+   Single source of truth: the active Dashboard button in
+   components/sidebar/sidebar.css (.io-nav-item.active) —
+   flat --primary fill, var(--radius-md) corners, a soft
+   colored glow instead of a hard shadow, --ease-premium
+   motion. This block re-skins the *existing* shared Button
+   component's `.btn-primary` (shared/components/button) to
+   match it, scoped to `.io-shell` only so nothing outside
+   Institution Owner is touched, no new Button component is
+   created, and no new design tokens are introduced — every
+   value below already exists in shared/styles/variables.css.
+
+   Applies to every Primary CTA this module renders through
+   Button({ variant: "primary" }) — Pending Task actions,
+   Subscription "Upgrade Plan", Quick Actions, empty-state
+   CTAs, etc. — so they all read as one consistent family
+   with the Sidebar's own active state.
+===================================================== */
+
+.io-shell .btn-primary {
+
+    background: var(--primary);
+    border-radius: var(--radius-md);
+    box-shadow: 0 8px 24px color-mix(in srgb, var(--primary) 25%, transparent);
+
+    transition:
+        transform var(--duration-hover) var(--ease-out),
+        background .22s var(--ease-premium),
+        box-shadow .22s var(--ease-premium);
+
+}
+
+.io-shell .btn-primary:hover:not(:disabled) {
+
+    filter: none;
+    background: var(--primary);
+    box-shadow: 0 10px 28px color-mix(in srgb, var(--primary) 32%, transparent);
+
+}
+
+.io-shell .btn-primary:active:not(:disabled) {
+
+    box-shadow: 0 6px 16px color-mix(in srgb, var(--primary) 22%, transparent);
+
+}
+
+/* Disabled Primary Button — stays the SAME Primary Button,
+   just quieter. Reads as "premium, not available yet", never
+   as broken/inactive: same blue fill, same white text, same
+   soft glow. Only the native `disabled` attribute (already
+   set by the shared Button component) removes interactivity —
+   no grey, no washed-out opacity, no separate disabled style. */
+
+.io-shell .btn-primary:disabled {
+
+    opacity: 1;
+    background: var(--primary);
+    color: var(--text-white);
+    box-shadow: 0 8px 24px color-mix(in srgb, var(--primary) 18%, transparent);
+    cursor: default;
+
+}
+
+.io-shell .btn-primary:disabled:hover,
+.io-shell .btn-primary:disabled:active {
+
+    transform: none;
+    box-shadow: 0 8px 24px color-mix(in srgb, var(--primary) 18%, transparent);
+
+}
+
+/* =====================================================
+   Phase 2 — Module Router: Empty States (coming-soon /
+   load-error) + loading skeleton. Mirrors Institution
+   Admin's .ia-empty-state / .ia-skeleton-page in
+   modules/institution-admin/shell/shell.css 1:1, just
+   under the "io" prefix. Painted by
+   router/router.institution-owner.js.
+   ===================================================== */
+
+.io-empty-state {
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+
+    padding: var(--spacing-lg, 24px);
+    min-height: 40vh;
+
+}
+
+.io-skeleton-page {
+
+    min-height: 40vh;
+
+}
+

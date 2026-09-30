@@ -1,0 +1,43 @@
+/*=========================================
+=         CAMPUSONE COLORS                =
+=========================================*/
+
+/* Every class here reads a token already declared in
+   variables.css — this file never declares a new color value
+   itself (same convention as spacing.css / shadows.css:
+   variables.css owns tokens, this owns utility classes built
+   from them). Dark mode falls out for free since the tokens
+   flip on [data-theme="dark"]. */
+
+/* Text */
+
+.co-text-primary{color:var(--primary);}
+.co-text-secondary-brand{color:var(--secondary);}
+.co-text-body{color:var(--text);}
+.co-text-muted{color:var(--text-secondary);}
+.co-text-light{color:var(--text-light);}
+.co-text-white{color:var(--text-white);}
+
+.co-text-success{color:var(--success);}
+.co-text-warning{color:var(--warning);}
+.co-text-danger{color:var(--danger);}
+.co-text-info{color:var(--info);}
+
+/* Background */
+
+.co-bg-primary{background:var(--primary);}
+.co-bg-background{background:var(--background);}
+.co-bg-surface{background:var(--surface);}
+.co-bg-surface-secondary{background:var(--surface-secondary);}
+
+.co-bg-success{background:color-mix(in srgb, var(--success) 12%, transparent);}
+.co-bg-warning{background:color-mix(in srgb, var(--warning) 12%, transparent);}
+.co-bg-danger{background:color-mix(in srgb, var(--danger) 12%, transparent);}
+.co-bg-info{background:color-mix(in srgb, var(--info) 12%, transparent);}
+
+/* Border */
+
+.co-border-default{border-color:var(--border);}
+.co-border-dark{border-color:var(--border-dark);}
+.co-border-primary{border-color:var(--primary);}
+.co-border-danger{border-color:var(--danger);}

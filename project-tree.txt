@@ -1,0 +1,345 @@
+.
+├── 404.html
+├── AI_CONSTITUTION.md
+├── ARCHITECTURE.md
+├── CHANGELOG.md
+├── DESIGN-SYSTEM.md
+├── MOTION-SYSTEM.md
+├── README.md
+├── ROADMAP.md
+├── assets
+│   ├── favicon
+│   │   └── favicon.ico
+│   ├── logo
+│   │   └── logo.png
+│   └── pwa
+│       ├── icon-192.png
+│       └── icon-512.png
+├── firebase
+│   └── firebase.js
+├── firebase.json
+├── firestore.indexes.json
+├── firestore.rules
+├── index.html
+├── main.js
+├── manifest.webmanifest
+├── modules
+│   ├── auth
+│   │   ├── forgot-password
+│   │   │   ├── forgot-password.controller.js
+│   │   │   ├── forgot-password.css
+│   │   │   └── forgot-password.page.js
+│   │   ├── login
+│   │   │   ├── login.controller.js
+│   │   │   ├── login.css
+│   │   │   └── login.page.js
+│   │   └── register
+│   │       ├── register.controller.js
+│   │       ├── register.css
+│   │       └── register.page.js
+│   ├── institution
+│   │   └── registration
+│   │       ├── config
+│   │       ├── institutionCode.util.js
+│   │       ├── registration.controller.js
+│   │       ├── registration.css
+│   │       ├── registration.page.js
+│   │       └── registration.validation.js
+│   ├── institution-admin
+│   │   ├── activity-panel
+│   │   │   ├── activity-panel.controller.js
+│   │   │   ├── activity-panel.css
+│   │   │   └── activity-panel.page.js
+│   │   ├── components
+│   │   │   ├── bottom-nav
+│   │   │   └── sidebar
+│   │   ├── dashboard
+│   │   │   ├── dashboard.controller.js
+│   │   │   ├── dashboard.css
+│   │   │   └── dashboard.page.js
+│   │   ├── profile
+│   │   │   ├── profile.controller.js
+│   │   │   ├── profile.css
+│   │   │   └── profile.page.js
+│   │   ├── router
+│   │   │   ├── guards.js
+│   │   │   ├── modules.registry.js
+│   │   │   └── router.institution.js
+│   │   ├── shell
+│   │   │   ├── shell.controller.js
+│   │   │   ├── shell.css
+│   │   │   ├── shell.html
+│   │   │   └── shell.page.js
+│   │   ├── status-bar
+│   │   │   ├── status-bar.controller.js
+│   │   │   ├── status-bar.css
+│   │   │   └── status-bar.page.js
+│   │   └── topbar
+│   │       ├── topbar.controller.js
+│   │       ├── topbar.css
+│   │       └── topbar.page.js
+│   ├── institution-owner
+│   │   ├── components
+│   │   │   └── sidebar
+│   │   ├── router
+│   │   │   └── modules.registry.js
+│   │   └── shell
+│   │       ├── shell.controller.js
+│   │       ├── shell.css
+│   │       ├── shell.html
+│   │       └── shell.page.js
+│   ├── splash
+│   │   ├── splash.css
+│   │   └── splash.js
+│   └── super-admin
+│       ├── activity-panel
+│       │   ├── activity-panel.controller.js
+│       │   ├── activity-panel.css
+│       │   └── activity-panel.page.js
+│       ├── components
+│       │   ├── active-pill
+│       │   ├── bottom-nav
+│       │   ├── empty-state
+│       │   └── sidebar
+│       ├── dashboard
+│       │   ├── dashboard.controller.js
+│       │   ├── dashboard.css
+│       │   └── dashboard.page.js
+│       ├── login
+│       │   ├── login.controller.js
+│       │   ├── login.css
+│       │   ├── login.page.js
+│       │   └── login.service.js
+│       ├── profile
+│       │   ├── profile.controller.js
+│       │   ├── profile.css
+│       │   ├── profile.page.js
+│       │   └── profile.service.js
+│       ├── router
+│       │   ├── guards.js
+│       │   ├── modules.registry.js
+│       │   └── router.super.js
+│       ├── shell
+│       │   ├── shell.controller.js
+│       │   ├── shell.css
+│       │   ├── shell.html
+│       │   └── shell.page.js
+│       ├── status-bar
+│       │   ├── status-bar.controller.js
+│       │   ├── status-bar.css
+│       │   └── status-bar.page.js
+│       └── topbar
+│           ├── topbar.controller.js
+│           ├── topbar.css
+│           └── topbar.page.js
+├── offline.html
+├── project-tree.txt
+├── public
+│   ├── favicon.svg
+│   └── icons.svg
+├── router
+│   └── router.js
+├── service-worker.js
+├── shared
+│   ├── components
+│   │   ├── auth-card
+│   │   │   ├── auth-card.css
+│   │   │   └── auth-card.js
+│   │   ├── avatar
+│   │   │   ├── avatar.css
+│   │   │   └── avatar.js
+│   │   ├── background
+│   │   │   ├── background.css
+│   │   │   └── background.js
+│   │   ├── badge
+│   │   │   ├── badge.css
+│   │   │   └── badge.js
+│   │   ├── bottom-nav
+│   │   │   ├── bottom-nav.controller.js
+│   │   │   ├── bottom-nav.css
+│   │   │   └── bottom-nav.page.js
+│   │   ├── button
+│   │   │   ├── button.css
+│   │   │   └── button.js
+│   │   ├── error
+│   │   │   ├── error.css
+│   │   │   └── error.js
+│   │   ├── icons
+│   │   │   ├── ai.js
+│   │   │   ├── analytics.js
+│   │   │   ├── audit.js
+│   │   │   ├── bar-chart.js
+│   │   │   ├── bell.js
+│   │   │   ├── billing.js
+│   │   │   ├── book.js
+│   │   │   ├── briefcase.js
+│   │   │   ├── building.js
+│   │   │   ├── calendar.js
+│   │   │   ├── check.js
+│   │   │   ├── chevron-down.js
+│   │   │   ├── clipboard.js
+│   │   │   ├── clock.js
+│   │   │   ├── close.js
+│   │   │   ├── credit-card.js
+│   │   │   ├── dashboard.js
+│   │   │   ├── edit.js
+│   │   │   ├── eye-off.js
+│   │   │   ├── eye.js
+│   │   │   ├── file-text.js
+│   │   │   ├── globe.js
+│   │   │   ├── google.js
+│   │   │   ├── home.js
+│   │   │   ├── inbox.js
+│   │   │   ├── index.js
+│   │   │   ├── institution.js
+│   │   │   ├── layers.js
+│   │   │   ├── library.js
+│   │   │   ├── lock.js
+│   │   │   ├── logout.js
+│   │   │   ├── mail.js
+│   │   │   ├── menu.js
+│   │   │   ├── message.js
+│   │   │   ├── more.js
+│   │   │   ├── notification.js
+│   │   │   ├── phone.js
+│   │   │   ├── plus.js
+│   │   │   ├── search.js
+│   │   │   ├── settings.js
+│   │   │   ├── shield-check.js
+│   │   │   ├── sparkles.js
+│   │   │   ├── support.js
+│   │   │   ├── truck.js
+│   │   │   ├── user.js
+│   │   │   └── users.js
+│   │   ├── input
+│   │   │   ├── input.css
+│   │   │   └── input.js
+│   │   ├── link
+│   │   │   ├── link.css
+│   │   │   └── link.js
+│   │   ├── live-header
+│   │   │   ├── live-header.css
+│   │   │   └── live-header.js
+│   │   ├── profile
+│   │   │   ├── activity-item.js
+│   │   │   ├── analytics-card.js
+│   │   │   ├── info-card.js
+│   │   │   ├── navigation-row.js
+│   │   │   ├── permission-row.js
+│   │   │   ├── profile-header.js
+│   │   │   └── profile.css
+│   │   ├── searchable-select
+│   │   │   ├── searchable-select.css
+│   │   │   └── searchable-select.js
+│   │   ├── select
+│   │   │   └── select.js
+│   │   ├── sidebar
+│   │   │   └── sidebar.controller.js
+│   │   ├── skeleton
+│   │   │   ├── avatar
+│   │   │   ├── base
+│   │   │   ├── button
+│   │   │   ├── card
+│   │   │   ├── chart
+│   │   │   ├── dashboard
+│   │   │   ├── form
+│   │   │   ├── list
+│   │   │   ├── profile
+│   │   │   ├── shell
+│   │   │   └── table
+│   │   └── toast
+│   │       ├── toast.css
+│   │       └── toast.js
+│   ├── config
+│   │   ├── config.js
+│   │   └── constants.js
+│   ├── constants
+│   │   ├── collections.js
+│   │   ├── roles.js
+│   │   └── status.js
+│   ├── core
+│   │   ├── animation
+│   │   │   ├── animation.engine.js
+│   │   │   ├── animation.service.js
+│   │   │   ├── animation.types.js
+│   │   │   └── index.js
+│   │   ├── base-component.js
+│   │   ├── bootstrap
+│   │   │   └── bootstrap.manager.js
+│   │   ├── counter
+│   │   │   ├── counter.engine.js
+│   │   │   ├── counter.service.js
+│   │   │   ├── counter.types.js
+│   │   │   └── index.js
+│   │   ├── loading
+│   │   │   ├── index.js
+│   │   │   ├── loading.manager.js
+│   │   │   ├── loading.service.js
+│   │   │   └── loading.types.js
+│   │   ├── magnetic
+│   │   │   ├── index.js
+│   │   │   ├── magnetic.engine.js
+│   │   │   └── magnetic.service.js
+│   │   ├── navigation
+│   │   │   ├── active-route.detector.js
+│   │   │   ├── active-tab.detector.js
+│   │   │   ├── active-tab.manager.js
+│   │   │   ├── active-tab.painter.js
+│   │   │   ├── active-tab.state.js
+│   │   │   ├── bottom-nav.engine.js
+│   │   │   ├── index.js
+│   │   │   ├── navigation-state.manager.js
+│   │   │   ├── sidebar.engine.js
+│   │   │   └── tab-registry.js
+│   │   └── ripple
+│   │       ├── index.js
+│   │       ├── ripple.engine.js
+│   │       └── ripple.service.js
+│   ├── data
+│   │   ├── countries.js
+│   │   └── india-states.js
+│   ├── guards
+│   │   └── role.guard.js
+│   ├── services
+│   │   ├── auth.service.js
+│   │   ├── institution.service.js
+│   │   ├── pdf
+│   │   │   ├── assets
+│   │   │   ├── documents
+│   │   │   └── engine
+│   │   ├── session.service.js
+│   │   ├── session.store.js
+│   │   ├── storage.service.js
+│   │   ├── time.service.js
+│   │   └── user.service.js
+│   ├── styles
+│   │   ├── accessibility.css
+│   │   ├── animations.css
+│   │   ├── colors.css
+│   │   ├── components.css
+│   │   ├── elevation.css
+│   │   ├── interaction.css
+│   │   ├── main.css
+│   │   ├── motion.css
+│   │   ├── reset.css
+│   │   ├── shadows.css
+│   │   ├── spacing.css
+│   │   ├── typography.css
+│   │   ├── utilities.css
+│   │   └── variables.css
+│   ├── utils
+│   │   ├── theme.js
+│   │   ├── utils.js
+│   │   └── wizard.js
+│   └── validation
+│       ├── confirm-password.js
+│       ├── email.js
+│       ├── index.js
+│       ├── institution.js
+│       ├── name.js
+│       ├── password.js
+│       ├── register.js
+│       └── validator.js
+└── storage.rules
+
+97 directories, 246 files

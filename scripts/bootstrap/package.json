@@ -1,0 +1,15 @@
+{
+  "name": "campusone-bootstrap",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Isolated Node.js CLI to bootstrap the first CampusOne Platform Super Admin. NOT part of the CampusOne web app — has its own dependencies and runs only via the Admin SDK, never in the browser.",
+  "type": "commonjs",
+  "main": "seedSuperAdmin.js",
+  "scripts": {
+    "bootstrap": "node seedSuperAdmin.js"
+  },
+  "dependencies": {
+    "firebase-admin": "^12.0.0",
+    "dotenv": "^16.4.5"
+  }
+}

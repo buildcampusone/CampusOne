@@ -1,0 +1,1001 @@
+/* ==========================================================
+   CampusOne
+   Institution Owner Sidebar
+   ----------------------------------------------------------
+   Sidebar Engine Extraction — mirrors modules/institution-admin/
+   components/sidebar/sidebar.css 1:1, io- namespaced. Same
+   design tokens (--surface, --border, --ease-premium, focus-
+   ring, motion/reduced-motion system) the audit already flagged
+   as reusable as-is.
+   ----------------------------------------------------------
+   #ioSidebar (rendered by shell.page.js) is the ONE sidebar
+   root element. Everything below targets it directly or via
+   its state classes:
+     .is-collapsed    desktop icon-rail state
+     .is-mobile-open  mobile drawer visible
+   .io-sidebar-inner is the content rendered by this module.
+========================================================== */
+
+:root{
+
+    --io-sidebar-w:280px;
+
+    --io-sidebar-w-collapsed:84px;
+
+    --io-sidebar-ease:var(--ease-premium);
+
+}
+
+.io-sidebar{
+
+    width:var(--io-sidebar-w);
+
+    min-width:var(--io-sidebar-w);
+
+    height:100vh;
+
+    background:var(--surface);
+
+    border-right:1px solid var(--border);
+
+    overflow:hidden;
+
+    position:relative;
+
+    flex-shrink:0;
+
+    transition:width .28s var(--io-sidebar-ease), min-width .28s var(--io-sidebar-ease);
+
+}
+
+.io-sidebar-inner{
+
+    width:var(--io-sidebar-w);
+
+    height:100%;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:space-between;
+
+}
+
+/* ==========================================================
+   Brand
+========================================================== */
+
+.io-sidebar-brand{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:16px;
+
+    padding:24px;
+
+    border-bottom:1px solid var(--border);
+
+    position:relative;
+
+}
+
+.io-sidebar-logo{
+
+    width:52px;
+
+    height:52px;
+
+    object-fit:contain;
+
+    flex-shrink:0;
+
+}
+
+.io-sidebar-brand-text{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:4px;
+
+    min-width:0;
+
+    overflow:hidden;
+
+    white-space:nowrap;
+
+    opacity:1;
+
+    transition:opacity .18s var(--io-sidebar-ease);
+
+}
+
+.io-sidebar-title{
+
+    margin:0;
+
+    font-size:20px;
+
+    font-weight:700;
+
+    color:var(--text);
+
+}
+
+.io-sidebar-subtitle{
+
+    font-size:13px;
+
+    color:var(--text-secondary);
+
+}
+
+/* ==========================================================
+   Desktop Collapse Button
+========================================================== */
+
+.io-sidebar-collapse-btn{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    width:28px;
+
+    height:28px;
+
+    flex-shrink:0;
+
+    margin-left:auto;
+
+    border:1px solid var(--border);
+
+    border-radius:50%;
+
+    background:var(--surface);
+
+    color:var(--text-secondary);
+
+    cursor:pointer;
+
+    transition:background .2s var(--io-sidebar-ease), color .2s var(--io-sidebar-ease), transform .28s var(--io-sidebar-ease), box-shadow .2s var(--io-sidebar-ease);
+
+}
+
+.io-sidebar-mobile-close{
+
+    display:none;
+
+}
+
+.io-sidebar-collapse-btn:hover{
+
+    background:color-mix(in srgb, var(--primary) 8%, transparent);
+
+    color:var(--primary);
+
+}
+
+.io-sidebar-collapse-btn:active{
+
+    transform:scale(.92);
+
+}
+
+.io-collapse-icon{
+
+    width:16px;
+
+    height:16px;
+
+    transition:transform .28s var(--io-sidebar-ease);
+
+}
+
+.io-sidebar.is-collapsed .io-collapse-icon{
+
+    transform:rotate(180deg);
+
+}
+
+/* ==========================================================
+   Navigation
+========================================================== */
+
+.io-sidebar-nav{
+
+    flex:1;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:8px;
+
+    padding:20px 16px;
+
+    overflow-y:auto;
+
+    overflow-x:hidden;
+
+}
+
+.io-nav-item{
+
+    position:relative;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+    width:100%;
+
+    padding:14px 18px;
+
+    border:none;
+
+    border-radius:14px;
+
+    background:transparent;
+
+    color:var(--text-secondary);
+
+    cursor:pointer;
+
+    overflow:hidden;
+
+    isolation:isolate;
+
+    transition:background .22s var(--io-sidebar-ease), color .22s var(--io-sidebar-ease), box-shadow .22s var(--io-sidebar-ease);
+
+}
+
+.io-nav-item:hover{
+
+    background:color-mix(in srgb, var(--primary) 8%, transparent);
+
+    color:var(--primary);
+
+}
+
+.io-nav-item.active{
+
+    background:var(--primary);
+
+    color:var(--text-white);
+
+    box-shadow:0 10px 24px color-mix(in srgb, var(--primary) 28%, transparent);
+
+}
+
+/* Active indicator bar — a subtle premium accent, not just a
+   solid fill, so the active state reads clearly even when a
+   theme's primary color is muted. */
+
+.io-nav-active-indicator{
+
+    position:absolute;
+
+    left:0;
+
+    top:50%;
+
+    transform:translateY(-50%) scaleY(0);
+
+    width:4px;
+
+    height:60%;
+
+    border-radius:0 4px 4px 0;
+
+    background:var(--text-white);
+
+    opacity:.9;
+
+    transition:transform .22s var(--io-sidebar-ease);
+
+}
+
+.io-nav-item.active .io-nav-active-indicator{
+
+    transform:translateY(-50%) scaleY(1);
+
+}
+
+/* Ripple — a lightweight radial pulse on click, CSS-only via
+   a pseudo-element driven by :active so no JS timers/cleanup
+   are needed to keep the sidebar's event-listener count flat. */
+
+.io-nav-item::after{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    border-radius:inherit;
+
+    background:radial-gradient(circle, color-mix(in srgb, var(--text-white) 35%, transparent) 0%, transparent 70%);
+
+    opacity:0;
+
+    transform:scale(.4);
+
+    transition:opacity .5s ease, transform .5s ease;
+
+    pointer-events:none;
+
+}
+
+.io-nav-item:active::after{
+
+    opacity:1;
+
+    transform:scale(1.4);
+
+    transition-duration:0s;
+
+}
+
+.io-nav-icon{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    width:22px;
+
+    height:22px;
+
+    flex-shrink:0;
+
+}
+
+.io-nav-icon svg{
+
+    width:20px;
+
+    height:20px;
+
+}
+
+.io-nav-label{
+
+    font-size:15px;
+
+    font-weight:600;
+
+    white-space:nowrap;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+
+}
+
+/* Soon badge — layout only; .co-badge (shared/components/badge)
+   already owns color, padding, radius, and typography, so
+   nothing about its appearance is redefined here. */
+
+.io-nav-soon-badge{
+
+    margin-left:auto;
+
+    flex-shrink:0;
+
+    display:inline-flex;
+
+    transition:opacity .18s var(--io-sidebar-ease);
+
+}
+
+.io-nav-group{
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+.io-nav-group + .io-nav-group{
+
+    margin-top:var(--space-16);
+
+    padding-top:var(--space-16);
+
+    border-top:1px solid var(--border);
+
+}
+
+.io-nav-group-title{
+
+    margin:8px 18px 4px;
+
+    font-size:11px;
+
+    font-weight:700;
+
+    letter-spacing:.06em;
+
+    text-transform:uppercase;
+
+    color:var(--text-light, var(--text-secondary));
+
+    white-space:nowrap;
+
+    overflow:hidden;
+
+}
+
+/* ==========================================================
+   Footer
+========================================================== */
+
+.io-sidebar-footer{
+
+    padding:20px;
+
+    border-top:1px solid var(--border);
+
+    display:flex;
+
+    justify-content:flex-start;
+
+    align-items:center;
+
+}
+
+.io-logout-btn{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:12px;
+
+    width:auto;
+
+    min-width:170px;
+
+    height:56px;
+
+    padding:0 20px;
+
+    border:1px solid color-mix(in srgb, var(--danger) 22%, transparent);
+
+    border-radius:18px;
+
+    background:color-mix(in srgb, var(--danger) 6%, transparent);
+
+    color:var(--danger);
+
+    cursor:pointer;
+
+    transition:all .25s var(--io-sidebar-ease);
+
+}
+
+.io-logout-btn:hover{
+
+    background:color-mix(in srgb, var(--danger) 12%, transparent);
+
+    border-color:var(--danger);
+
+    transform:translateY(-2px);
+
+    box-shadow:0 10px 24px color-mix(in srgb, var(--danger) 18%, transparent);
+
+}
+
+.io-logout-btn:active{
+
+    transform:scale(.97);
+
+}
+
+.io-logout-btn svg{
+
+    width:26px;
+
+    height:26px;
+
+    flex-shrink:0;
+
+}
+
+.io-logout-label{
+
+    white-space:nowrap;
+
+    overflow:hidden;
+
+    font-size:16px;
+
+    font-weight:600;
+
+    line-height:1;
+
+}
+
+/* ==========================================================
+   Desktop Collapsed (icon rail) — Phase 2B.2 / 2B.6
+========================================================== */
+
+/* --bp-laptop (1024px) + 1 */
+@media (min-width:1025px){
+
+    .io-sidebar.is-collapsed{
+
+        width:var(--io-sidebar-w-collapsed);
+
+        min-width:var(--io-sidebar-w-collapsed);
+
+    }
+
+    .io-sidebar.is-collapsed .io-sidebar-inner{
+
+        width:var(--io-sidebar-w-collapsed);
+
+    }
+
+    .io-sidebar.is-collapsed .io-sidebar-brand-text,
+    .io-sidebar.is-collapsed .io-nav-label,
+    .io-sidebar.is-collapsed .io-nav-group-title,
+    .io-sidebar.is-collapsed .io-logout-label,
+    .io-sidebar.is-collapsed .io-nav-soon-badge{
+
+        opacity:0;
+
+        width:0;
+
+        pointer-events:none;
+
+    }
+
+    .io-sidebar.is-collapsed .io-sidebar-brand{
+
+        justify-content:center;
+
+        padding:24px 12px;
+
+    }
+
+    .io-sidebar.is-collapsed .io-sidebar-collapse-btn{
+
+        position:absolute;
+
+        right:-14px;
+
+        top:24px;
+
+        background:var(--surface);
+
+        box-shadow:0 2px 8px color-mix(in srgb, var(--text) 12%, transparent);
+
+    }
+
+    .io-sidebar.is-collapsed .io-nav-item,
+    .io-sidebar.is-collapsed .io-logout-btn{
+
+        justify-content:center;
+
+        padding:14px;
+
+    }
+
+    /* Glass-effect tooltip on hover while collapsed, so the
+       icon rail stays usable without opening it back up. */
+
+    .io-sidebar.is-collapsed .io-nav-item{
+
+        position:relative;
+
+    }
+
+    .io-sidebar.is-collapsed .io-nav-item:hover::before{
+
+        content:attr(aria-label);
+
+        position:absolute;
+
+        left:calc(100% + 12px);
+
+        top:50%;
+
+        transform:translateY(-50%);
+
+        padding:8px 14px;
+
+        border-radius:10px;
+
+        background:color-mix(in srgb, var(--text) 92%, transparent);
+
+        -webkit-backdrop-filter:blur(6px);
+
+        backdrop-filter:blur(6px);
+
+        color:var(--text-white);
+
+        font-size:13px;
+
+        font-weight:600;
+
+        white-space:nowrap;
+
+        box-shadow:0 8px 24px color-mix(in srgb, var(--text) 24%, transparent);
+
+        z-index:1200;
+
+        pointer-events:none;
+
+    }
+
+}
+
+/* ==========================================================
+   Mobile Drawer — Phase 2B.2 / 2B.4
+========================================================== */
+
+/* --bp-laptop (1024px) */
+@media (max-width:1024px){
+
+    .io-sidebar{
+
+        position:fixed;
+
+        inset:0;
+
+        z-index:1000;
+
+        transform:translateY(12px);
+
+        opacity:0;
+
+        visibility:hidden;
+
+        box-shadow:none;
+
+        transition:opacity .32s var(--io-sidebar-ease), transform .32s var(--io-sidebar-ease), visibility 0s linear .32s;
+
+        width:100vw;
+
+        min-width:100vw;
+
+        height:100dvh;
+
+    }
+
+    .io-sidebar.is-mobile-open{
+
+        transform:translateY(0);
+
+        opacity:1;
+
+        visibility:visible;
+
+        transition:opacity .32s var(--io-sidebar-ease), transform .32s var(--io-sidebar-ease);
+
+    }
+
+    .io-sidebar-inner{
+
+        width:100%;
+
+        height:100%;
+
+        padding-top:env(safe-area-inset-top);
+
+    }
+
+    /* Desktop-only rail toggle has no meaning on a full
+       overlay drawer — a dedicated Topbar hamburger already
+       owns open/close there. */
+
+    .io-sidebar-collapse-btn{
+
+        display:none;
+
+    }
+
+    /* Full-screen page needs its own explicit close control —
+       there's no "outside" to tap anymore. */
+
+    .io-sidebar-mobile-close{
+
+        display:flex;
+
+        align-items:center;
+
+        justify-content:center;
+
+        width:40px;
+
+        height:40px;
+
+        margin-left:auto;
+
+        border:1px solid var(--border);
+
+        border-radius:50%;
+
+        background:var(--surface);
+
+        color:var(--text-secondary);
+
+        cursor:pointer;
+
+        transition:background .2s var(--io-sidebar-ease), color .2s var(--io-sidebar-ease), transform .2s var(--io-sidebar-ease);
+
+    }
+
+    .io-sidebar-mobile-close svg{
+
+        width:18px;
+
+        height:18px;
+
+    }
+
+    .io-sidebar-mobile-close:hover{
+
+        background:color-mix(in srgb, var(--danger) 8%, transparent);
+
+        color:var(--danger);
+
+    }
+
+    .io-sidebar-mobile-close:active{
+
+        transform:scale(.92);
+
+    }
+
+    /* Skeleton-engine reveal — nav groups fade/slide up one
+       after another the instant the full-screen page becomes
+       visible, instead of the whole menu appearing as one flat
+       block. Delay is driven purely by DOM order (nth-child),
+       no JS timers involved. */
+
+    .io-sidebar:not(.is-mobile-open) .io-nav-group{
+
+        opacity:0;
+
+        transform:translateY(14px);
+
+    }
+
+    .io-sidebar.is-mobile-open .io-nav-group{
+
+        animation:io-sidebar-item-in .38s var(--io-sidebar-ease) both;
+
+    }
+
+    .io-sidebar.is-mobile-open .io-nav-group:nth-child(1){ animation-delay:.05s; }
+    .io-sidebar.is-mobile-open .io-nav-group:nth-child(2){ animation-delay:.09s; }
+    .io-sidebar.is-mobile-open .io-nav-group:nth-child(3){ animation-delay:.13s; }
+    .io-sidebar.is-mobile-open .io-nav-group:nth-child(4){ animation-delay:.17s; }
+    .io-sidebar.is-mobile-open .io-nav-group:nth-child(5){ animation-delay:.21s; }
+    .io-sidebar.is-mobile-open .io-nav-group:nth-child(6){ animation-delay:.25s; }
+    .io-sidebar.is-mobile-open .io-nav-group:nth-child(7){ animation-delay:.29s; }
+    .io-sidebar.is-mobile-open .io-nav-group:nth-child(8){ animation-delay:.33s; }
+    .io-sidebar.is-mobile-open .io-nav-group:nth-child(9){ animation-delay:.37s; }
+    .io-sidebar.is-mobile-open .io-nav-group:nth-child(n+10){ animation-delay:.40s; }
+
+    @keyframes io-sidebar-item-in{
+
+        from{
+
+            opacity:0;
+
+            transform:translateY(14px);
+
+        }
+
+        to{
+
+            opacity:1;
+
+            transform:translateY(0);
+
+        }
+
+    }
+
+}
+
+/* Overlay (scrim) — created dynamically by the controller so
+   it always exists exactly once, independent of shell markup. */
+
+.io-sidebar-overlay{
+
+    position:fixed;
+
+    inset:0;
+
+    background:color-mix(in srgb, var(--text) 50%, transparent);
+
+    z-index:999;
+
+    opacity:0;
+
+    visibility:hidden;
+
+    transition:opacity .25s ease, visibility 0s linear .25s;
+
+}
+
+.io-sidebar-overlay.is-visible{
+
+    opacity:1;
+
+    visibility:visible;
+
+    transition:opacity .25s ease;
+
+}
+
+@media (max-width:1024px){
+
+    .io-sidebar-overlay{
+
+        display:none;
+
+    }
+
+}
+
+/* --bp-laptop (1024px) + 1 */
+@media (min-width:1025px){
+
+    .io-sidebar-overlay{
+
+        display:none;
+
+    }
+
+}
+
+/* ==========================================================
+   Tablet fine-tuning
+========================================================== */
+
+/* ==========================================================
+   Tablet fine-tuning — sidebar is full-screen at every width
+   in this breakpoint now, so no separate rail width is needed
+   here anymore; kept as a no-op section marker for future
+   tablet-specific tweaks (e.g. multi-column nav groups).
+========================================================== */
+
+/* ==========================================================
+   Landscape phones — shorter viewport, tighten vertical
+   rhythm so the nav list doesn't force scrolling before it
+   needs to.
+========================================================== */
+
+/* --bp-laptop (1024px), landscape edge case */
+@media (max-width:1024px) and (orientation:landscape) and (max-height:480px){
+
+    .io-sidebar-brand{
+
+        padding:14px 20px;
+
+    }
+
+    .io-sidebar-nav{
+
+        padding:12px 16px;
+
+        gap:4px;
+
+    }
+
+    .io-nav-item{
+
+        padding:10px 16px;
+
+    }
+
+}
+
+/* ==========================================================
+   Foldables / very narrow widths
+========================================================== */
+
+/* --bp-phone-sm (360px) */
+@media (max-width:360px){
+
+    .io-sidebar{
+
+        width:100vw;
+
+        min-width:100vw;
+
+    }
+
+}
+
+/* ==========================================================
+   Reduced motion — global rule in shell.css already zeroes
+   transition/animation durations; this only removes the
+   collapsed-rail hover tooltip's implied motion assumption.
+========================================================== */
+
+@media (prefers-reduced-motion:reduce){
+
+    /* Width/collapse transition (desktop) and slide/fade
+       transition (mobile drawer) — state still changes
+       (collapsed/expanded, open/closed), just instantly
+       instead of animated. */
+
+    .io-sidebar,
+    .io-sidebar.is-mobile-open{
+
+        transition:none;
+
+    }
+
+    .io-sidebar-brand-text,
+    .io-sidebar-collapse-btn,
+    .io-collapse-icon,
+    .io-nav-item,
+    .io-nav-active-indicator,
+    .io-nav-item::after,
+    .io-logout-btn,
+    .io-sidebar-mobile-close,
+    .io-nav-soon-badge{
+
+        transition:none;
+
+    }
+
+    /* Decorative hover/press transforms (lift, scale, ripple
+       pulse) are removed outright rather than instant-applied
+       — same treatment the shared .co-press/.co-card-hover
+       utilities already use in accessibility.css. The
+       underlying click/hover functionality is unaffected. */
+
+    .io-sidebar-collapse-btn:active,
+    .io-sidebar-mobile-close:active,
+    .io-logout-btn:hover,
+    .io-logout-btn:active{
+
+        transform:none !important;
+
+    }
+
+    .io-nav-item::after{
+
+        opacity:0 !important;
+
+    }
+
+    .io-sidebar.is-collapsed .io-nav-item:hover::before{
+
+        transition:none;
+
+    }
+
+    .io-sidebar.is-mobile-open .io-nav-group{
+
+        animation:none;
+
+        opacity:1;
+
+        transform:none;
+
+    }
+
+}

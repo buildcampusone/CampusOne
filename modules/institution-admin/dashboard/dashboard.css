@@ -1,0 +1,1415 @@
+/* ==========================================================
+   CampusOne
+   Institution Admin Dashboard
+   ----------------------------------------------------------
+   Phase 5.4.1 — Hero Section 2.0
+
+   Presentation pass only, scoped to the Welcome Hero — the
+   Statistics / Actions / Widgets sections below are unchanged
+   from Phase 5.3. Cards still compose the shared `.co-card`
+   component (shared/styles/components.css — background,
+   border, radius-lg, shadow-sm, hover shadow-md) rather than
+   re-declaring that box model here. Everything still resolves
+   through variables.css tokens — no literal colors, no inline
+   styles, per Chapter 3 of AI_CONSTITUTION.md.
+
+   Icon-size scale used across this file (small -> large):
+     .ia-hero-avatar-badge  12px  in a 22px chip
+     .ia-icon-badge-action  22px  in a 48px tile (in-card)
+     .ia-icon-badge-kpi     22px  in a 48px tile (in-card)
+     .ia-icon-badge-widget  22px  in a 48px tile (in-card, Phase 5.6.1)
+     .ia-hero-icon          28px  in a 60px tile
+   Action, KPI, and Widget tiles are all the same size as of
+   Phase 5.6.1 — all three read as one shared "premium tile"
+   language now, tinted per-card via --action-accent /
+   --kpi-accent / --widget-accent respectively rather than one
+   flat neutral color. Every icon still comes from the shared
+   icon library (shared/components/icons) and keeps that
+   library's own stroke-width — only the container/svg
+   dimensions change here, so stroke weight stays consistent
+   everywhere.
+========================================================== */
+
+.ia-dashboard {
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-24);
+
+}
+
+/* ==========================================================
+   Section 1 — Welcome Hero 2.0
+   ----------------------------------------------------------
+   The one card in this file that intentionally does NOT use
+   `.co-card` — a gradient hero reads as a different surface
+   than a flat content card, and .co-card's white background
+   would fight the gradient. Still built entirely from tokens
+   (--primary/--secondary for the gradient stops, --radius-lg,
+   --shadow-md), so it stays "reuse tokens, don't hardcode
+   colors" rather than a one-off duplicate card system.
+
+   `.ia-hero-decor` is the "premium illustration" — two soft,
+   blurred circles built from the same gradient tokens, not an
+   external image, so there's nothing to host or license.
+   Everything glass (pills / avatar / status badge) layers a
+   `backdrop-filter: blur()` on top of the existing translucent
+   token background so it reads as frosted glass, not just a
+   tinted chip.
+========================================================== */
+
+.ia-hero-card {
+
+    position: relative;
+    overflow: hidden;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-24);
+
+    padding: var(--space-32) var(--space-40);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+
+}
+
+/* -- Decorative illustration layer -- */
+
+.ia-hero-decor {
+
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+
+    pointer-events: none;
+
+}
+
+.ia-hero-blob {
+
+    position: absolute;
+    border-radius: var(--radius-full);
+
+    background: color-mix(in srgb, var(--text-white) 30%, transparent);
+    filter: blur(32px);
+
+}
+
+.ia-hero-blob-a {
+
+    width: 220px;
+    height: 220px;
+    top: -90px;
+    right: 60px;
+
+}
+
+.ia-hero-blob-b {
+
+    width: 160px;
+    height: 160px;
+    bottom: -70px;
+    right: 220px;
+
+    background: color-mix(in srgb, var(--text-white) 18%, transparent);
+
+}
+
+/* -- Main content row (avatar + text), above the decor layer -- */
+
+.ia-hero-main {
+
+    position: relative;
+    z-index: 1;
+
+    display: flex;
+    align-items: center;
+    gap: var(--space-20);
+
+}
+
+/* -- Institution avatar (monogram + small institution-icon badge) -- */
+
+.ia-hero-avatar {
+
+    position: relative;
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 64px;
+    height: 64px;
+
+    border-radius: var(--radius-full);
+    background: color-mix(in srgb, var(--text-white) 20%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid color-mix(in srgb, var(--text-white) 30%, transparent);
+
+}
+
+.ia-hero-avatar-initial {
+
+    font-size: var(--text-xl);
+    font-weight: var(--weight-bold);
+    color: var(--text-white);
+
+}
+
+.ia-hero-avatar-badge {
+
+    position: absolute;
+    right: -4px;
+    bottom: -4px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 22px;
+    height: 22px;
+
+    border-radius: var(--radius-full);
+    background: var(--surface);
+    color: var(--primary);
+    box-shadow: var(--shadow-sm);
+
+}
+
+.ia-hero-avatar-badge svg {
+
+    width: 12px;
+    height: 12px;
+
+}
+
+/* -- Text content -- */
+
+.ia-hero-content {
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+
+}
+
+.ia-hero-top {
+
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-12);
+
+}
+
+.ia-hero-greeting {
+
+    margin: 0;
+    font-size: var(--text-3xl);
+    font-weight: var(--weight-bold);
+    line-height: 1.2;
+    color: var(--text-white);
+
+}
+
+/* -- Live status badge -- */
+
+.ia-hero-status {
+
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-8);
+
+    padding: var(--space-4) var(--space-12);
+    border-radius: var(--radius-full);
+
+    background: color-mix(in srgb, var(--text-white) 16%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    font-size: var(--text-xs);
+    font-weight: var(--weight-medium);
+    color: var(--text-white);
+
+}
+
+.ia-hero-status-dot {
+
+    width: 7px;
+    height: 7px;
+    border-radius: var(--radius-full);
+
+    background: var(--success);
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--success) 60%, transparent);
+
+    animation: ia-status-pulse 2.2s ease-out infinite;
+
+}
+
+@keyframes ia-status-pulse {
+
+    0% {
+        box-shadow: 0 0 0 0 color-mix(in srgb, var(--success) 55%, transparent);
+    }
+
+    70% {
+        box-shadow: 0 0 0 7px color-mix(in srgb, var(--success) 0%, transparent);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 color-mix(in srgb, var(--success) 0%, transparent);
+    }
+
+}
+
+.ia-hero-institution {
+
+    margin: 0;
+    font-size: var(--text-md);
+    color: var(--text-white);
+    opacity: 0.88;
+
+}
+
+.ia-hero-meta {
+
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-8);
+    margin-top: var(--space-8);
+
+}
+
+.ia-hero-pill {
+
+    padding: var(--space-8) var(--space-16);
+    border-radius: var(--radius-full);
+
+    background: color-mix(in srgb, var(--text-white) 16%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: var(--text-white);
+
+    font-size: var(--text-xs);
+    font-weight: var(--weight-medium);
+    letter-spacing: 0.01em;
+
+}
+
+/* -- Corner sparkle accent -- */
+
+.ia-hero-icon {
+
+    position: relative;
+    z-index: 1;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 60px;
+    height: 60px;
+    flex-shrink: 0;
+
+    border-radius: var(--radius-full);
+    background: color-mix(in srgb, var(--text-white) 16%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: var(--text-white);
+
+}
+
+.ia-hero-icon svg {
+
+    width: 28px;
+    height: 28px;
+
+}
+
+@media (max-width: 640px) {
+
+    .ia-hero-card {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: var(--space-24);
+    }
+
+    .ia-hero-main {
+        width: 100%;
+    }
+
+    .ia-hero-icon {
+        align-self: flex-end;
+        width: 48px;
+        height: 48px;
+    }
+
+    .ia-hero-icon svg {
+        width: 22px;
+        height: 22px;
+    }
+
+    .ia-hero-avatar {
+        width: 52px;
+        height: 52px;
+    }
+
+    .ia-hero-blob-a {
+        width: 140px;
+        height: 140px;
+        top: -60px;
+        right: -20px;
+    }
+
+    .ia-hero-blob-b {
+        display: none;
+    }
+
+}
+
+/* ==========================================================
+   Shared — Icon Badge
+   ----------------------------------------------------------
+   Base tile shared by every "colored icon on a tinted chip"
+   use on this page; `-stat` and `-action` modifiers only ever
+   change size, never the tile's shape/color logic, so there
+   is one visual language, not three.
+========================================================== */
+
+.ia-icon-badge {
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    border-radius: var(--radius-md);
+    background: var(--surface-secondary);
+    color: var(--primary);
+
+}
+
+.ia-icon-badge-kpi {
+
+    width: 40px;
+    height: 40px;
+
+}
+
+.ia-icon-badge-kpi svg {
+
+    width: 20px;
+    height: 20px;
+
+}
+
+.ia-icon-badge-action {
+
+    width: 40px;
+    height: 40px;
+
+}
+
+.ia-icon-badge-action svg {
+
+    width: 20px;
+    height: 20px;
+
+}
+
+.ia-icon-badge-widget {
+
+    width: 40px;
+    height: 40px;
+
+}
+
+.ia-icon-badge-widget svg {
+
+    width: 20px;
+    height: 20px;
+
+}
+
+/* ==========================================================
+   Section Title (shared by Quick Actions + Widgets)
+========================================================== */
+
+.ia-section-title {
+
+    margin: 0;
+    font-size: var(--text-lg);
+    font-weight: var(--weight-semibold);
+    color: var(--text);
+
+}
+
+/* ==========================================================
+   Section 2 — KPI Grid
+   ----------------------------------------------------------
+   Phase 5.4.2.1 — KPI Grid Layout
+
+   True responsive grid: 4 cols desktop, 2x2 tablet, 2x2
+   mobile. Every card is a CSS Grid item, so cards on the same
+   row are stretched to equal height automatically (grid's
+   default `align-items: stretch`) — `min-height` below only
+   sets the floor. Gap is a single `var(--space-20)` shorthand
+   so row gap and column gap stay identical at every breakpoint;
+   only the column count changes per breakpoint, never the gap
+   token.
+
+   Phase 5.4.2.2 — Premium KPI Card Design
+   ----------------------------------------------------------
+   Card still composes `.co-card` (surface/border/base radius)
+   but overrides radius/shadow explicitly here so the "premium"
+   look is guaranteed rather than inherited by coincidence:
+     - border-radius: var(--radius-lg) → 20px, per spec.
+     - box-shadow: var(--shadow-md) at rest (`.co-card` only
+       gives shadow-sm), lifting to var(--shadow-lg) + a small
+       translateY on hover — a proper "premium" elevation
+       instead of the flat utility default.
+     - Icon container (`.ia-icon-badge-kpi`) grows to 48px and
+       picks up a soft tint of the card's accent color via
+       `--kpi-accent` (set by the `.ia-kpi-card--{accent}`
+       modifiers below) instead of one flat neutral chip for
+       every KPI — still the same shared SVG icon, just given
+       its own color identity per metric.
+     - Label reads as a small, uppercase eyebrow title; value
+       is bumped to the largest number size on the page
+       (var(--text-3xl)) so it's unmistakably the headline of
+       the card; trend keeps its existing role as quiet
+       secondary text underneath.
+   No new DOM nodes, no emoji — everything above is CSS-only on
+   top of dashboard.page.js's existing markup.
+========================================================== */
+
+.ia-kpi-grid {
+
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: 1fr;
+    gap: var(--space-20);
+    align-items: stretch;
+
+}
+
+.ia-kpi-card {
+
+    position: relative;
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-16);
+
+    min-height: 168px;
+    padding: var(--space-24);
+
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+
+    transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+
+    /* Phase 5.4.2.3.1 — one-shot fade-up on first paint.
+       `both` holds the 0% keyframe through the stagger delay
+       below (nothing flashes at full opacity before its turn)
+       and keeps the 100% state once the animation ends, so
+       hover's own `transition` above takes over cleanly. Only
+       opacity/transform are animated — compositor-only
+       properties that never trigger layout, so no card shifts
+       while this plays. */
+    animation: ia-kpi-card-in var(--animation-normal) var(--ease-premium) both;
+
+}
+
+.ia-kpi-grid .ia-kpi-card:nth-child(1) { animation-delay: 0ms; }
+.ia-kpi-grid .ia-kpi-card:nth-child(2) { animation-delay: 60ms; }
+.ia-kpi-grid .ia-kpi-card:nth-child(3) { animation-delay: 120ms; }
+.ia-kpi-grid .ia-kpi-card:nth-child(4) { animation-delay: 180ms; }
+
+@keyframes ia-kpi-card-in {
+
+    from {
+
+        opacity: 0;
+        transform: translateY(10px);
+
+    }
+
+    to {
+
+        opacity: 1;
+        transform: translateY(0);
+
+    }
+
+}
+
+.ia-kpi-card:hover {
+
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+
+}
+
+/* Entry animation and hover lift both fold away here — content
+   still appears, it just stops sweeping/lifting to get there. */
+@media (prefers-reduced-motion: reduce) {
+
+    .ia-kpi-card {
+
+        animation: none;
+        opacity: 1;
+
+    }
+
+    .ia-kpi-card:hover {
+
+        transform: none;
+
+    }
+
+}
+
+/* -- Accent registry: one custom property, reused by the icon chip -- */
+
+.ia-kpi-card--primary { --kpi-accent: var(--primary); }
+.ia-kpi-card--secondary { --kpi-accent: var(--secondary); }
+.ia-kpi-card--info { --kpi-accent: var(--info); }
+.ia-kpi-card--success { --kpi-accent: var(--success); }
+.ia-kpi-card--default { --kpi-accent: var(--primary); }
+
+.ia-kpi-card .ia-icon-badge-kpi {
+
+    width: 48px;
+    height: 48px;
+
+    border-radius: var(--radius-md);
+    background: color-mix(in srgb, var(--kpi-accent, var(--primary)) 14%, var(--surface-secondary));
+    color: var(--kpi-accent, var(--primary));
+
+}
+
+.ia-kpi-card .ia-icon-badge-kpi svg {
+
+    width: 22px;
+    height: 22px;
+
+}
+
+.ia-kpi-body {
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+
+}
+
+.ia-kpi-label {
+
+    font-size: var(--text-xs);
+    font-weight: var(--weight-semibold);
+    color: var(--text-secondary);
+
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+
+}
+
+.ia-kpi-value {
+
+    margin: 0;
+    font-size: var(--text-3xl);
+    font-weight: var(--weight-bold);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    color: var(--text);
+
+}
+
+.ia-kpi-trend {
+
+    font-size: var(--text-xs);
+    font-weight: var(--weight-medium);
+    color: var(--text-light);
+
+}
+
+/* ==========================================================
+   Section 3 — Quick Actions
+   ----------------------------------------------------------
+   Phase 5.5.1.2 — Premium Card Structure
+   Phase 5.5.5.1 — Premium Card Structure (rework)
+   Phase 5.5.5.2 — Premium Icons & Typography
+   Phase 5.5.5.2.1 — Final Layout Polish
+   Phase 5.5.5.3 — Card Layout Alignment (Analytics Card Style)
+
+   What 5.5.5.3 changes vs 5.5.5.2.1 (layout-only — no new DOM
+   nodes, no routing/Firebase/controller changes, per spec):
+     - Row layout → column layout: `.ia-action-card` switches
+       `flex-direction: row` → `column`, so the icon badge
+       (already the first child in dashboard.page.js) becomes
+       the first *visual* element instead of sitting left of the
+       text, matching `.ia-kpi-card`'s icon-on-top hierarchy. No
+       markup reordering needed — the DOM was already icon →
+       text → arrow.
+     - Card sizing now mirrors `.ia-kpi-card` exactly: min-height
+       100px → 168px, padding 16/20px → uniform var(--space-24),
+       box-shadow explicitly set to var(--shadow-md) (previously
+       inherited .co-card's shadow-sm) — same padding/radius/
+       shadow/min-height tokens, nothing hardcoded.
+     - `.ia-action-text` drops its row-layout `justify-content:
+       center` (there's no longer a taller icon sibling to center
+       against) and its gap tightens to var(--space-4), the same
+       title→subtitle rhythm `.ia-kpi-body` uses for label→value.
+     - The arrow moves out of normal flow — `.ia-action-arrow` is
+       now `position: absolute`, pinned to the card's top-right
+       padding box and vertically centered on the *icon* row via
+       `top: var(--space-24)` + `transform: translateY(-50%)` —
+       "keep the arrow, vertically center it" from the spec —
+       instead of trailing at the end of a horizontal row. Same
+       element, same ChevronDownIcon, same rotation, same click
+       target (still inside the `<button>`), only its positioning
+       changed.
+     - `.ia-action-text` gets `padding-right` so wrapped title/
+       subtitle text never runs under the now-absolute arrow.
+   Everything below this point (accent registry, hover/active/
+   focus states, ripple, reduced-motion) is unchanged from
+   5.5.5.2.1 and still applies on top of the column layout.
+
+   Historical (pre-5.5.5.3): row layout unchanged — icon badge,
+   then a title + subtitle stack (`.ia-action-text`), then a
+   trailing arrow indicator (`.ia-action-arrow`, the shared
+   ChevronDownIcon rotated to point right — no new icon asset
+   needed). Title/subtitle can
+   wrap to more than one line as of 5.5.5.2 (see below); every
+   card still sits in a `grid-auto-rows: 1fr` row so a row's
+   cards stay equal height regardless of label length either
+   way. Icon tile color is now semantic (`--action-accent`, set
+   per card by `.ia-action-card--{accent}`) — title/subtitle/
+   arrow still resolve through the existing --text / --text-light
+   tokens, nothing new introduced there.
+
+   What 5.5.5.1 changed vs 5.5.1.2 (structure only — no new
+   markup nodes, no routing, no Firebase):
+     - Grid drops from 3 columns down to a permanent 2-column
+       layout at every breakpoint (was 3 -> 2 at 1200px). Fewer,
+       wider cards per row gives each card more breathing room.
+     - Card padding steps up 20px -> 24px (matches .co-card's
+       own default) now that there's room for it.
+     - Icon badge steps up 32px -> 40px (matches the *base*
+       `.ia-icon-badge` size the KPI cards also start from) so
+       it reads as the anchor of the row instead of competing
+       with the title for attention.
+     - Title steps up from --text-sm/medium to --text-md/
+       semibold, sharpening the icon -> title -> subtitle -> arrow
+       hierarchy; subtitle stays --text-xs/regular underneath it.
+     - min-height steps up to match the larger icon + padding,
+       still paired with grid-auto-rows: 1fr so every row of
+       cards stays equal height regardless of label length.
+
+   What 5.5.5.2 changes vs 5.5.5.1 (full parity with the KPI/
+   Analytics cards' icon + typography language, per spec):
+     - Icon tile steps up again, 40px -> 48px / 20px -> 22px svg,
+       matching the *in-card* size `.ia-kpi-card .ia-icon-badge-kpi`
+       uses (5.5.5.1 only matched the smaller base tile).
+     - Icon tile now gets a semantic accent tint per action
+       (`ACTION_ACCENTS` in dashboard.page.js) instead of one
+       flat `--primary` chip — same `color-mix(... 14% ...)`
+       formula the KPI tiles use, just keyed off `--action-accent`.
+     - Title/subtitle no longer truncate to one line — a fixed
+       single line was clipping real labels on narrow columns.
+       Title picks up the KPI value's tightened letter-spacing;
+       subtitle steps up regular -> medium weight so two-line
+       text stays legible instead of just not-clipped.
+     - `.ia-action-text` centers its own content on the cross-
+       axis and gets a touch more gap, so a wrapped two-line
+       title still reads as one balanced block next to the icon
+       rather than pinning to one edge of the row.
+
+   What 5.5.5.2.1 changes vs 5.5.5.2 (visual density pass only —
+   same DOM, same icon sizes/colors, same typography hierarchy):
+     - min-height 116px -> 100px, padding 24px uniform -> 16px
+       vertical / 20px horizontal — about 14% shorter, still
+       comfortably above the 44px touch-target minimum and still
+       stretched equal by grid-auto-rows: 1fr.
+     - Right-side padding step-down (24px -> 20px) also pulls the
+       trailing arrow closer to the card's edge, per spec; `gap`
+       between icon/text/arrow is untouched, so nothing crowds
+       the text column.
+     - Subtitle now clamps to 2 lines (`-webkit-line-clamp`) with
+       a tighter 1.4 -> 1.3 line-height instead of wrapping
+       indefinitely, so an unusually long subtitle can no longer
+       push a card's natural content height past what the shorter
+       cards in its row need.
+========================================================== */
+
+.ia-quick-actions {
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-16);
+
+}
+
+.ia-action-grid {
+
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: 1fr;
+    gap: var(--space-16);
+
+}
+
+.ia-action-card {
+
+    position: relative;
+    overflow: hidden;
+
+    /* Phase 5.5.5.3 — column layout puts the icon on top, then
+       title/subtitle, matching .ia-kpi-card's vertical hierarchy.
+       align-items: flex-start (not center) so the icon badge and
+       text block both hug the card's left edge instead of
+       centering on the cross-axis. */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-16);
+
+    width: 100%;
+    min-width: 0;
+    /* Phase 5.5.5.3 — min-height/padding/box-shadow now match
+       .ia-kpi-card exactly (168px / uniform space-24 / shadow-md)
+       instead of the shorter row-layout values — same tokens,
+       reused, not redefined. */
+    min-height: 168px;
+    padding: var(--space-24);
+    box-shadow: var(--shadow-md);
+
+    font-family: inherit;
+    text-align: left;
+
+    cursor: pointer;
+
+    /* Phase 5.5.2.2 — Motion & Transitions
+       Overrides .co-card's `transition:all` with an explicit,
+       GPU-friendly property list (transform + box-shadow +
+       border-color only — never layout-triggering properties),
+       on the same --animation-fast / --ease-premium pairing the
+       KPI cards use, so hover-in and the :active press below
+       share one consistent premium easing curve instead of
+       drifting between --transition-normal and --transition-fast. */
+    transition:
+        transform var(--animation-fast) var(--ease-premium),
+        box-shadow var(--animation-fast) var(--ease-premium),
+        border-color var(--animation-fast) var(--ease-premium);
+    will-change: transform;
+
+}
+
+/* -- Accent registry: mirrors .ia-kpi-card--{accent} above --
+   Phase 5.5.5.2 — one custom property, reused by the icon tile. */
+
+.ia-action-card--primary { --action-accent: var(--primary); }
+.ia-action-card--secondary { --action-accent: var(--secondary); }
+.ia-action-card--info { --action-accent: var(--info); }
+.ia-action-card--success { --action-accent: var(--success); }
+.ia-action-card--warning { --action-accent: var(--warning); }
+.ia-action-card--default { --action-accent: var(--primary); }
+
+/* Phase 5.5.5.2 — Premium Icons & Typography
+   Brings the tile to full parity with `.ia-kpi-card
+   .ia-icon-badge-kpi` above: identical 48px/22px sizing (was
+   32px/16px pre-5.5.5.1, then 40px/20px at parity with the
+   *base* `.ia-icon-badge` only), identical radius-md tile
+   with an identical 13px icon-to-edge inset on every side, and
+   the same accent-tinted background instead of one flat
+   `--primary` chip — the two card types now share one visual
+   icon language rather than two that happen to look similar. */
+.ia-action-card .ia-icon-badge-action {
+
+    width: 48px;
+    height: 48px;
+
+    border-radius: var(--radius-md);
+    background: color-mix(in srgb, var(--action-accent, var(--primary)) 14%, var(--surface-secondary));
+    color: var(--action-accent, var(--primary));
+
+}
+
+.ia-action-card .ia-icon-badge-action svg {
+
+    width: 22px;
+    height: 22px;
+
+}
+
+.ia-action-text {
+
+    display: flex;
+    flex-direction: column;
+    /* Phase 5.5.5.3 — justify-content: center dropped: that was
+       only needed to vertically center this block against a
+       taller icon sibling in the old row layout. Column layout
+       has no such sibling to center against, so this now just
+       flows top-to-bottom like .ia-kpi-body. Gap tightens
+       space-8 → space-4 to match .ia-kpi-body's label→value
+       rhythm exactly. */
+    gap: var(--space-4);
+
+    width: 100%;
+    min-width: 0;
+    /* Reserves room so wrapped title/subtitle text never runs
+       under the arrow, which is now absolutely positioned at the
+       card's top-right instead of trailing inline in the row. */
+    padding-right: var(--space-24);
+
+}
+
+.ia-action-title {
+
+    font-size: var(--text-md);
+    font-weight: var(--weight-semibold);
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+    color: var(--text);
+
+    /* Phase 5.5.5.2 — truncation removed: a fixed single line
+       cut real labels off mid-word on narrow columns. The card
+       already sits in a grid-auto-rows: 1fr row (base + 5.5.5.1),
+       so a wrapped two-line title still keeps every card in that
+       row equal height — nothing to guard against by clipping. */
+
+}
+
+.ia-action-subtitle {
+
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+
+    font-size: var(--text-xs);
+    font-weight: var(--weight-medium);
+    line-height: 1.3;
+    color: var(--text-light);
+
+    /* Phase 5.5.5.2.1 — clamped to 2 lines (was unbounded wrap
+       since 5.5.5.2) so one long subtitle can't push a card
+       taller than its row's shorter neighbors need; line-height
+       tightened 1.4 -> 1.3 to match the shorter card height
+       from the padding/min-height change above. */
+
+}
+
+.ia-action-arrow {
+
+    /* Phase 5.5.5.3 — taken out of normal flow: in the column
+       layout there's no horizontal row left for it to trail at
+       the end of, so it's pinned to the card's top-right padding
+       corner instead. `top` matches the card's own padding
+       (space-24) so it lines up with the icon badge's vertical
+       center, then `translateY(-50%)` centers the arrow itself
+       on that line — "keep the arrow, vertically center it" per
+       spec. Still the same element, same click target (inside
+       the <button>), same icon asset. */
+    position: absolute;
+    top: var(--space-24);
+    right: var(--space-24);
+    transform: translateY(-50%);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    color: var(--text-light);
+
+}
+
+.ia-action-arrow svg {
+
+    width: 16px;
+    height: 16px;
+    transform: rotate(-90deg);
+
+    /* Rides the same fast/premium pairing as the card so the
+       arrow's nudge (below) never lags or leads the card lift. */
+    transition: transform var(--animation-fast) var(--ease-premium);
+
+}
+
+/* Icon badge gets its own transform transition so its hover
+   scale (below) animates independently of the card's lift —
+   both compositor-only, so they run smoothly in parallel. */
+.ia-action-card .ia-icon-badge-action {
+
+    transition: transform var(--animation-fast) var(--ease-premium);
+
+}
+
+@media (hover: hover) and (pointer: fine) {
+
+    .ia-action-card:hover {
+
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+        border-color: var(--border-dark);
+
+    }
+
+    /* Subtle icon/arrow lift-in, riding the card's own hover —
+       transform-only, no new colors or icon assets. */
+    .ia-action-card:hover .ia-icon-badge-action {
+
+        transform: scale(1.08);
+
+    }
+
+    .ia-action-card:hover .ia-action-arrow svg {
+
+        transform: rotate(-90deg) translateX(2px);
+
+    }
+
+}
+
+.ia-action-card:active {
+
+    /* Duration/easing now inherited from the base transition
+       list above — previously pinned to --transition-fast here
+       while hover rode --transition-normal via .co-card, so the
+       press-in and lift-out snapped back at different speeds. */
+    transform: translateY(0) scale(0.98);
+    box-shadow: var(--shadow-sm);
+
+}
+
+/* Phase 5.5.2.4 — Keyboard & Accessibility
+   Keyboard-only ring (focus-visible, never on mouse click).
+   Outline + matching box-shadow "halo" is redundant on purpose:
+   outline alone can be visually swallowed by the card's own
+   :active/:hover box-shadow above, so the halo guarantees the
+   ring still reads against --surface in both the light and
+   dark theme (--primary keeps ≥3:1 contrast against --surface
+   in both palettes already defined in variables.css). Outline
+   itself is never clipped by the card's overflow:hidden — that
+   only clips the ripple pseudo-element inside the border box. */
+.ia-action-card:focus-visible {
+
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary) 25%, transparent);
+
+}
+
+/* Phase 5.5.2.3 — Ripple & Tap Feedback
+   Same CSS-only, pseudo-element-driven ripple already used on
+   .ia-nav-item (sidebar) — no new JS ripple engine, no tap-
+   position tracking, just the identical :active-triggered pulse.
+   Only the tint changes: the sidebar ripple is white-on-color
+   for its dark nav items, this card sits on --surface, so it's
+   mixed from --primary instead. position:relative + overflow:
+   hidden on .ia-action-card (above) clip it to the card's own
+   rounded corners — it never bleeds past the edge. */
+.ia-action-card::after {
+
+    content: "";
+    position: absolute;
+    inset: 0;
+
+    border-radius: inherit;
+    background: radial-gradient(circle, color-mix(in srgb, var(--primary) 20%, transparent) 0%, transparent 70%);
+
+    opacity: 0;
+    transform: scale(.4);
+    transition: opacity .5s ease, transform .5s ease;
+    pointer-events: none;
+
+}
+
+.ia-action-card:active::after {
+
+    opacity: 1;
+    transform: scale(1.4);
+    transition-duration: 0s;
+
+}
+
+/* Every transform above is compositor-only (transform +
+   box-shadow/border-color, never top/left/width/height), so it
+   stays 60fps on its own — this block exists purely to honor
+   the user's motion preference, not to fix jank. */
+@media (prefers-reduced-motion: reduce) {
+
+    .ia-action-card,
+    .ia-action-card .ia-icon-badge-action,
+    .ia-action-arrow svg,
+    .ia-action-card::after {
+
+        transition: none;
+
+    }
+
+    /* Tap feedback stays (still confirms the press landed) but
+       drops the pulsing scale — a flat tint flash instead. */
+    .ia-action-card::after {
+
+        transform: none;
+
+    }
+
+    .ia-action-card:active::after {
+
+        transform: none;
+
+    }
+
+    .ia-action-card:hover,
+    .ia-action-card:active {
+
+        transform: none;
+
+    }
+
+    .ia-action-card:hover .ia-icon-badge-action {
+
+        transform: none;
+
+    }
+
+    .ia-action-card:hover .ia-action-arrow svg {
+
+        transform: rotate(-90deg);
+
+    }
+
+}
+
+/* ==========================================================
+   Section 4 — Information Widgets
+   ----------------------------------------------------------
+   Phase 5.6.1 — Premium Information Widgets
+
+   Brings Recent Activity / Announcements / Upcoming Events up
+   to the same premium language as the KPI and Quick Action
+   cards above them — same surface treatment, same icon-tile
+   component, same empty-state depth — without introducing any
+   new visual vocabulary of its own:
+     - `.ia-dashboard-card` explicitly sets box-shadow: var(
+       --shadow-md) (was inheriting .co-card's shadow-sm) and
+       gets the same hover lift as its sibling card types, so
+       all three families now share one elevation model. Radius/
+       border/background/padding still come from `.co-card`
+       itself — untouched, not redeclared.
+     - `.ia-widget-header`'s icon goes from a bare 14px muted
+       glyph to the shared `.ia-icon-badge` component (already
+       used by KPI + Action cards) via the new `.ia-icon-badge-
+       widget` size variant — same 48px/22px in-card sizing,
+       same color-mix accent-tint formula, keyed off a new
+       `--widget-accent` custom property (`.ia-dashboard-card--
+       {accent}` below, mirrors `--kpi-accent` / `--action-
+       accent`). Heading steps up text-lg → text-xl to read as
+       more clearly "premium" against the bigger icon tile.
+     - `.ia-dash-empty` is no longer just a centered one-line
+       `<p>` — it's an icon (large, accent-tinted, echoes the
+       header icon) + title (the existing `message` string,
+       unchanged) + a new short description line, each with its
+       own type scale, stacked with breathing room instead of
+       one small muted sentence in a fixed-height box.
+   Every value below still resolves through variables.css
+   tokens — no literal colors, no inline styles.
+========================================================== */
+
+.ia-dashboard-grid {
+
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: 1fr;
+    gap: var(--space-20);
+
+}
+
+.ia-dashboard-card {
+
+    display: flex;
+    flex-direction: column;
+
+    box-shadow: var(--shadow-md);
+    transition: transform var(--animation-fast) var(--ease-premium), box-shadow var(--animation-fast) var(--ease-premium);
+
+}
+
+@media (hover: hover) and (pointer: fine) {
+
+    .ia-dashboard-card:hover {
+
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+
+    }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .ia-dashboard-card {
+
+        transition: none;
+
+    }
+
+    .ia-dashboard-card:hover {
+
+        transform: none;
+
+    }
+
+}
+
+/* -- Accent registry: mirrors .ia-kpi-card--{accent} / .ia-action-card--{accent} above -- */
+
+.ia-dashboard-card--info { --widget-accent: var(--info); }
+.ia-dashboard-card--warning { --widget-accent: var(--warning); }
+.ia-dashboard-card--secondary { --widget-accent: var(--secondary); }
+.ia-dashboard-card--default { --widget-accent: var(--primary); }
+
+.ia-widget-header {
+
+    display: flex;
+    align-items: center;
+    gap: var(--space-12);
+    margin-bottom: var(--space-20);
+
+}
+
+.ia-widget-header .ia-icon-badge-widget {
+
+    background: color-mix(in srgb, var(--widget-accent, var(--primary)) 14%, var(--surface-secondary));
+    color: var(--widget-accent, var(--primary));
+
+}
+
+.ia-widget-header .ia-section-title {
+
+    margin: 0;
+    font-size: var(--text-xl);
+
+}
+
+.ia-dash-empty {
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-12);
+
+    flex: 1;
+    min-height: 160px;
+    padding: var(--space-16) var(--space-8);
+    text-align: center;
+
+}
+
+.ia-dash-empty-icon {
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    width: 56px;
+    height: 56px;
+
+    border-radius: var(--radius-full);
+    background: color-mix(in srgb, var(--widget-accent, var(--primary)) 10%, var(--surface-secondary));
+    color: var(--widget-accent, var(--primary));
+
+}
+
+.ia-dash-empty-icon svg {
+
+    width: 24px;
+    height: 24px;
+
+}
+
+.ia-dash-empty-title {
+
+    margin: 0;
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+    color: var(--text);
+
+}
+
+.ia-dash-empty-description {
+
+    margin: 0;
+    max-width: 220px;
+
+    font-size: var(--text-xs);
+    font-weight: var(--weight-regular);
+    line-height: 1.5;
+    color: var(--text-light);
+
+}
+
+/* ==========================================================
+   Responsive
+   ----------------------------------------------------------
+   KPI Grid -> 4 columns desktop, 2x2 tablet, 2x2 mobile. The
+   column count only ever drops from 4 -> 2 and then holds, so
+   the KPI grid never collapses to a single column the way
+   `.ia-action-grid` still intentionally does — four KPI cards
+   always read as two even rows, never a long single-column
+   stack. `grid-auto-rows: 1fr` (set on `.ia-kpi-grid` itself)
+   keeps both rows equal height at every one of these widths,
+   so only `min-height` needs to step down here, not the
+   equal-height behavior.
+
+   Quick Actions (Phase 5.5.5.1) is now a permanent 2-column
+   grid — `.ia-action-grid` sets `repeat(2, minmax(0, 1fr))` as
+   its base, so there's no breakpoint step needed to get there;
+   it just holds 2 columns from desktop down through mobile
+   instead of collapsing to a single-column list. `grid-auto-
+   rows: 1fr` (also set at the base) keeps every row's cards
+   equal height the same way the KPI grid does. Card padding
+   and icon-badge size still step down at 768 so the wider
+   24px/40px desktop treatment doesn't crowd a narrow mobile
+   column. The rest of the dashboard grid still steps down at
+   992 — none of that changed. Breakpoints stay aligned with
+   sa-dashboard's own (1200 / 992 / 768 / 480) so Institution
+   Admin and Super Admin collapse at the same widths.
+========================================================== */
+
+@media (max-width: 1200px) {
+
+    .ia-kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+@media (max-width: 992px) {
+
+    .ia-dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+@media (max-width: 768px) {
+
+    .ia-kpi-card {
+        min-height: 140px;
+        padding: var(--space-20);
+    }
+
+    .ia-kpi-card .ia-icon-badge-kpi {
+        width: 42px;
+        height: 42px;
+    }
+
+    .ia-kpi-card .ia-icon-badge-kpi svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .ia-kpi-value {
+        font-size: var(--text-2xl);
+    }
+
+    /* Phase 5.5.5.3 — mirrors .ia-kpi-card's 768px step exactly
+       (140px / space-20 / 42px-20px icon) instead of the old
+       row-layout's own shorter values, so the two card types
+       keep matching height/hierarchy at this breakpoint too. */
+    .ia-action-card {
+        min-height: 140px;
+        width: 100%;
+        padding: var(--space-20);
+    }
+
+    .ia-action-card .ia-icon-badge-action {
+        width: 42px;
+        height: 42px;
+    }
+
+    .ia-action-card .ia-icon-badge-action svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .ia-action-arrow {
+        top: var(--space-20);
+        right: var(--space-20);
+    }
+
+}
+
+@media (max-width: 480px) {
+
+    .ia-hero-greeting {
+        font-size: var(--text-xl);
+    }
+
+    .ia-kpi-grid {
+        gap: var(--space-12);
+    }
+
+    .ia-kpi-card {
+        min-height: 128px;
+        padding: var(--space-16);
+    }
+
+    .ia-kpi-card .ia-icon-badge-kpi,
+    .ia-icon-badge-kpi {
+        width: 36px;
+        height: 36px;
+    }
+
+    .ia-kpi-card .ia-icon-badge-kpi svg,
+    .ia-icon-badge-kpi svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    .ia-kpi-value {
+        font-size: var(--text-xl);
+    }
+
+    .ia-action-grid {
+        gap: var(--space-12);
+    }
+
+    /* Phase 5.5.5.3 — mirrors .ia-kpi-card's 480px step; the
+       old row layout had no rule at this breakpoint at all
+       (it just kept its 768px sizing down to mobile), so this
+       is a new step, not a change to an existing one. */
+    .ia-action-card {
+        min-height: 128px;
+        padding: var(--space-16);
+    }
+
+    .ia-action-card .ia-icon-badge-action {
+        width: 36px;
+        height: 36px;
+    }
+
+    .ia-action-card .ia-icon-badge-action svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    .ia-action-arrow {
+        top: var(--space-16);
+        right: var(--space-16);
+    }
+
+}

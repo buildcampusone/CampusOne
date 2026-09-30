@@ -1,0 +1,221 @@
+/* =========================================
+   CampusOne Input
+   Version: 3.0
+========================================= */
+
+.input-group{
+
+    width:100%;
+
+    display:flex;
+    flex-direction:column;
+
+    gap:8px;
+
+}
+
+.input-label{
+
+    font-size:12px;
+    font-weight:600;
+
+    letter-spacing:.3px;
+
+    color:rgba(255,255,255,.78);
+
+}
+
+.input-wrapper{
+
+    position:relative;
+
+    width:100%;
+
+    display:flex;
+    align-items:center;
+
+}
+
+/* Left Icon */
+
+.input-icon{
+
+    position:absolute;
+
+    left:16px;
+
+    width:18px;
+    height:18px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    color:rgba(255,255,255,.45);
+
+    pointer-events:none;
+
+    transition:.25s ease;
+
+}
+
+/* Right Button (Eye) */
+
+.input-action{
+
+    position:absolute;
+
+    top:50%;
+    right:16px;
+
+    transform:translateY(-50%);
+
+    width:22px;
+    height:22px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    padding:0;
+
+    background:transparent;
+
+    border:none;
+
+    color:rgba(255,255,255,.75);
+
+    cursor:pointer;
+
+    z-index:2;
+
+}
+
+.input-action svg{
+
+    width:20px;
+    height:20px;
+
+    pointer-events:none;
+
+}
+
+.input-action:hover{
+
+    color:#FFF;
+
+}
+
+.input{
+
+    width:100%;
+
+    height:50px;
+
+    padding:0 52px 0 52px;
+
+    border:none;
+    outline:none;
+
+    border-radius:14px;
+
+    background:rgba(255,255,255,.06);
+
+    border:1px solid rgba(255,255,255,.10);
+
+    color:#FFFFFF;
+
+    font-size:15px;
+    font-weight:500;
+
+    transition:
+        border-color var(--duration-hover) var(--ease-standard),
+        background var(--duration-hover) var(--ease-standard),
+        box-shadow var(--duration-hover) var(--ease-standard);
+
+}
+
+.input::placeholder{
+
+    color:rgba(255,255,255,.38);
+
+}
+
+.input:focus{
+
+    background:rgba(255,255,255,.08);
+
+    border-color:#3B82F6;
+
+    box-shadow:0 0 0 4px rgba(59,130,246,.14);
+
+}
+
+.input-wrapper:focus-within .input-icon{
+
+    color:#3B82F6;
+
+}
+
+.input-wrapper:focus-within .input-action{
+
+    color:#3B82F6;
+
+}
+
+.input:disabled{
+
+    opacity:.6;
+
+    cursor:not-allowed;
+
+}
+
+.input:-webkit-autofill,
+.input:-webkit-autofill:hover,
+.input:-webkit-autofill:focus{
+
+    -webkit-text-fill-color:#FFFFFF;
+
+    -webkit-box-shadow:0 0 0 1000px rgba(255,255,255,.06) inset;
+
+    transition:background-color 9999s;
+
+}
+
+/* =========================================
+   Validation States
+========================================= */
+
+.input.error{
+
+    border-color:#EF4444;
+
+    background:rgba(239,68,68,.08);
+
+    box-shadow:0 0 0 4px rgba(239,68,68,.12);
+
+}
+
+.input.success{
+
+    border-color:#22C55E;
+
+    background:rgba(34,197,94,.08);
+
+    box-shadow:0 0 0 4px rgba(34,197,94,.12);
+
+}
+.input-hint{
+
+    font-size:12px;
+    opacity:.6;
+    margin-top:-2px;
+    line-height:1.4;
+}
+
+.input[readonly]{
+
+    opacity:.7;
+    cursor:not-allowed;
+}

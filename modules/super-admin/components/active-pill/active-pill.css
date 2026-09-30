@@ -1,0 +1,123 @@
+/* ==========================================================
+   CampusOne
+   Super Admin — Active Pill (Shared Component)
+   ----------------------------------------------------------
+   Part 2.2.1: Premium Active Pill Foundation
+
+   Reusable "active state" surface for nav-style elements —
+   sidebar rail items, bottom-nav tabs, and any future tab-like
+   surface that wants the same premium pill treatment instead
+   of each component re-inventing its own active background.
+
+   Scope of THIS file (foundation only):
+     - shape / surface: background, radius, shadow, transition
+   Explicitly out of scope (later Part 2.2.x):
+     - icon size/position, label alignment, padding, gap —
+       those stay owned by the host component (sidebar.css,
+       bottom-nav.css) until wired in on purpose.
+
+   Usage: add `.sa-active-pill` alongside whatever active-state
+   class a host component already toggles, e.g.
+
+       <button class="sa-nav-item active sa-active-pill">
+
+   Every value below is a token already defined in
+   shared/styles/variables.css — no hardcoded colors, no
+   inline styles. Dark mode falls out for free since the
+   underlying tokens flip on [data-theme="dark"].
+========================================================== */
+
+:root{
+
+    /* Sizing / motion dials for the pill surface, kept local to
+       this component so every future consumer (bottom-nav,
+       topbar tabs, etc.) shares one source instead of each
+       re-declaring its own copy. */
+
+    --sa-active-pill-radius:var(--radius-full);
+
+    --sa-active-pill-shadow:0 10px 24px color-mix(in srgb, var(--primary) 28%, transparent);
+
+    --sa-active-pill-shadow-hover:0 14px 30px color-mix(in srgb, var(--primary) 36%, transparent);
+
+    --sa-active-pill-transition:background var(--transition-normal), box-shadow var(--transition-normal), transform var(--transition-fast);
+
+}
+
+/* ==========================================================
+   Base Pill Surface
+   ----------------------------------------------------------
+   Additive class only — provides background/shape/shadow.
+   Does not set display, padding, gap, or position; the host
+   element keeps full ownership of its own layout.
+========================================================== */
+
+.sa-active-pill{
+
+    background:linear-gradient(135deg, var(--primary), var(--primary-light));
+
+    border-radius:var(--sa-active-pill-radius);
+
+    box-shadow:var(--sa-active-pill-shadow);
+
+    color:var(--text-white);
+
+    transform:scale(1);
+
+    transition:var(--sa-active-pill-transition), transform var(--duration-hover) var(--ease-spring);
+
+}
+
+.sa-active-pill:hover{
+
+    box-shadow:var(--sa-active-pill-shadow-hover);
+
+    transform:scale(1.02);
+
+}
+
+.sa-active-pill:active{
+
+    transform:scale(.98);
+
+}
+
+/* Graceful fallback for browsers without color-mix support —
+   falls back to the existing token shadow scale instead of an
+   unsupported color-mix() shadow. */
+
+@supports not (color:color-mix(in srgb, red, blue)){
+
+    .sa-active-pill{
+
+        box-shadow:var(--shadow-md);
+
+    }
+
+    .sa-active-pill:hover{
+
+        box-shadow:var(--shadow-lg);
+
+    }
+
+}
+
+/* ==========================================================
+   Reduced Motion
+========================================================== */
+
+@media (prefers-reduced-motion:reduce){
+
+    .sa-active-pill{
+
+        transition:none;
+
+    }
+
+    .sa-active-pill:hover{
+
+        transform:none;
+
+    }
+
+}

@@ -1,0 +1,64 @@
+/*=========================================
+=         DASHBOARD SKELETON              =
+=========================================*/
+
+.skel-dashboard{
+
+    width:100%;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:24px;
+
+}
+
+.skel-dashboard-stats{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));
+
+    gap:16px;
+
+}
+
+.skel-dashboard-chart,
+.skel-dashboard-table{
+
+    width:100%;
+
+    padding:20px;
+
+    background:var(--surface);
+
+    border-radius:var(--radius-lg);
+
+}
+
+/* ==========================================================
+   Dashboard Skeleton Wrap
+   ----------------------------------------------------------
+   Mount point used by dashboard.page.js's render() while the
+   skeleton is shown (before the real .sa-dashboard content
+   replaces it). Matches .sa-dashboard's own padding so there's
+   no layout jump when Animation.fadeOut() hands off to the
+   real page.
+========================================================== */
+
+.sa-dashboard-skeleton-wrap{
+
+    padding:28px;
+
+}
+
+@media (max-width:768px){
+
+    .sa-dashboard-skeleton-wrap{
+
+        padding:18px;
+
+    }
+
+}

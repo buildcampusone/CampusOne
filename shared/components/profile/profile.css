@@ -1,0 +1,799 @@
+/**
+ * ==========================================================
+ * CampusOne — Shared Profile Components
+ * Phase 8 — Profile Header / Info Card / Analytics Card
+ * Tokens only, mobile-first, dark mode via [data-theme="dark"]
+ * ==========================================================
+ */
+
+/* ----------------------------------------------------------
+   Profile Header
+---------------------------------------------------------- */
+
+.co-profile-header{
+
+    position:relative;
+    overflow:hidden;
+    display:flex;
+    align-items:center;
+    gap:var(--space-20);
+    flex-wrap:wrap;
+    padding:var(--space-24);
+    background:linear-gradient(180deg, color-mix(in srgb, var(--primary) 6%, var(--surface)) 0%, var(--surface) 60%);
+
+}
+
+.co-profile-header::before{
+
+    content:"";
+    position:absolute;
+    inset:0 0 auto 0;
+    height:4px;
+    background:linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+
+}
+
+.co-profile-header-glow{
+
+    position:absolute;
+    top:-70px;
+    right:-70px;
+    width:220px;
+    height:220px;
+    border-radius:var(--radius-full);
+    background:color-mix(in srgb, var(--primary) 20%, transparent);
+    filter:blur(46px);
+    pointer-events:none;
+    z-index:0;
+
+}
+
+@media (min-width:768px){
+
+    .co-profile-header{
+
+        padding:var(--space-32);
+
+    }
+
+}
+
+.co-profile-header-avatar{
+
+    position:relative;
+    z-index:1;
+    flex-shrink:0;
+
+}
+
+.co-profile-header-info{
+
+    position:relative;
+    z-index:1;
+    display:flex;
+    flex-direction:column;
+    gap:var(--space-8);
+    min-width:0;
+
+}
+
+.co-profile-header-name-row{
+
+    display:flex;
+    align-items:center;
+    gap:var(--space-8);
+    flex-wrap:wrap;
+
+}
+
+.co-profile-header-name{
+
+    font-size:var(--text-2xl);
+    font-weight:var(--weight-bold);
+    color:var(--text);
+    line-height:1.2;
+
+}
+
+.co-profile-header-meta{
+
+    display:flex;
+    align-items:center;
+    gap:var(--space-8);
+    flex-wrap:wrap;
+
+}
+
+.co-profile-header-institution{
+
+    font-size:var(--text-sm);
+    color:var(--text-secondary);
+
+}
+
+.co-profile-header-footer{
+
+    display:flex;
+    align-items:center;
+    gap:var(--space-8);
+    flex-wrap:wrap;
+
+}
+
+.co-profile-header-id{
+
+    font-size:var(--text-xs);
+    color:var(--text-light);
+
+}
+
+.co-profile-header-id strong{
+
+    color:var(--text-secondary);
+    font-weight:var(--weight-medium);
+
+}
+
+.co-profile-header-divider{
+
+    width:3px;
+    height:3px;
+    border-radius:var(--radius-full);
+    background:var(--text-light);
+
+}
+
+.co-profile-header-member{
+
+    font-size:var(--text-xs);
+    color:var(--text-light);
+
+}
+
+@media (max-width:520px){
+
+    .co-profile-header{
+
+        flex-direction:column;
+        align-items:flex-start;
+        text-align:left;
+
+    }
+
+}
+
+/* ----------------------------------------------------------
+   Info Card (Personal / Professional Information)
+---------------------------------------------------------- */
+
+.co-info-card-header{
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:var(--space-12);
+    margin-bottom:var(--space-16);
+    flex-wrap:wrap;
+
+}
+
+.co-info-card-heading{
+
+    display:flex;
+    align-items:center;
+    gap:var(--space-8);
+
+}
+
+.co-info-card-icon{
+
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:32px;
+    height:32px;
+    flex-shrink:0;
+    border-radius:var(--radius-md);
+    background:color-mix(in srgb, var(--primary) 12%, transparent);
+    color:var(--primary);
+
+}
+
+.co-info-card-icon svg{
+
+    width:16px;
+    height:16px;
+
+}
+
+.co-info-card-title{
+
+    font-size:var(--text-md);
+    font-weight:var(--weight-semibold);
+    color:var(--text);
+
+}
+
+/* Edit Profile (and any other) action button sitting inside a
+   light co-card — .btn/.btn-secondary are built for the dark,
+   glassy auth screens, so on a white card they render as
+   near-invisible white-on-white. Scope a card-appropriate look
+   here instead of touching the global auth button styles. */
+
+.co-info-card-action .btn{
+
+    width:auto;
+    height:36px;
+    padding:0 var(--space-16);
+    font-size:var(--text-sm);
+    border-radius:var(--radius-md);
+    gap:var(--space-8);
+
+}
+
+.co-info-card-action .btn-secondary{
+
+    color:var(--primary);
+    background:color-mix(in srgb, var(--primary) 8%, transparent);
+    border:1px solid color-mix(in srgb, var(--primary) 22%, transparent);
+    backdrop-filter:none;
+    -webkit-backdrop-filter:none;
+
+}
+
+.co-info-card-action .btn-secondary:hover{
+
+    background:color-mix(in srgb, var(--primary) 14%, transparent);
+    border-color:color-mix(in srgb, var(--primary) 34%, transparent);
+    transform:none;
+
+}
+
+.co-info-card-action .btn-icon{
+
+    width:16px;
+    height:16px;
+
+}
+
+.co-info-card-action .btn-icon svg{
+
+    width:16px;
+    height:16px;
+
+}
+
+.co-info-list{
+
+    display:flex;
+    flex-direction:column;
+
+}
+
+.co-info-row{
+
+    display:flex;
+    flex-direction:column;
+    gap:var(--space-4);
+    padding:var(--space-16) 0;
+    border-bottom:1px solid var(--border);
+
+}
+
+.co-info-row:last-child{
+
+    border-bottom:none;
+    padding-bottom:0;
+
+}
+
+.co-info-label{
+
+    font-size:var(--text-xs);
+    font-weight:var(--weight-medium);
+    color:var(--text-light);
+    text-transform:uppercase;
+    letter-spacing:.04em;
+
+}
+
+.co-info-value{
+
+    font-size:var(--text-md);
+    font-weight:var(--weight-semibold);
+    color:var(--text);
+    word-break:break-word;
+
+}
+
+/* ----------------------------------------------------------
+   Analytics Card (Quick Statistics)
+---------------------------------------------------------- */
+
+.co-analytics-grid{
+
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:var(--space-16);
+
+}
+
+@media (min-width:768px){
+
+    .co-analytics-grid{
+
+        grid-template-columns:repeat(4, 1fr);
+
+    }
+
+}
+
+.co-analytics-card{
+
+    display:flex;
+    align-items:center;
+    gap:var(--space-12);
+    padding:var(--space-16);
+    min-height:84px;
+
+}
+
+.co-analytics-value-row{
+
+    display:flex;
+    align-items:baseline;
+    gap:var(--space-8);
+    flex-wrap:wrap;
+
+}
+
+.co-analytics-trend{
+
+    display:inline-flex;
+    align-items:center;
+    gap:2px;
+    font-size:var(--text-xs);
+    font-weight:var(--weight-semibold);
+
+}
+
+.co-analytics-trend--up{
+
+    color:var(--success);
+
+}
+
+.co-analytics-trend--down{
+
+    color:var(--danger);
+
+}
+
+.co-analytics-icon{
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:40px;
+    height:40px;
+    flex-shrink:0;
+    border-radius:var(--radius-md);
+    background:color-mix(in srgb, var(--primary) 12%, transparent);
+    color:var(--primary);
+
+}
+
+.co-analytics-icon svg{
+
+    width:20px;
+    height:20px;
+
+}
+
+.co-analytics-body{
+
+    display:flex;
+    flex-direction:column;
+    min-width:0;
+
+}
+
+.co-analytics-value{
+
+    font-size:var(--text-xl);
+    font-weight:var(--weight-bold);
+    color:var(--text);
+    line-height:1.2;
+
+}
+
+.co-analytics-label{
+
+    font-size:var(--text-xs);
+    color:var(--text-secondary);
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+
+}
+
+/* ----------------------------------------------------------
+   Navigation Row (Account & Security / Help & Support)
+---------------------------------------------------------- */
+
+.co-nav-list,
+.co-permission-list,
+.co-activity-list{
+
+    display:flex;
+    flex-direction:column;
+
+}
+
+.co-nav-row{
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:var(--space-12);
+    width:100%;
+    padding:var(--space-12) var(--space-8);
+    margin:0 calc(-1 * var(--space-8));
+    border:none;
+    border-bottom:1px solid var(--border);
+    border-radius:var(--radius-sm);
+    background:none;
+    font:inherit;
+    color:inherit;
+    text-align:left;
+    cursor:pointer;
+    transition:background var(--duration-hover) var(--ease-standard);
+
+}
+
+.co-nav-row:last-child{
+
+    border-bottom:none;
+
+}
+
+.co-nav-row:hover{
+
+    background:var(--surface-secondary);
+
+}
+
+.co-nav-row-main{
+
+    display:flex;
+    align-items:center;
+    gap:var(--space-12);
+    min-width:0;
+
+}
+
+.co-nav-row-icon{
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:32px;
+    height:32px;
+    flex-shrink:0;
+    border-radius:var(--radius-md);
+    background:color-mix(in srgb, var(--primary) 12%, transparent);
+    color:var(--primary);
+
+}
+
+.co-nav-row-icon svg{
+
+    width:16px;
+    height:16px;
+
+}
+
+.co-nav-row-text{
+
+    display:flex;
+    flex-direction:column;
+    min-width:0;
+
+}
+
+.co-nav-row-label{
+
+    font-size:var(--text-sm);
+    font-weight:var(--weight-medium);
+    color:var(--text);
+
+}
+
+.co-nav-row-sublabel{
+
+    font-size:var(--text-xs);
+    color:var(--text-light);
+
+}
+
+.co-nav-row-end{
+
+    display:flex;
+    align-items:center;
+    gap:var(--space-8);
+    flex-shrink:0;
+
+}
+
+.co-nav-row-value{
+
+    font-size:var(--text-xs);
+    color:var(--text-secondary);
+
+}
+
+.co-nav-row-chevron{
+
+    display:flex;
+    width:16px;
+    height:16px;
+    color:var(--text-light);
+    transform:rotate(-90deg);
+
+}
+
+.co-nav-row-chevron svg{
+
+    width:100%;
+    height:100%;
+
+}
+
+.co-nav-row[data-tone="danger"] .co-nav-row-icon{
+
+    background:color-mix(in srgb, var(--danger) 12%, transparent);
+    color:var(--danger);
+
+}
+
+.co-nav-row[data-tone="danger"] .co-nav-row-label{
+
+    color:var(--danger);
+
+}
+
+/* ----------------------------------------------------------
+   Permission Row (My Permissions)
+---------------------------------------------------------- */
+
+.co-permission-row{
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:var(--space-12);
+    padding:var(--space-12) 0;
+    border-bottom:1px solid var(--border);
+
+}
+
+.co-permission-row:last-child{
+
+    border-bottom:none;
+    padding-bottom:0;
+
+}
+
+.co-permission-main{
+
+    display:flex;
+    align-items:center;
+    gap:var(--space-12);
+    min-width:0;
+
+}
+
+.co-permission-icon{
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:32px;
+    height:32px;
+    flex-shrink:0;
+    border-radius:var(--radius-md);
+    background:color-mix(in srgb, var(--primary) 12%, transparent);
+    color:var(--primary);
+
+}
+
+.co-permission-icon svg{
+
+    width:16px;
+    height:16px;
+
+}
+
+.co-permission-label{
+
+    font-size:var(--text-sm);
+    font-weight:var(--weight-medium);
+    color:var(--text);
+
+}
+
+/* ----------------------------------------------------------
+   Activity Item (My Activity)
+---------------------------------------------------------- */
+
+.co-activity-item{
+
+    display:flex;
+    align-items:flex-start;
+    gap:var(--space-12);
+    padding:var(--space-12) 0;
+    border-bottom:1px solid var(--border);
+
+}
+
+.co-activity-item:last-child{
+
+    border-bottom:none;
+    padding-bottom:0;
+
+}
+
+.co-activity-icon{
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:32px;
+    height:32px;
+    flex-shrink:0;
+    margin-top:2px;
+    border-radius:var(--radius-md);
+    background:color-mix(in srgb, var(--primary) 12%, transparent);
+    color:var(--primary);
+
+}
+
+.co-activity-icon svg{
+
+    width:16px;
+    height:16px;
+
+}
+
+.co-activity-body{
+
+    display:flex;
+    flex-direction:column;
+    gap:var(--space-4);
+    min-width:0;
+
+}
+
+.co-activity-text{
+
+    font-size:var(--text-sm);
+    color:var(--text);
+
+}
+
+.co-activity-time{
+
+    font-size:var(--text-xs);
+    color:var(--text-light);
+
+}
+
+.co-empty-hint{
+
+    font-size:var(--text-sm);
+    color:var(--text-secondary);
+    padding:var(--space-8) 0 0;
+
+}
+
+/* ----------------------------------------------------------
+   Danger Zone
+---------------------------------------------------------- */
+
+.co-danger-card{
+
+    border-color:color-mix(in srgb, var(--danger) 30%, var(--border));
+    background:color-mix(in srgb, var(--danger) 4%, var(--surface));
+
+}
+
+.co-danger-card .co-info-card-icon{
+
+    background:color-mix(in srgb, var(--danger) 14%, transparent);
+    color:var(--danger);
+
+}
+
+.co-danger-row{
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:var(--space-16);
+    flex-wrap:wrap;
+
+}
+
+.co-danger-copy{
+
+    display:flex;
+    flex-direction:column;
+    gap:var(--space-4);
+
+}
+
+.co-danger-title{
+
+    font-size:var(--text-sm);
+    font-weight:var(--weight-semibold);
+    color:var(--text);
+
+}
+
+.co-danger-desc{
+
+    font-size:var(--text-xs);
+    color:var(--text-secondary);
+    max-width:38ch;
+
+}
+
+.co-danger-card .btn{
+
+    width:auto;
+    height:42px;
+    padding:0 var(--space-20);
+    font-size:var(--text-sm);
+    border-radius:var(--radius-md);
+
+}
+
+.co-danger-card .btn-danger{
+
+    color:#FFFFFF;
+    background:linear-gradient(135deg, #F87171 0%, #EF4444 100%);
+    box-shadow:
+        0 10px 24px rgba(239,68,68,.30),
+        inset 0 1px 0 rgba(255,255,255,.18);
+
+}
+
+.co-danger-card .btn-danger:hover{
+
+    transform:translateY(-2px);
+    filter:brightness(1.05);
+
+}
+
+.co-danger-card .btn-danger:active{
+
+    transform:scale(.97);
+
+}
+
+@media (max-width:480px){
+
+    .co-danger-row{
+
+        flex-direction:column;
+        align-items:stretch;
+
+    }
+
+    .co-danger-card .btn{
+
+        width:100%;
+
+    }
+
+}

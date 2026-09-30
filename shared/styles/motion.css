@@ -1,0 +1,369 @@
+/* ==========================================================
+   CampusOne
+   Motion Design System v1.0
+   ----------------------------------------------------------
+   Philosophy: Apple x Linear x Stripe x Vercel — every
+   interaction responds, nothing on screen ever feels dead.
+
+   This file is the UTILITY / BEHAVIOR layer. The actual
+   durations and easing curves live as tokens in
+   variables.css (single source of truth, same pattern as
+   --animation-fast/--ease-premium already used by the
+   Animation Engine) — nothing here hardcodes a raw ms value
+   or cubic-bezier a second time.
+
+   Tokens this file consumes (see variables.css):
+     --duration-button-press   80ms
+     --duration-hover          150ms
+     --duration-card-hover     180ms
+     --duration-ripple         220ms
+     --duration-modal          260ms
+     --duration-drawer         300ms
+     --duration-bottom-sheet   320ms
+     --duration-page           350ms
+     --duration-toast          250ms
+     --duration-skeleton-fade  500ms
+     --ease-standard   cubic-bezier(.2,.8,.2,1)
+     --ease-out        cubic-bezier(.16,1,.3,1)
+     --ease-in         cubic-bezier(.7,0,.84,0)
+     --ease-spring     cubic-bezier(.34,1.56,.64,1)
+
+   Golden Rules encoded below:
+     - Animate only transform + opacity (60 FPS, no layout
+       shift) — every utility here sticks to those two
+       properties only.
+     - No bounce everywhere — --ease-spring is opt-in per
+       utility (buttons, success ticks, active pills), never
+       the default curve.
+     - No large zooms — every scale utility caps at 1.02
+       (hover) / 1.01 (card hover) / .97 (press), per spec.
+     - Every utility has a reduced-motion fallback — instant,
+       no animation, but the end state still applies.
+
+   Usage: these are ADDITIVE classes, same convention as
+   sa-active-pill.css — add alongside a component's own
+   classes, don't replace them.
+
+     <div class="co-card co-card-hover">...</div>
+     <button class="btn co-touch-target">...</button>
+     <input class="input-field" /> (needs .is-error, below)
+========================================================== */
+
+/* ----------------------------------------------------------
+   Hover Lift (Card Hover — 180ms)
+   ----------------------------------------------------------
+   translateY(-2px) + scale(1.01, the spec's hard ceiling) +
+   a shadow step-up. Add to any card that represents a real,
+   interactive surface (stat cards, list-as-cards, clickable
+   tiles) — not to purely static containers.
+---------------------------------------------------------- */
+
+.co-card-hover{
+
+    transition:
+        transform var(--duration-card-hover) var(--ease-standard),
+        box-shadow var(--duration-card-hover) var(--ease-standard);
+
+}
+
+.co-card-hover:hover{
+
+    transform:translateY(-2px) scale(1.01);
+    box-shadow:var(--shadow-lg);
+
+}
+
+/* ----------------------------------------------------------
+   Press (generic tappable surface)
+   ----------------------------------------------------------
+   For non-.btn elements that still need the same idle -> hover
+   1.02 -> pressed .97 -> spring-back feel (e.g. a custom icon
+   button, a nav pill). .btn already has this built in — see
+   button.css — so don't double up on actual <button class="btn">s.
+---------------------------------------------------------- */
+
+.co-press{
+
+    transform:scale(1);
+    transition:transform var(--duration-hover) var(--ease-out);
+
+}
+
+.co-press:hover{
+
+    transform:scale(1.02);
+
+}
+
+.co-press:active{
+
+    transform:scale(.97);
+    transition-duration:var(--duration-button-press);
+    transition-timing-function:var(--ease-standard);
+
+}
+
+/* ----------------------------------------------------------
+   Spring In (success ticks, icon pops)
+   ----------------------------------------------------------
+   0 -> 1.2 -> 1, the one place overshoot is intentional per
+   the spec. Play it once by adding the class (e.g. right
+   after inserting a success-check icon into the DOM).
+---------------------------------------------------------- */
+
+@keyframes co-spring-in{
+
+    0%{ transform:scale(0); opacity:0; }
+    60%{ transform:scale(1.2); opacity:1; }
+    100%{ transform:scale(1); opacity:1; }
+
+}
+
+.co-spring-in{
+
+    animation:co-spring-in 320ms var(--ease-spring);
+
+}
+
+/* ----------------------------------------------------------
+   Shake (form/field error — 240ms)
+   ----------------------------------------------------------
+   4px -> -4px -> 4px -> 0. Re-triggering requires the caller
+   to remove and re-add the class (a class already present
+   won't replay) — same pattern as any one-shot CSS animation.
+---------------------------------------------------------- */
+
+@keyframes co-shake{
+
+    0%,100%{ transform:translateX(0); }
+    25%{ transform:translateX(4px); }
+    75%{ transform:translateX(-4px); }
+
+}
+
+.co-shake{
+
+    animation:co-shake 240ms var(--ease-standard);
+
+}
+
+/* ----------------------------------------------------------
+   Toast Motion (slide up + fade + scale — 250ms)
+   ----------------------------------------------------------
+   Entrance for anything that slides in from an edge (toast,
+   bottom banner). toast.css wires this to the real toast
+   markup; kept here too so any future edge-notification reuses
+   the same curve instead of inventing its own.
+---------------------------------------------------------- */
+
+@keyframes co-toast-in{
+
+    from{
+
+        opacity:0;
+        transform:translateY(12px) scale(.95);
+
+    }
+
+    to{
+
+        opacity:1;
+        transform:translateY(0) scale(1);
+
+    }
+
+}
+
+.co-toast-in{
+
+    animation:co-toast-in var(--duration-toast) var(--ease-out);
+
+}
+
+/* ----------------------------------------------------------
+   Page Transition (350ms)
+   ----------------------------------------------------------
+   Outgoing page fades + nudges out; incoming page fades +
+   nudges in from 8px, per spec. The router/shell applies
+   .co-page-out on the leaving view and .co-page-in on the
+   entering one.
+---------------------------------------------------------- */
+
+@keyframes co-page-in{
+
+    from{
+
+        opacity:0;
+        transform:translateY(8px);
+
+    }
+
+    to{
+
+        opacity:1;
+        transform:translateY(0);
+
+    }
+
+}
+
+@keyframes co-page-out{
+
+    from{
+
+        opacity:1;
+        transform:translateY(0);
+
+    }
+
+    to{
+
+        opacity:0;
+        transform:translateY(-8px);
+
+    }
+
+}
+
+.co-page-in{
+
+    animation:co-page-in var(--duration-page) var(--ease-out) forwards;
+
+}
+
+.co-page-out{
+
+    animation:co-page-out var(--duration-page) var(--ease-in) forwards;
+
+}
+
+/* ----------------------------------------------------------
+   Modal / Drawer / Bottom Sheet entrances
+   ----------------------------------------------------------
+   No modal/drawer/bottom-sheet component exists in the
+   codebase yet (Phase 8 hasn't built one) — these are ready
+   the moment one is, so it doesn't invent a fourth timing
+   convention.
+---------------------------------------------------------- */
+
+@keyframes co-modal-in{
+
+    from{
+
+        opacity:0;
+        transform:scale(.96);
+
+    }
+
+    to{
+
+        opacity:1;
+        transform:scale(1);
+
+    }
+
+}
+
+.co-modal-in{
+
+    animation:co-modal-in var(--duration-modal) var(--ease-out);
+
+}
+
+.co-drawer-in{
+
+    transition:transform var(--duration-drawer) var(--ease-standard);
+
+}
+
+.co-bottom-sheet-in{
+
+    transition:transform var(--duration-bottom-sheet) var(--ease-spring);
+
+}
+
+/* ----------------------------------------------------------
+   Touch Targets
+   ----------------------------------------------------------
+   Golden rule: every tappable element is at least 48x48px.
+   Add to icon-only buttons/rows whose visible glyph is
+   smaller than that so the hit area still meets it.
+---------------------------------------------------------- */
+
+.co-touch-target{
+
+    min-width:48px;
+    min-height:48px;
+
+}
+
+/* ----------------------------------------------------------
+   Ink Ripple (Phase 2)
+   ----------------------------------------------------------
+   Markup/positioning only — the actual ripple dot is spawned
+   at the real click coordinates by shared/core/ripple/, which
+   also owns the reduced-motion check (skips spawning a dot at
+   all rather than spawning one with no animation). button.js
+   already adds .co-ripple-surface to every .btn, so this is
+   live on every button in the app the moment the ripple
+   engine is imported once (see main.js).
+---------------------------------------------------------- */
+
+.co-ripple-surface{
+
+    position:relative;
+    overflow:hidden;
+
+}
+
+.co-ripple-dot{
+
+    position:absolute;
+    border-radius:var(--radius-full);
+    background:currentColor;
+    pointer-events:none;
+    transform:scale(0);
+
+}
+
+/* ----------------------------------------------------------
+   Staggered List (Phase 2)
+   ----------------------------------------------------------
+   Pure CSS — no JS required. Add `.co-stagger` to the list
+   container and `.co-stagger-item` to each direct child; items
+   fade/slide up in sequence, 40ms apart. Capped at the first 12
+   children (nth-child) — a longer list still renders correctly,
+   the items past #12 just animate together with #12 instead of
+   continuing to stack delay, which reads fine in practice since
+   anything past ~12 rows is usually off-screen/scrolled anyway.
+---------------------------------------------------------- */
+
+.co-stagger-item{
+
+    opacity:0;
+    animation:co-fade-up var(--animation-normal) var(--ease-out) forwards;
+
+}
+
+.co-stagger-item:nth-child(1){animation-delay:0ms;}
+.co-stagger-item:nth-child(2){animation-delay:40ms;}
+.co-stagger-item:nth-child(3){animation-delay:80ms;}
+.co-stagger-item:nth-child(4){animation-delay:120ms;}
+.co-stagger-item:nth-child(5){animation-delay:160ms;}
+.co-stagger-item:nth-child(6){animation-delay:200ms;}
+.co-stagger-item:nth-child(7){animation-delay:240ms;}
+.co-stagger-item:nth-child(8){animation-delay:280ms;}
+.co-stagger-item:nth-child(9){animation-delay:320ms;}
+.co-stagger-item:nth-child(10){animation-delay:360ms;}
+.co-stagger-item:nth-child(11){animation-delay:400ms;}
+.co-stagger-item:nth-child(12){animation-delay:440ms;}
+
+/* ----------------------------------------------------------
+   Reduced Motion
+   ----------------------------------------------------------
+   The master override for every utility class in this file
+   lives in shared/styles/accessibility.css, not here — "does
+   the user want less motion" is an accessibility concern, this
+   file only owns the curves/durations themselves. See that
+   file's own comment for why.
+---------------------------------------------------------- */

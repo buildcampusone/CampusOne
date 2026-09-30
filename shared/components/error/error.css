@@ -1,0 +1,33 @@
+/* =========================================
+   CampusOne Error Message
+========================================= */
+
+.error-message{
+
+    min-height:18px;
+
+    margin-top:6px;
+
+    font-size:13px;
+
+    font-weight:500;
+
+    color:#EF4444;
+
+    opacity:0;
+
+    transform:translateY(-4px);
+
+    transition:
+        opacity .25s ease,
+        transform .25s ease;
+
+}
+
+.error-message.show{
+
+    opacity:1;
+
+    transform:translateY(0);
+
+}

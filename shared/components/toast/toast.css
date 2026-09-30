@@ -1,0 +1,267 @@
+/* ==========================================================
+   CampusOne
+   Toast
+========================================================== */
+
+.sa-toast-root{
+
+    position:fixed;
+
+    top:24px;
+
+    right:24px;
+
+    z-index:1000;
+
+    pointer-events:none;
+
+}
+
+.sa-toast{
+
+    pointer-events:auto;
+
+    display:flex;
+
+    align-items:flex-start;
+
+    gap:14px;
+
+    width:340px;
+
+    max-width:calc(100vw - 48px);
+
+    padding:18px 18px 16px;
+
+    background:var(--surface);
+
+    border:1px solid var(--border);
+
+    border-radius:var(--radius-lg);
+
+    box-shadow:var(--shadow-lg);
+
+    position:relative;
+
+    overflow:hidden;
+
+    opacity:0;
+
+    transform:translateY(-14px) scale(.95);
+
+    transition:
+        opacity var(--duration-toast) var(--ease-out),
+        transform var(--duration-toast) var(--ease-out);
+
+}
+
+.sa-toast.is-visible{
+
+    opacity:1;
+
+    transform:translateY(0) scale(1);
+
+}
+
+.sa-toast.is-leaving{
+
+    opacity:0;
+
+    transform:translateY(-10px) scale(.95);
+
+}
+
+@media (prefers-reduced-motion:reduce){
+
+    .sa-toast{
+
+        transition:opacity var(--duration-toast) linear;
+        transform:none !important;
+
+    }
+
+}
+
+.sa-toast-icon{
+
+    flex-shrink:0;
+
+    width:38px;
+
+    height:38px;
+
+    border-radius:50%;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:rgba(16,185,129,.14);
+
+    color:var(--success);
+
+}
+
+.sa-toast-error .sa-toast-icon{
+
+    background:rgba(239,68,68,.14);
+
+    color:var(--danger);
+
+}
+
+.sa-toast-info .sa-toast-icon{
+
+    background:rgba(14,165,233,.14);
+
+    color:var(--info);
+
+}
+
+.sa-toast-icon svg{
+
+    width:18px;
+
+    height:18px;
+
+}
+
+.sa-toast-body{
+
+    flex:1;
+
+    min-width:0;
+
+}
+
+.sa-toast-body h4{
+
+    margin:0 0 2px;
+
+    font-size:14.5px;
+
+    font-weight:700;
+
+    color:var(--text);
+
+}
+
+.sa-toast-body p{
+
+    margin:0;
+
+    font-size:13px;
+
+    line-height:1.5;
+
+    color:var(--text-secondary);
+
+}
+
+.sa-toast-done{
+
+    flex-shrink:0;
+
+    border:none;
+
+    background:transparent;
+
+    color:var(--primary);
+
+    font-size:12.5px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    padding:4px 6px;
+
+}
+
+.sa-toast-done:hover{
+
+    text-decoration:underline;
+
+}
+
+.sa-toast-progress{
+
+    position:absolute;
+
+    left:0;
+
+    right:0;
+
+    bottom:0;
+
+    height:3px;
+
+    background:transparent;
+
+    overflow:hidden;
+
+}
+
+.sa-toast-progress span{
+
+    display:block;
+
+    height:100%;
+
+    width:100%;
+
+    background:var(--success);
+
+    transform-origin:left;
+
+    animation-name:sa-toast-shrink;
+
+    animation-timing-function:linear;
+
+    animation-fill-mode:forwards;
+
+}
+
+.sa-toast-error .sa-toast-progress span{
+
+    background:var(--danger);
+
+}
+
+.sa-toast-info .sa-toast-progress span{
+
+    background:var(--info);
+
+}
+
+@keyframes sa-toast-shrink{
+
+    from{ transform:scaleX(1); }
+
+    to{ transform:scaleX(0); }
+
+}
+
+@media (max-width:560px){
+
+    .sa-toast-root{
+
+        top:auto;
+
+        bottom:24px;
+
+        right:16px;
+
+        left:16px;
+
+    }
+
+    .sa-toast{
+
+        width:100%;
+
+    }
+
+}

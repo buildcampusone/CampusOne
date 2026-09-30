@@ -1,0 +1,133 @@
+/**
+ * shell.css
+ * ---------------------------------------------------------
+ * Design tokens (color / type / radius / shadow / motion)
+ * live here because shell.html loads first, before every
+ * other component stylesheet. Every component.css file in
+ * this module reads these variables — none of them redefine
+ * their own colors.
+ *
+ * Token rationale (kept short, see design plan in chat):
+ *  - White / Royal Blue / Soft Grey light theme, Deep Navy /
+ *    Blue Accent dark theme — matches the brief exactly.
+ *  - Manrope for headings (confident geometric display face),
+ *    Inter for body/UI text, JetBrains Mono for stat numbers
+ *    so KPIs on the dashboard read like an operations console,
+ *    not a marketing page.
+ *  - 20px radius on cards (per brief), 12–14px on controls.
+ * ---------------------------------------------------------
+ */
+
+:root {
+  /* Color — light (default) */
+  --c1-bg: #FFFFFF;
+  --c1-surface: #F5F7FA;
+  --c1-surface-alt: #EAEEF5;
+  --c1-border: #E3E8F0;
+  --c1-text: #12151C;
+  --c1-text-muted: #6B7280;
+  --c1-primary: #2954E0;
+  --c1-primary-dark: #1B3AA8;
+  --c1-primary-soft: #E8EDFC;
+
+  /* Radius */
+  --c1-radius-lg: 20px;
+  --c1-radius-md: 14px;
+  --c1-radius-sm: 10px;
+
+  /* Shadow */
+  --c1-shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.05);
+  --c1-shadow-md: 0 8px 24px rgba(16, 24, 40, 0.10);
+  --c1-shadow-lg: 0 16px 48px rgba(16, 24, 40, 0.16);
+
+  /* Motion */
+  --c1-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+[data-theme="dark"] {
+  --c1-bg: #0A1020;
+  --c1-surface: #111A2E;
+  --c1-surface-alt: #16213A;
+  --c1-border: #23304A;
+  --c1-text: #F2F5FA;
+  --c1-text-muted: #94A1B8;
+  --c1-primary: #4C7CFF;
+  --c1-primary-dark: #7DA0FF;
+  --c1-primary-soft: rgba(76, 124, 255, 0.16);
+
+  --c1-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.25);
+  --c1-shadow-md: 0 8px 24px rgba(0, 0, 0, 0.35);
+  --c1-shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.5);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: var(--c1-bg);
+  color: var(--c1-text);
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  transition: background 0.25s var(--c1-ease), color 0.25s var(--c1-ease);
+}
+
+body.sa-no-scroll { overflow: hidden; }
+
+/* Respect reduced-motion preference across the whole module */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+}
+
+button { font-family: inherit; }
+button:focus-visible, a:focus-visible, input:focus-visible {
+  outline: 2px solid var(--c1-primary);
+  outline-offset: 2px;
+}
+
+/* ---------- Layout grid ---------- */
+
+.sa-shell {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.sa-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* NOTE: no margin-left push here. .sa-sidebar is a normal-flow flex
+   item (see sidebar.css) except on mobile where it becomes fixed —
+   the old ci-shell__body margin-left/collapse-state rules assumed a
+   fixed/slot-based sidebar and would double-offset .sa-main. Dropped
+   intentionally. The icon-rail collapse state (Phase 2B.2/2B.6) is
+   now implemented in sidebar.css via .sa-sidebar.is-collapsed, which
+   only changes width/min-width — .sa-main reflows automatically
+   because it's a sibling flex item, no margin math needed here. */
+
+.sa-content {
+  flex: 1;
+  min-width: 0;
+  overflow-y: auto;
+  padding: 24px 28px 100px;
+}
+
+@media (max-width: 900px) {
+  .sa-content { padding: 18px 16px 90px; }
+}
+
+/* ---------- Mobile bottom navigation ----------
+   The real component now lives in
+   modules/super-admin/components/bottom-nav/bottom-nav.css
+   (imported globally via shared/styles/main.css) — it owns its
+   own fixed positioning, so nothing further is needed here
+   beyond reserving scroll space at the bottom of the content
+   area so the floating pill never overlaps the last card. */
+
+@media (max-width: 1024px) {
+  .sa-content { padding-bottom: 96px; }
+}

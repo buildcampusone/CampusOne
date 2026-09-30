@@ -1,0 +1,48 @@
+/*=========================================
+=         CAMPUSONE INTERACTION           =
+=========================================*/
+
+/* This file owns WHICH states a tappable surface has
+   (interactive / disabled / focus-ring) as reusable classes.
+   shared/styles/motion.css owns HOW those state changes
+   animate (the timing/easing tokens). Keeping the two separate
+   means adding a new interactive component only ever means
+   picking classes from both files, never inventing a third
+   set of hover/disabled rules. */
+
+/* Base interactive surface — anything clickable that isn't
+   already a real <button>/<a> (a custom row, a card acting as
+   a link) should get this so it behaves like one. */
+
+.co-interactive{
+
+    cursor:pointer;
+    user-select:none;
+    -webkit-tap-highlight-color:transparent;
+
+}
+
+/* Disabled — the single disabled treatment for any custom
+   interactive surface (native <button disabled> already has
+   its own per-component rule, e.g. .btn:disabled in
+   button.css; this is for the custom, non-native cases). */
+
+.co-disabled{
+
+    opacity:.55;
+    cursor:not-allowed;
+    pointer-events:none;
+
+}
+
+/* Focus Ring — the one focus-visible treatment for any custom
+   interactive surface. Native inputs/buttons keep their own
+   per-component focus style (button.css, input.css); this is
+   for rows/cards/icons that don't go through those. */
+
+.co-focus-ring:focus-visible{
+
+    outline:none;
+    box-shadow:0 0 0 4px color-mix(in srgb, var(--primary) 22%, transparent);
+
+}

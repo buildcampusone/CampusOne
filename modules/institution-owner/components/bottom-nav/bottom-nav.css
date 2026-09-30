@@ -1,0 +1,591 @@
+/**
+ * ==========================================================
+ * CampusOne
+ * Institution Owner — Premium Mobile Bottom Navigation
+ * ----------------------------------------------------------
+ * UI-enhancement pass only. No business logic, no routing
+ * here — see bottom-nav.controller.js for behaviour.
+ *
+ * Every color, radius, shadow, spacing and motion value below
+ * comes from shared/styles/variables.css — the app's single
+ * design-token source (var(--primary) IS the official
+ * CampusOne Primary Blue used across the Primary Button
+ * system, resolving to #2563EB). The only literal colors in
+ * this file are the white overlays the brief itself specifies
+ * for icon/label/active-pill treatment (white @ 100% active,
+ * white @ 70% inactive) — not a second brand blue.
+ *
+ * Scoped entirely to #ioBottomNav so nothing here can ever
+ * leak into Institution Admin's ("ia-") or Super Admin's
+ * ("sa-"/"bn-") own bottom nav.
+ * ==========================================================
+ */
+
+/* ==========================================================
+   Root — fixed, full width, mobile/tablet only
+   ----------------------------------------------------------
+   Same 1024px breakpoint sidebar.controller.js already uses
+   to switch into a full-screen drawer, so the two never
+   disagree (mirrors shared/components/bottom-nav/bottom-nav.css's
+   own breakpoint contract).
+========================================================== */
+
+#ioBottomNav.io-bottomnav-root {
+
+    display: none;
+
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    z-index: var(--z-header);
+
+    pointer-events: none;
+
+}
+
+/* --bp-laptop (1024px) */
+@media (max-width: 1024px) {
+
+    #ioBottomNav.io-bottomnav-root {
+
+        display: flex;
+
+        transition: transform var(--animation-normal) var(--ease-premium), opacity var(--animation-normal) var(--ease-premium);
+
+    }
+
+    /* Tucks itself away while the full-screen mobile sidebar
+       drawer is open (see bottom-nav.controller.js) instead of
+       floating on top of it. */
+    #ioBottomNav.io-bottomnav-root.io-bottomnav-hidden {
+
+        transform: translateY(140%);
+
+        opacity: 0;
+
+        pointer-events: none;
+
+    }
+
+    /* Phase 3 — scroll-driven auto-hide (bottom-nav.autohide.js
+       toggles this independently of the sidebar-drawer state
+       above). Its own 250ms timing per the brief, distinct from
+       the 300ms --animation-normal the root otherwise uses, so
+       it never has to borrow/share timing with the drawer
+       interaction. */
+    #ioBottomNav.io-bottomnav-root.io-bottomnav-autohidden {
+
+        transform: translateY(100%);
+
+        opacity: .96;
+
+        transition: transform 250ms var(--ease-premium), opacity 250ms var(--ease-premium);
+
+        pointer-events: none;
+
+    }
+
+}
+
+@media (min-width: 1025px) {
+
+    #ioBottomNav.io-bottomnav-root {
+
+        display: none !important;
+
+    }
+
+}
+
+/* ==========================================================
+   Bar — full width, solid Primary Blue, rounded top corners
+========================================================== */
+
+.io-bottomnav-bar {
+
+    position: relative;
+
+    display: flex;
+    align-items: stretch;
+
+    width: 100%;
+
+    /* 72–80px visual height + safe-area handled as extra
+       bottom padding so the tap targets never sit under a
+       home-indicator / gesture bar. */
+    min-height: 76px;
+    padding-bottom: env(safe-area-inset-bottom);
+
+    pointer-events: auto;
+
+    background: var(--primary);
+
+    /* Brief calls for 24–28px top corners; --radius-xl (28px)
+       is the existing token that lands exactly in that range —
+       no new radius introduced. */
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+
+    box-shadow: 0 -12px 32px color-mix(in srgb, var(--primary) 40%, transparent);
+
+    transition: box-shadow var(--animation-normal) var(--ease-premium);
+
+}
+
+/* ==========================================================
+   Nav Item — equal width, equal spacing, equal touch targets
+========================================================== */
+
+.io-bottomnav-item {
+
+    position: relative;
+
+    flex: 1 1 0;
+    min-width: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* >=44px comfortable tap target on every axis. */
+    padding: 12px 4px 10px;
+
+    background: transparent;
+    border: none;
+
+    font-family: inherit;
+    cursor: pointer;
+
+    color: var(--text-white);
+    opacity: .7;
+
+    -webkit-tap-highlight-color: transparent;
+
+    overflow: hidden;
+
+    /* Base/press transition (90ms). The spring release transition
+       (200ms, --ease-spring) is applied inline per-item by
+       bottom-nav.controller.js at the moment of pointer release,
+       since a single CSS transition can't express two different
+       durations for the same property depending on direction. */
+    transition: opacity var(--animation-fast) var(--ease-premium), transform 90ms var(--ease-premium);
+
+    transform: translateZ(0) scale(1);
+
+}
+
+.io-bottomnav-item:hover {
+
+    opacity: .9;
+
+}
+
+.io-bottomnav-item.is-pressed {
+
+    transform: translateZ(0) scale(.95);
+
+}
+
+.io-bottomnav-item:focus-visible {
+
+    outline: 2px solid var(--text-white);
+    outline-offset: -2px;
+    border-radius: var(--radius-md);
+
+}
+
+/* Active item — full-opacity white icon + label, subtle glow */
+.io-bottomnav-item.is-active {
+
+    opacity: 1;
+
+}
+
+/* ==========================================================
+   Content — icon + label as a single rigid unit
+   ----------------------------------------------------------
+   Phase 2: the active "lift" lives here, not on the icon or
+   label individually, so both rise/scale as one — no separate
+   movement, icon stays perfectly centered inside its own
+   unaffected icon-wrap. Deliberately its own element (not
+   .io-bottomnav-item) so this transform/transition never shares
+   a property with the item's own press-scale (Phase 1, driven by
+   inline styles from bottom-nav.controller.js) — the two systems
+   can never collide or fight over timing.
+========================================================== */
+
+.io-bottomnav-content {
+
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+
+    transform: translateY(0) scale(1);
+
+    transition: transform 240ms var(--ease-premium);
+
+}
+
+.io-bottomnav-item.is-active .io-bottomnav-content {
+
+    transform: translateY(-8px) scale(1.08);
+
+}
+
+/* ==========================================================
+   Icon + Active Pill / Glow
+========================================================== */
+
+.io-bottomnav-icon-wrap {
+
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 40px;
+    height: 32px;
+
+}
+
+/* Subtle white active pill/glow behind the active icon only —
+   scale+fade transition, no layout shift (absolutely
+   positioned, never affects flow). Timing matched to the
+   content lift (240ms) above so pill + lift read as one
+   continuous motion rather than two separately-timed effects. */
+.io-bottomnav-glow {
+
+    position: absolute;
+    inset: 0;
+
+    border-radius: var(--radius-full);
+
+    background: color-mix(in srgb, var(--text-white) 20%, transparent);
+    box-shadow: 0 0 0 color-mix(in srgb, var(--text-white) 35%, transparent);
+
+    opacity: 0;
+    transform: scale(.7);
+
+    transition: opacity 240ms var(--ease-premium), transform 240ms var(--ease-premium), box-shadow 240ms var(--ease-premium);
+
+    pointer-events: none;
+
+}
+
+.io-bottomnav-item.is-active .io-bottomnav-glow {
+
+    opacity: 1;
+    transform: scale(1);
+
+    box-shadow: 0 0 16px 2px color-mix(in srgb, var(--text-white) 35%, transparent);
+
+}
+
+.io-bottomnav-icon {
+
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 22px;
+    height: 22px;
+
+    transform: translateZ(0);
+
+    transition: transform 90ms var(--ease-premium);
+
+}
+
+.io-bottomnav-icon svg {
+
+    width: 100%;
+    height: 100%;
+
+}
+
+/* Icon press response — layered on top of the item-level scale
+   above. bottom-nav.controller.js swaps this transition to the
+   200ms spring on release the same way it does for the item
+   itself, so icon + label stay perfectly in sync with it.
+   (Active-state movement lives one level up, on
+   .io-bottomnav-content — see Phase 2 — so this transform is
+   never shared between the two systems.) */
+.io-bottomnav-item.is-pressed .io-bottomnav-icon {
+
+    transform: scale(.92);
+
+}
+
+/* ==========================================================
+   Ripple System
+   ----------------------------------------------------------
+   Originates at the touch point (bottom-nav.controller.js sets
+   --tap-x/--tap-y from the pointer event), clipped to the item
+   via overflow:hidden on .io-bottomnav-item so it can never
+   spill outside the button.
+========================================================== */
+
+.io-bottomnav-ripple-layer {
+
+    position: absolute;
+    inset: 0;
+
+    overflow: hidden;
+
+    pointer-events: none;
+
+}
+
+.io-bottomnav-ripple {
+
+    position: absolute;
+    top: var(--tap-y, 50%);
+    left: var(--tap-x, 50%);
+
+    width: 120px;
+    height: 120px;
+    margin: -60px 0 0 -60px;
+
+    border-radius: var(--radius-full);
+
+    background: color-mix(in srgb, var(--text-white) 45%, transparent);
+
+    opacity: 0;
+    transform: scale(0);
+    transform-origin: center;
+
+    pointer-events: none;
+
+}
+
+@keyframes io-bottomnav-ripple {
+
+    0% { opacity: 1; transform: scale(0); }
+    100% { opacity: 0; transform: scale(2.2); }
+
+}
+
+.io-bottomnav-ripple.is-rippling {
+
+    animation: io-bottomnav-ripple 350ms var(--ease-out) forwards;
+
+}
+
+/* ==========================================================
+   Wave Glow — soft bloom that follows the ripple, entirely
+   separate from .io-bottomnav-glow (the persistent active-tab
+   pill), so activating a tab never interrupts a tap's wave.
+========================================================== */
+
+.io-bottomnav-wave {
+
+    position: absolute;
+    inset: 0;
+
+    border-radius: var(--radius-full);
+
+    background: color-mix(in srgb, var(--text-white) 25%, transparent);
+
+    opacity: 0;
+    transform: scale(.6);
+
+    pointer-events: none;
+
+}
+
+@keyframes io-bottomnav-wave {
+
+    0% { opacity: .32; transform: scale(.6); }
+    100% { opacity: 0; transform: scale(1.9); }
+
+}
+
+.io-bottomnav-wave.is-waving {
+
+    animation: io-bottomnav-wave 420ms var(--ease-out) 40ms forwards;
+
+}
+
+/* ==========================================================
+   Label
+========================================================== */
+
+.io-bottomnav-label {
+
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: .01em;
+    line-height: 1;
+
+    max-width: 100%;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    /* Follows the icon's press/release scale exactly (same
+       transform, same transition swap in bottom-nav.controller.js)
+       — no independent movement of its own. */
+    transform: scale(1);
+    transition: transform 90ms var(--ease-premium);
+
+}
+
+.io-bottomnav-item.is-pressed .io-bottomnav-label {
+
+    transform: scale(.92);
+
+}
+
+/* ==========================================================
+   Notification Badge — Future-Ready Hook
+   ----------------------------------------------------------
+   Markup exists (bottom-nav.page.js) and is styled here, but
+   ships hidden with no data source wired to it in this pass —
+   same "future-ready, not populated yet" contract the shared
+   component's own .bn-badge uses.
+========================================================== */
+
+.io-bottomnav-badge {
+
+    position: absolute;
+    top: -3px;
+    right: -7px;
+
+    min-width: 15px;
+    height: 15px;
+    padding: 0 3px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: var(--radius-full);
+
+    background: var(--danger);
+    border: 2px solid var(--primary);
+
+    color: var(--text-white);
+    font-size: 8.5px;
+    font-weight: 700;
+    line-height: 1;
+
+}
+
+.io-bottomnav-badge[hidden] {
+
+    display: none;
+
+}
+
+/* ==========================================================
+   Tablet fine-tuning
+========================================================== */
+
+/* --bp-phone-lg (481px) to --bp-laptop (1024px) */
+@media (min-width: 481px) and (max-width: 1024px) {
+
+    .io-bottomnav-bar {
+
+        min-height: 80px;
+
+    }
+
+}
+
+/* ==========================================================
+   Foldables / very narrow widths — keep equal spacing intact
+   instead of letting icons or labels clip.
+========================================================== */
+
+/* --bp-phone-xs (340px) */
+@media (max-width: 340px) {
+
+    .io-bottomnav-item {
+
+        padding-left: 2px;
+        padding-right: 2px;
+
+    }
+
+    .io-bottomnav-label {
+
+        font-size: 9.5px;
+
+    }
+
+}
+
+/* ==========================================================
+   Reduced motion
+========================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    #ioBottomNav.io-bottomnav-root,
+    .io-bottomnav-bar,
+    .io-bottomnav-item,
+    .io-bottomnav-content,
+    .io-bottomnav-icon,
+    .io-bottomnav-label,
+    .io-bottomnav-glow {
+
+        transition: none;
+
+    }
+
+    /* Lift + scale off entirely; only the existing opacity
+       feedback (.io-bottomnav-item.is-active { opacity: 1 })
+       remains, per Phase 2's own accessibility brief. */
+    .io-bottomnav-item.is-active .io-bottomnav-content {
+
+        transform: none;
+
+    }
+
+    /* Ripple + wave off entirely; only the existing opacity
+       feedback (.io-bottomnav-item:hover / .is-active) remains —
+       bottom-nav.controller.js also checks this same media query
+       before spawning either effect, so this is belt-and-braces. */
+    .io-bottomnav-item.is-pressed,
+    .io-bottomnav-item.is-pressed .io-bottomnav-icon,
+    .io-bottomnav-item.is-pressed .io-bottomnav-label {
+
+        transform: none;
+
+    }
+
+    .io-bottomnav-ripple,
+    .io-bottomnav-ripple.is-rippling,
+    .io-bottomnav-wave,
+    .io-bottomnav-wave.is-waving {
+
+        animation: none;
+        opacity: 0;
+
+    }
+
+    /* Phase 3 — no slide; hide/show via a minimal opacity fade
+       only. Higher specificity than the blanket "transition: none"
+       above, so this is the one transition that still runs. */
+    #ioBottomNav.io-bottomnav-root.io-bottomnav-autohidden {
+
+        transform: none;
+
+        opacity: 0;
+
+        transition: opacity 150ms linear;
+
+        pointer-events: none;
+
+    }
+
+}

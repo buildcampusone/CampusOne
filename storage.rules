@@ -1,0 +1,111 @@
+rules_version = '2';
+
+/**
+ * ==========================================================
+ * CampusOne — Storage Security Rules
+ * ----------------------------------------------------------
+ * Only one upload path is actually live in the codebase today:
+ * registration.controller.js's safeUploadOptionalFile() writes
+ * to institutions/{institutionId}/{logo|cover|favicon|admin-photo}
+ * during self-registration.
+ *
+ * KNOWN TRADE-OFF (flagging, not hiding): those uploads happen
+ * BEFORE the matching institutions/{institutionId} Firestore doc
+ * is created (Stage 3 uploads run, then Stage 4 saves the docs —
+ * see the comments in registration.controller.js), so at upload
+ * time there is no Firestore document yet to check ownership
+ * against. That means these rules can only verify "is this a
+ * signed-in user uploading one of the 4 expected branding
+ * files, under a size/type limit" — not "does this institutionId
+ * actually belong to them" (nothing to check it against yet).
+ * Impact is limited to cosmetic branding assets (no auth/role
+ * data lives in Storage), but if you want this fully tightened,
+ * the real fix is reordering registration.controller.js to
+ * create the institution doc first, then upload — happy to do
+ * that as a follow-up if you want it.
+ *
+ * shared/services/profile.service.js has a commented-out
+ * platformUsers/{uid}/avatar.jpg path — not live code yet, so
+ * it isn't given a rule here. It will be denied by default
+ * (see the catch-all at the bottom) until that feature is built
+ * and a matching rule is added.
+ * ========================================================== */
+
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAllowedBrandingFile(fileName) {
+      return fileName in ['logo', 'cover', 'favicon', 'admin-photo'];
+    }
+
+    function isReasonableImage() {
+      return request.resource.size < 5 * 1024 * 1024
+          && request.resource.contentType.matches('image/.*');
+    }
+
+    match /institutions/{institutionId}/{fileName} {
+
+      // Branding assets are shown on public-facing pages
+      // (login screen, institution landing, etc.) — public read.
+      allow read: if true;
+
+      allow write: if isSignedIn()
+                   && isAllowedBrandingFile(fileName)
+                   && isReasonableImage();
+
+      allow delete: if isSignedIn();
+
+    }
+
+    /**
+     * Institution Logo management (Phase 4.3 — Institution
+     * Profile's own editable logo upload, separate from the
+     * one-time registration branding uploads above). A fixed,
+     * single-file-per-institution path — every (re)upload
+     * overwrites the same object at institution-logos/
+     * {institutionId}/logo.webp — so there is never more than one
+     * live logo object to reason about per institution.
+     *
+     * Same trade-off as the sibling institutions/{institutionId}
+     * block above: this can verify "a signed-in user uploading
+     * exactly logo.webp, under 2MB, of an image content-type" —
+     * not "does this institutionId belong to them", since that
+     * would need a cross-service Firestore lookup this ruleset
+     * doesn't otherwise use. Flagging, not hiding, the same way
+     * the header comment above already does for the older path.
+     */
+    function isLogoFile(fileName) {
+      return fileName == 'logo.webp';
+    }
+
+    function isReasonableLogo() {
+      return request.resource.size < 2 * 1024 * 1024
+          && request.resource.contentType.matches('image/.*');
+    }
+
+    match /institution-logos/{institutionId}/{fileName} {
+
+      // Institution logos appear on public-facing surfaces too
+      // (login screen, dashboard header) — same public-read
+      // posture as the sibling path above.
+      allow read: if true;
+
+      allow write: if isSignedIn()
+                   && isLogoFile(fileName)
+                   && isReasonableLogo();
+
+      allow delete: if isSignedIn();
+
+    }
+
+    // Everything else: denied by default.
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+
+  }
+}

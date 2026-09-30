@@ -1,0 +1,1048 @@
+/* ==========================================================
+   CampusOne
+   Institution Owner — Institution Admin Management
+   ----------------------------------------------------------
+   Phase 5.1.1 — Institution Admin Management Foundation
+   Phase 5.1.2 (Part 1) — added .iam-header-text/.iam-header-actions
+   so the header can carry the new "Create Administrator" button
+   alongside the title/subtitle; everything else below is
+   unchanged from 5.1.1. The modal itself is styled in the sibling
+   create-admin.css file, not here.
+   Phase 5.1.3 (Step 6) — Administrator Directory visual polish:
+   card elevation/hover, responsive card grid, status-badge
+   accents, toolbar alignment, empty-state rhythm, skeleton grid
+   parity, and accessibility (focus-visible, touch targets,
+   reduced motion). No HTML/JS changed — every rule below targets
+   markup admin-management.page.js / .card.js already render.
+
+   Same discipline dashboard.css and institution-profile.css
+   already established: everything resolves through
+   variables.css tokens (no literal colors, no inline styles),
+   dark mode comes free via [data-theme="dark"] token overrides,
+   no separate dark-mode rules needed here.
+
+   Summary cards deliberately have NO rules in this file — they
+   compose `.io-kpi-grid`/`.io-kpi-card` verbatim from
+   dashboard.css (already loaded globally for Institution Owner)
+   per the Reusable-over-Duplicate rule. Only what's genuinely
+   new to this page (header, toolbar, directory, empty/error
+   states) is styled below, `iam-` namespaced.
+
+   Breakpoints (1200 / 992 / 768 / 480) match dashboard.css /
+   institution-profile.css so every Owner page collapses at the
+   same widths.
+========================================================== */
+
+.iam-page {
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-24);
+
+}
+
+/* ==========================================================
+   Header
+========================================================== */
+
+.iam-header {
+
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-16);
+
+}
+
+.iam-header-text {
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4, 4px);
+    min-width: 240px;
+
+}
+
+.iam-header-actions {
+
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-12);
+
+}
+
+/* C1 — visibility toggle hook for the header "Create Administrator"
+   button (admin-management.page.js's loadSummary()); kept
+   inline-flex, same convention institution-profile.css's
+   #iopEditWrap already established, so the wrap shrinks to the
+   button's own content width instead of inheriting the full-width
+   `.btn` default (M2). */
+#iamCreateAdminWrap {
+
+    display: inline-flex;
+
+}
+
+.iam-title {
+
+    margin: 0;
+    font-size: var(--text-2xl);
+    font-weight: var(--weight-semibold);
+    color: var(--text);
+    letter-spacing: -0.01em;
+
+}
+
+.iam-subtitle {
+
+    margin: 0;
+    font-size: var(--text-sm);
+    font-weight: var(--weight-regular);
+    color: var(--text-secondary);
+
+}
+
+/* ==========================================================
+   Toolbar — Search + Filter Bar
+   ----------------------------------------------------------
+   `align-items: flex-end` (rather than `flex-start`) is the one
+   change that matters here: Search has no visible label so its
+   `.input-wrapper` is a bare 50px box, while each Select() sits
+   inside an `.input-group` with a label above it (shared
+   input.css). Aligning on the flex-end edge lines up the actual
+   field bottoms — search box and every select — into one row
+   instead of the label pushing the selects visibly lower.
+========================================================== */
+
+.iam-toolbar {
+
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: var(--space-16);
+    margin-bottom: var(--space-4, 4px);
+
+}
+
+.iam-search {
+
+    flex: 1 1 260px;
+    min-width: 220px;
+
+}
+
+.iam-search .input-wrapper {
+
+    width: 100%;
+
+}
+
+.iam-filters {
+
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: var(--space-12);
+
+}
+
+.iam-filters .input-group {
+
+    width: 180px;
+
+}
+
+/* Shared Input()/Select() label defaults to a dark-surface tint
+   (shared/components/input/input.css) — every light-card
+   consumer overrides it locally, same pattern
+   institution-profile.css's own `.iop-card--identity .input-label`
+   rule already establishes. */
+.iam-filters .input-label {
+
+    font-size: var(--text-xs);
+    font-weight: var(--weight-medium);
+    color: var(--text-secondary);
+    letter-spacing: normal;
+
+}
+
+/* Same shared Input()/Select() dark-surface defaults as above —
+   that prior comment only ever fixed the label. The field itself
+   (background/border/text/placeholder/focus) was still the
+   hardcoded white-on-transparent from
+   shared/components/input/input.css, invisible against this
+   page's light `.iam-page` surface. Scoped, token-based override,
+   same pattern create-admin.css's `.ca-form .input` block uses. */
+.iam-search .input-icon,
+.iam-filters .input-icon {
+
+    color: var(--text-light);
+
+}
+
+.iam-search .input-wrapper:focus-within .input-icon,
+.iam-filters .input-wrapper:focus-within .input-icon {
+
+    color: var(--primary);
+
+}
+
+.iam-search .input,
+.iam-filters .input {
+
+    height: 44px;
+    background: var(--surface-secondary);
+    border: 1px solid var(--border);
+    color: var(--text);
+
+}
+
+.iam-search .input::placeholder,
+.iam-filters .input::placeholder {
+
+    color: var(--text-light);
+
+}
+
+.iam-search .input:focus,
+.iam-filters .input:focus {
+
+    background: var(--surface);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary) 14%, transparent);
+
+}
+
+/* Keyboard-only ring on the Select() element itself — the shared
+   component's own `.input:focus` box-shadow above already fires
+   on mouse focus too; this adds a crisper outline specifically
+   for :focus-visible so keyboard navigation through the Filter
+   Bar is never ambiguous which control is active. */
+.iam-search .input:focus-visible,
+.iam-filters .input:focus-visible {
+
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+
+}
+
+/* ==========================================================
+   Admin Directory — Container
+   ----------------------------------------------------------
+   One wrapper, three shapes: a centered single-column box for
+   the Empty Directory / Empty Search / Error states and the
+   loading Skeleton, or — once AdministratorCard() rows exist —
+   a responsive card grid. No JS/HTML hook exists to tell these
+   apart (Step 5's scope was integration only), so `:has()` reads
+   the actual rendered content instead: the grid rule only
+   engages when `.iam-directory` contains at least one
+   `.iam-admin-card`. Browsers without `:has()` support simply
+   keep the single-column flex layout below — every card still
+   renders, just stacked, so nothing breaks, it's just less
+   polished.
+========================================================== */
+
+.iam-directory {
+
+    display: flex;
+    flex-direction: column;
+    min-height: 280px;
+
+}
+
+.iam-directory:has(.iam-admin-card) {
+
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    align-items: stretch;
+    gap: var(--space-20);
+    min-height: 0;
+
+}
+
+/* The base `.co-card` hover rule (components.css) bumps the
+   shadow on any hover — appropriate for a single actionable
+   card, not for this large panel-level wrapper, which isn't
+   itself a clickable surface. Neutralized here so hovering
+   anywhere over the directory doesn't visually "lift" the whole
+   panel; each `.iam-admin-card` still gets its own hover
+   treatment below. */
+.iam-directory:hover {
+
+    box-shadow: var(--shadow-sm);
+
+}
+
+/* ==========================================================
+   Administrator Card
+   ----------------------------------------------------------
+   `.iam-admin-card` already carries the shared `.co-card` base
+   (background/border/radius-lg/shadow-sm/padding-24 —
+   components.css) via admin-management.card.js's own markup;
+   everything below only refines that base for this specific
+   card: tighter padding for a denser grid, a hover lift + accent
+   border instead of the generic shadow-only bump, and the
+   internal spacing/alignment for identity, tags, and meta rows.
+========================================================== */
+
+.iam-admin-card {
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-16);
+
+    padding: var(--space-20);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+
+    transition:
+        transform var(--duration-card-hover) var(--ease-out),
+        box-shadow var(--duration-card-hover) var(--ease-out),
+        border-color var(--duration-card-hover) var(--ease-out);
+
+}
+
+.iam-admin-card:hover {
+
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    border-color: color-mix(in srgb, var(--primary) 35%, var(--border));
+
+}
+
+.iam-admin-card:focus-within {
+
+    border-color: color-mix(in srgb, var(--primary) 45%, var(--border));
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .iam-admin-card {
+
+        transition: box-shadow var(--transition-fast), border-color var(--transition-fast);
+
+    }
+
+    .iam-admin-card:hover {
+
+        transform: none;
+
+    }
+
+}
+
+/* Top row — Avatar + name/designation on the left, the "more
+   actions" trigger pinned top-right regardless of how tall the
+   identity text block grows. */
+.iam-admin-card-top {
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-12);
+
+}
+
+.iam-admin-identity {
+
+    display: flex;
+    align-items: center;
+    gap: var(--space-12);
+    min-width: 0;
+
+}
+
+.iam-admin-identity .co-avatar {
+
+    flex-shrink: 0;
+
+}
+
+.iam-admin-identity-text {
+
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+
+}
+
+.iam-admin-name {
+
+    margin: 0;
+    font-size: var(--text-md);
+    font-weight: var(--weight-semibold);
+    color: var(--text);
+    line-height: 1.3;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+}
+
+.iam-admin-designation {
+
+    margin: 0;
+    font-size: var(--text-xs);
+    font-weight: var(--weight-regular);
+    color: var(--text-light);
+    line-height: 1.4;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+}
+
+/* Phase 5.1.6 — the trigger now sits inside its own wrap
+   (position:relative) so the dropdown panel below can anchor to
+   it directly, without depending on `.iam-admin-card-top`'s own
+   layout. */
+.iam-admin-card-menu-wrap {
+
+    position: relative;
+    flex-shrink: 0;
+
+}
+
+/* Icon-button sizing/affordance for the "more actions" trigger —
+   sized to the 44px minimum comfortable touch target even though
+   the visual glyph stays small, and centered on it rather than
+   on the button box edges. */
+.iam-admin-card-menu-btn {
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    width: 36px;
+    height: 36px;
+    min-width: 44px;
+    min-height: 44px;
+    margin: -4px;
+
+    border: none;
+    border-radius: var(--radius-full);
+    background: transparent;
+    color: var(--text-light);
+    cursor: pointer;
+
+    transition: background var(--duration-hover) var(--ease-standard), color var(--duration-hover) var(--ease-standard);
+
+}
+
+.iam-admin-card-menu-btn svg {
+
+    width: 18px;
+    height: 18px;
+
+}
+
+.iam-admin-card-menu-btn:hover {
+
+    background: var(--surface-secondary);
+    color: var(--text-secondary);
+
+}
+
+.iam-admin-card-menu-btn:focus-visible {
+
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+    background: var(--surface-secondary);
+
+}
+
+.iam-admin-card-menu-btn[aria-expanded="true"] {
+
+    background: var(--surface-secondary);
+    color: var(--text-secondary);
+
+}
+
+/* ==========================================================
+   Phase 5.1.6 — Actions Menu Panel
+   ----------------------------------------------------------
+   Same shape as topbar.css's .io-dropdown-panel/.io-profile-
+   menu-item (position/box-shadow/radius/transition tokens,
+   open-state toggled by a wrap-level class) — reused visually,
+   not via the Topbar Panel Engine (see admin-management.actions.js
+   for why: that engine is a fixed, named-panel registry, the
+   wrong shape for one panel per directory row).
+========================================================== */
+.iam-admin-card-menu {
+
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    z-index: 20;
+
+    display: flex;
+    flex-direction: column;
+    min-width: 180px;
+    padding: 6px;
+
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+
+    opacity: 0;
+    transform: translateY(-6px) scale(0.98);
+    transform-origin: top right;
+    transition: opacity var(--duration-hover) var(--ease-standard), transform var(--duration-hover) var(--ease-standard);
+    pointer-events: none;
+
+}
+
+.iam-admin-card-menu-wrap.is-open .iam-admin-card-menu {
+
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+
+}
+
+.iam-admin-card-menu-item {
+
+    width: 100%;
+    text-align: left;
+    padding: 10px 10px;
+
+    border: none;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--text);
+    font-size: var(--text-sm);
+    font-family: inherit;
+    cursor: pointer;
+
+    transition: background var(--duration-hover) var(--ease-standard);
+
+}
+
+.iam-admin-card-menu-item:hover,
+.iam-admin-card-menu-item:focus-visible {
+
+    background: color-mix(in srgb, var(--primary) 8%, transparent);
+    outline: none;
+
+}
+
+.iam-admin-card-menu-item--danger {
+
+    color: var(--danger);
+
+}
+
+.iam-admin-card-menu-item--danger:hover,
+.iam-admin-card-menu-item--danger:focus-visible {
+
+    background: color-mix(in srgb, var(--danger) 8%, transparent);
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .iam-admin-card-menu {
+        transition: none;
+    }
+
+}
+
+.iam-admin-email {
+
+    margin: 0;
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+}
+
+/* Department + Status pills */
+.iam-admin-card-tags {
+
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-8);
+
+}
+
+/* Scoped refinements over the shared Badge() component
+   (shared/components/badge/badge.css, out of this phase's
+   scope) — padding/weight/radius polish plus a subtle
+   status-tinted border so Active/Pending/Suspended read as
+   visually distinct pill *styles*, not just different fill
+   colors, at a glance. The component's own colors/variants are
+   untouched; only this card's presentation of them changes. */
+.iam-admin-card-tags .co-badge {
+
+    padding: 3px var(--space-12);
+    border-radius: var(--radius-full);
+    font-weight: var(--weight-semibold);
+    letter-spacing: 0.01em;
+
+}
+
+.iam-admin-card-tags .co-badge--success {
+
+    border: 1px solid color-mix(in srgb, var(--success) 30%, transparent);
+
+}
+
+.iam-admin-card-tags .co-badge--warning {
+
+    border: 1px solid color-mix(in srgb, var(--warning) 30%, transparent);
+
+}
+
+.iam-admin-card-tags .co-badge--danger {
+
+    border: 1px solid color-mix(in srgb, var(--danger) 30%, transparent);
+
+}
+
+.iam-admin-card-tags .co-badge--neutral {
+
+    border: 1px solid var(--border);
+
+}
+
+/* Meta row — last login / created date, pinned to the bottom of
+   the card via margin-top:auto on the card's own flex column so
+   short and long cards in the same grid row still line their
+   footers up. */
+.iam-admin-card-meta {
+
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-4, 4px) var(--space-16);
+
+    margin-top: auto;
+    padding-top: var(--space-12);
+    border-top: 1px solid var(--border);
+
+}
+
+.iam-admin-meta-item {
+
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    font-size: var(--text-xs);
+    color: var(--text-light);
+    white-space: nowrap;
+
+}
+
+.iam-admin-meta-icon {
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+}
+
+.iam-admin-meta-icon svg {
+
+    width: 14px;
+    height: 14px;
+
+}
+
+/* ==========================================================
+   Admin Directory — Empty State
+   ----------------------------------------------------------
+   A larger, illustrated variant of the same empty-state pattern
+   dashboard.css's `.io-dash-empty` already established (same
+   tint formula, same type scale) — sized up since this is a
+   page-level empty state, not a small dashboard-widget one.
+   Shared by DirectoryEmptyState() and SearchEmptyState()
+   (admin-management.page.js) — same rhythm for both, the icon
+   glyph/copy/CTA presence is the only thing that differs between
+   them.
+========================================================== */
+
+.iam-empty-state {
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-16);
+
+    flex: 1;
+    padding: var(--space-40) var(--space-16);
+    text-align: center;
+
+}
+
+.iam-empty-icon {
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    width: 96px;
+    height: 96px;
+
+    border-radius: var(--radius-full);
+    background: color-mix(in srgb, var(--primary) 10%, var(--surface-secondary));
+    color: var(--primary);
+
+}
+
+.iam-empty-icon svg {
+
+    width: 40px;
+    height: 40px;
+
+}
+
+.iam-empty-title {
+
+    margin: 0;
+    font-size: var(--text-lg);
+    font-weight: var(--weight-semibold);
+    color: var(--text);
+
+}
+
+.iam-empty-description {
+
+    margin: 0;
+    max-width: 360px;
+
+    font-size: var(--text-sm);
+    font-weight: var(--weight-regular);
+    line-height: 1.5;
+    color: var(--text-light);
+
+}
+
+.iam-empty-state .btn {
+
+    min-width: 240px;
+    margin-top: var(--space-4, 4px);
+
+}
+
+/* ==========================================================
+   Error States
+   ----------------------------------------------------------
+   Same `.io-hero-error` alert primitive every Dashboard section
+   already uses (dashboard.css) — re-declared here under an
+   `iam-` selector rather than cross-importing dashboard.css's
+   class, so this module's stylesheet stays a fully independent
+   namespace, same discipline dashboard.css's own header comment
+   documents for io- vs institution-admin's own equivalent.
+========================================================== */
+
+.iam-error {
+
+    padding: var(--space-16);
+
+    border-radius: var(--radius-md);
+    background: color-mix(in srgb, var(--danger) 8%, var(--surface));
+    border: 1px solid color-mix(in srgb, var(--danger) 24%, var(--border));
+
+    font-size: var(--text-sm);
+    color: var(--danger);
+    text-align: center;
+
+}
+
+/* ==========================================================
+   Skeleton
+   ----------------------------------------------------------
+   Appearance-only parity with the eventual card grid above —
+   the underlying markup is still the shared ListSkeleton()
+   (shared/components/skeleton/list/), unmodified. On wider
+   screens its rows are laid into the same column grid the real
+   cards use, each row padded/bordered to roughly preview a card
+   silhouette instead of a flat list, so the skeleton -> content
+   swap doesn't visibly jump in shape. Collapses back to a plain
+   stacked list below the tablet breakpoint, matching the real
+   grid's own single-column collapse.
+========================================================== */
+
+.iam-directory-skeleton {
+
+    padding: var(--space-24);
+
+}
+
+@media (min-width: 769px) {
+
+    .iam-directory-skeleton .skel-list {
+
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: var(--space-20);
+
+    }
+
+    .iam-directory-skeleton .skel-list-item {
+
+        padding: var(--space-20);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+
+    }
+
+}
+
+/* ==========================================================
+   Responsive
+========================================================== */
+
+@media (max-width: 1200px) {
+
+    /* --bp-desktop — one column fewer than the widest tier by
+       simply letting `auto-fill` recompute; explicit column
+       counts start at the tablet tier below where the fluid
+       `minmax()` alone would otherwise squeeze cards too
+       narrow. */
+    .iam-directory:has(.iam-admin-card) {
+
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+
+    }
+
+}
+
+@media (max-width: 992px) {
+
+    /* --bp-laptop-sm */
+    .iam-filters .input-group {
+
+        width: 160px;
+
+    }
+
+    .iam-directory:has(.iam-admin-card) {
+
+        grid-template-columns: repeat(2, 1fr);
+
+    }
+
+    .iam-directory-skeleton .skel-list {
+
+        grid-template-columns: repeat(2, 1fr);
+
+    }
+
+}
+
+@media (max-width: 768px) {
+
+    /* --bp-tablet */
+    .iam-header-actions {
+
+        width: 100%;
+
+    }
+
+    .iam-header-actions .btn {
+
+        width: 100%;
+
+    }
+
+    .iam-toolbar {
+
+        flex-direction: column;
+        align-items: stretch;
+
+    }
+
+    .iam-filters {
+
+        flex-direction: column;
+        align-items: stretch;
+
+    }
+
+    .iam-filters .input-group {
+
+        width: 100%;
+
+    }
+
+    .iam-directory:has(.iam-admin-card) {
+
+        grid-template-columns: 1fr;
+
+    }
+
+}
+
+@media (max-width: 480px) {
+
+    /* --bp-phone-lg */
+    .iam-title {
+
+        font-size: var(--text-xl);
+
+    }
+
+    .iam-admin-card {
+
+        padding: var(--space-16);
+
+    }
+
+    .iam-admin-card-meta {
+
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-4, 4px);
+
+    }
+
+    .iam-empty-icon {
+
+        width: 72px;
+        height: 72px;
+
+    }
+
+    .iam-empty-icon svg {
+
+        width: 32px;
+        height: 32px;
+
+    }
+
+    .iam-empty-state .btn {
+
+        min-width: 100%;
+
+    }
+
+}
+
+/* ==========================================================
+   Phase 5.1.6 — Edit Administrator Modal Form
+   ----------------------------------------------------------
+   Same grid/spacing shape as create-admin.css's `.ca-form`/
+   `.ca-form-grid`, and the same scoped light-theme override for
+   shared/components/input/input.css's hardcoded dark-surface
+   colors (see that file's own header comment for the root
+   cause — it applies here too, since this form also renders on
+   var(--surface) via the modal body). Reused instead of
+   duplicated logic; duplicated because `.ca-form` itself lives
+   in create-admin.css and Phase 5.1.6's Locked Scope only
+   touches this file plus the two JS files already noted.
+========================================================== */
+.iam-edit-form {
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-20);
+
+}
+
+.iam-edit-form-field {
+
+    min-width: 0;
+
+}
+
+.iam-edit-form .input-label {
+
+    color: var(--text-secondary);
+
+}
+
+.iam-edit-form .input-icon {
+
+    color: var(--text-light);
+
+}
+
+.iam-edit-form .input-wrapper:focus-within .input-icon {
+
+    color: var(--primary);
+
+}
+
+.iam-edit-form .input {
+
+    background: var(--surface-secondary);
+    border: 1px solid var(--border);
+    color: var(--text);
+
+}
+
+.iam-edit-form .input::placeholder {
+
+    color: var(--text-light);
+
+}
+
+.iam-edit-form .input:focus {
+
+    background: var(--surface);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary) 14%, transparent);
+
+}
+
+.iam-edit-form .input:-webkit-autofill,
+.iam-edit-form .input:-webkit-autofill:hover,
+.iam-edit-form .input:-webkit-autofill:focus {
+
+    -webkit-text-fill-color: var(--text);
+    -webkit-box-shadow: 0 0 0 1000px var(--surface-secondary) inset;
+
+}
+
+.iam-edit-form .input.error {
+
+    border-color: var(--danger);
+    background: color-mix(in srgb, var(--danger) 8%, var(--surface-secondary));
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--danger) 12%, transparent);
+
+}
+
+.iam-edit-form .input-hint {
+
+    color: var(--text-secondary);
+
+}
+
+/* ==========================================================
+   Phase 5.1.6 — Suspend / Activate Confirmation Modal
+========================================================== */
+.iam-confirm-message {
+
+    margin: 0;
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    line-height: 1.5;
+
+}
+
+/* Scoped danger styling for the Suspend confirm's primary
+   button — added here rather than a new `.btn-danger` variant
+   in the shared button component, per Phase 5.1.6's "no new
+   shared components unless absolutely necessary". */
+.iam-confirm-btn--danger {
+
+    background: var(--danger);
+    box-shadow: 0 12px 32px color-mix(in srgb, var(--danger) 40%, transparent);
+
+}

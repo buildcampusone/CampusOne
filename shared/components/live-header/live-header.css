@@ -1,0 +1,41 @@
+.live-header{
+
+    width:100%;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    margin-bottom:40px;
+
+}
+
+.live-time{
+
+    font-size:44px;
+
+    font-weight:700;
+
+    color:#FFFFFF;
+
+    letter-spacing:-1px;
+
+}
+
+.live-date{
+
+    margin-top:6px;
+
+    color:rgba(255,255,255,.70);
+
+}
+
+.live-greeting{
+
+    margin-top:24px;
+
+    color:#FFFFFF;
+
+}

@@ -1,0 +1,341 @@
+rules_version = '2';
+
+/**
+ * ==========================================================
+ * CampusOne — Firestore Security Rules
+ * ----------------------------------------------------------
+ * This is the ONLY place access control is actually enforced.
+ * Every guard in the app (session.store.js, initSuperAdminGuard,
+ * initLogin's role checks) is a client-side UI convenience —
+ * it decides what to SHOW, not what Firestore will ALLOW. Any
+ * of those guards can be bypassed by calling the Firebase SDK
+ * or REST API directly, which is exactly what these rules stop.
+ *
+ * Modeled directly off the actual write paths in the codebase:
+ *  - modules/institution/registration/registration.controller.js
+ *      (self-registration: creates institutionCodes/{code},
+ *      institutions/{id}, users/{uid} in one flow)
+ *  - shared/services/session.store.js (reads users/{uid},
+ *      listens to institutions/{institutionId})
+ *  - shared/services/user.service.js / institution.service.js
+ *      (profile + institution updates)
+ *  - shared/services/auth.service.js (updateLastLogin)
+ *  - shared/services/admin-directory.service.js (Phase 5.1.4 —
+ *      an Institution Owner listing/creating/updating their own
+ *      institution's users/{uid} docs whose role is
+ *      institution_admin or department_admin only)
+ *  - shared/services/activity.service.js (Phase 3.5A — reads/
+ *      writes institutions/{institutionId}/activity/{activityId};
+ *      no caller in the app writes through it yet, see that
+ *      file's own header, but the rule below is live from day
+ *      one rather than added later alongside the first caller)
+ *
+ * Collections not yet wired to any UI (access_requests, staff —
+ * see the Super Admin roadmap) are intentionally NOT covered
+ * below. Firestore denies-by-default, so they stay fully locked
+ * until rules are added for them alongside the real feature.
+ * ========================================================== */
+
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    /* =========================================
+       Helpers
+    ========================================= */
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // Mirrors session.store.js: role is only ever trusted from
+    // a user doc whose status is "active" — a suspended/blocked/
+    // pending/deleted account has no role, full stop.
+    function myUserDoc() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid));
+    }
+
+    function myUserData() {
+      return myUserDoc().data;
+    }
+
+    function hasActiveProfile() {
+      return isSignedIn()
+          && myUserDoc() != null
+          && myUserData().status == 'active';
+    }
+
+    function myRole() {
+      return hasActiveProfile() ? myUserData().role : null;
+    }
+
+    function myInstitutionId() {
+      return hasActiveProfile() ? myUserData().institutionId : null;
+    }
+
+    function isPlatformSuperAdmin() {
+      return isSignedIn() && myRole() == 'platform_super_admin';
+    }
+
+    function isInstitutionOwnerOf(institutionId) {
+      return isSignedIn()
+          && myRole() == 'institution_owner'
+          && myInstitutionId() == institutionId;
+    }
+
+    function isOwnUser(uid) {
+      return isSignedIn() && request.auth.uid == uid;
+    }
+
+    // Blocks self-privilege-escalation: a user updating their
+    // own doc can never change role, status, or which institution
+    // they belong to — only Platform Super Admin can do that.
+    function keepsRoleStatusInstitutionUnchanged() {
+      return request.resource.data.role == resource.data.role
+          && request.resource.data.status == resource.data.status
+          && request.resource.data.institutionId == resource.data.institutionId;
+    }
+
+    /* =========================================
+       users/{uid}
+    ========================================= */
+
+    match /users/{uid} {
+
+      // Every signed-in user must be able to read their OWN doc —
+      // this is what session.store.js's resolveUserDoc() runs on
+      // every login/session-restore, for every role in the app.
+      allow get: if isOwnUser(uid)
+                 || isPlatformSuperAdmin()
+                 || isInstitutionOwnerOf(resource.data.institutionId);
+
+      // Phase 5.1.4 — Institution Owner's own Institution Admin
+      // Directory (admin-directory.service.js's
+      // listInstitutionAdmins()) queries `where("institutionId",
+      // "==", ...)` + `where("role", "in", [...])`. Firestore
+      // evaluates `list` per returned document, so this only
+      // grants what that query itself already filters down to —
+      // it can never be used to list a whole institution's staff,
+      // just the delegated-admin subset an Owner is allowed to
+      // manage.
+      allow list: if isPlatformSuperAdmin()
+                  || (
+                       isSignedIn()
+                       && myRole() == 'institution_owner'
+                       && resource.data.institutionId == myInstitutionId()
+                       && resource.data.role in ['institution_admin', 'department_admin']
+                     );
+
+      // Self-registration (registration.controller.js Stage 4):
+      // the newly created auth account writes its OWN user doc,
+      // pinned to exactly the role/status that flow is allowed
+      // to grant itself. Note: NOT gated on email-verified — the
+      // real flow creates this doc *before* the verification
+      // email is even sent (see registration.controller.js).
+      allow create: if isOwnUser(uid)
+                    && request.resource.data.uid == uid
+                    && request.resource.data.role == 'institution_owner'
+                    && request.resource.data.status == 'active';
+
+      // Phase 5.1.4 — Create Institution Administrator
+      // (create-admin.controller.js, via
+      // admin-directory.service.js's createInstitutionAdmin()).
+      // An Institution Owner may create a user doc for someone
+      // else's uid (the Auth account was just created on a
+      // secondary app — see firebase/firebase.js) but ONLY when
+      // every privilege-bearing field is pinned to something safe:
+      // the new doc's own institutionId (never another
+      // institution), a delegated-admin role (never owner/
+      // platform_super_admin — no self-escalation via this path),
+      // and createdBy stamped as the caller's own uid so it can't
+      // be forged.
+      allow create: if isSignedIn()
+                    && myRole() == 'institution_owner'
+                    && request.resource.data.uid == uid
+                    && request.resource.data.institutionId == myInstitutionId()
+                    && request.resource.data.role in ['institution_admin', 'department_admin']
+                    && request.resource.data.createdBy == request.auth.uid;
+
+      // Platform Super Admin can create any user doc directly
+      // (e.g. provisioning platform-level admins).
+      allow create: if isPlatformSuperAdmin();
+
+      // Users may edit their own profile fields (name, phone,
+      // photo, etc.) but never grant themselves a new role,
+      // reactivate/suspend themselves, or switch institutions.
+      allow update: if isOwnUser(uid) && keepsRoleStatusInstitutionUnchanged();
+
+      // Phase 5.1.4 — Institution Owner editing one of their own
+      // delegated admins (status change, or a profile-field edit
+      // via admin-directory.service.js's
+      // updateInstitutionAdminStatus()/updateInstitutionAdminProfile()).
+      // role/institutionId are pinned unchanged so this can never
+      // be used to move an admin to another institution or
+      // reassign their role; email is likewise excluded since it
+      // must stay in lockstep with the Firebase Auth account,
+      // which this simple doc update can't touch.
+      allow update: if isSignedIn()
+                    && myRole() == 'institution_owner'
+                    && resource.data.institutionId == myInstitutionId()
+                    && resource.data.role in ['institution_admin', 'department_admin']
+                    && request.resource.data.role == resource.data.role
+                    && request.resource.data.institutionId == resource.data.institutionId
+                    && request.resource.data.email == resource.data.email
+                    && request.resource.data.diff(resource.data)
+                         .affectedKeys()
+                         .hasOnly(['status', 'fullName', 'designation', 'mobile', 'department', 'permissions', 'updatedAt']);
+
+      // Only Platform Super Admin can change role/status/
+      // institutionId, or delete a user outright.
+      allow update, delete: if isPlatformSuperAdmin();
+
+    }
+
+    /* =========================================
+       institutions/{institutionId}
+    ========================================= */
+
+    match /institutions/{institutionId} {
+
+      // session.store.js keeps a live listener on the signed-in
+      // user's own institution. Institution Owners/staff of
+      // that institution and Platform Super Admin can read it.
+      allow get: if isPlatformSuperAdmin()
+                 || (isSignedIn() && myInstitutionId() == institutionId);
+
+      allow list: if isPlatformSuperAdmin();
+
+      // Self-registration (registration.controller.js Stage 4):
+      // the account that will become this institution's Owner
+      // creates the institution doc in the same flow as
+      // the users/{uid} create above. Not gated on
+      // email-verified for the same reason as above.
+      allow create: if isSignedIn()
+                    && request.resource.data.owner.uid == request.auth.uid;
+
+      // The institution's own Owner may update
+      // profile/contact/address/branding only — never their own
+      // status or subscription (that's a platform-level decision).
+      //
+      // Phase 4.0B (Institution Profile Foundation): contact and
+      // address were added here per the Phase 4.0A audit's
+      // Critical finding — the Owner previously had no way to
+      // save Contact or Address edits at all, since neither key
+      // was in this allow-list.
+      //
+      // Note: this rule can't restrict which KEYS inside `profile`
+      // change (Firestore rules see `profile` as one opaque map
+      // field) — so it technically still permits a `profile.code`
+      // change. Keeping the institution code read-only is a
+      // deliberate business-rule decision enforced in
+      // modules/institution-owner/profile/profile.controller.js's
+      // updateInstitutionProfile(), not here — a real code change
+      // needs the institutionCodes/{code} claim transaction
+      // re-run, which this simple map update can't do safely.
+      allow update: if isPlatformSuperAdmin()
+                    || (
+                         isInstitutionOwnerOf(institutionId)
+                         && request.resource.data.diff(resource.data)
+                              .affectedKeys()
+                              .hasOnly(['profile', 'contact', 'address', 'branding', 'updatedAt'])
+                       );
+
+      allow delete: if isPlatformSuperAdmin();
+
+    }
+
+    /* =========================================
+       institutionCodes/{code}
+       (uniqueness-claim docs used by the atomic
+       transaction in registration.controller.js)
+    ========================================= */
+
+    match /institutionCodes/{code} {
+
+      // Read is needed pre-claim, inside the transaction, by a
+      // brand-new auth account that has no user/institution doc
+      // yet — so this only requires being signed in.
+      allow get: if isSignedIn();
+
+      allow list: if isPlatformSuperAdmin();
+
+      // Matches transaction.set(codeRef, { institutionId,
+      // claimedBy: uid, claimedAt }) exactly — you can only ever
+      // claim a code as yourself, and (since resource == null pre-
+      // claim) only when nobody has claimed it yet.
+      allow create: if isSignedIn()
+                    && request.resource.data.claimedBy == request.auth.uid;
+
+      allow update, delete: if isPlatformSuperAdmin();
+
+    }
+
+    /* =========================================
+       subscriptions/{id}
+       (COLLECTIONS.SUBSCRIPTIONS is declared but not yet
+       written to anywhere — subscription data currently lives
+       embedded inside institutions/{id}.subscription. Locked
+       down to Platform Super Admin now so it's safe by default
+       whenever this collection does get wired up.)
+    ========================================= */
+
+    match /subscriptions/{id} {
+      allow read, write: if isPlatformSuperAdmin();
+    }
+
+    /* =========================================
+       institutions/{institutionId}/activity/{activityId}
+       ----------------------------------------
+       Phase 3.5A — Activity Infrastructure.
+       shared/services/activity.service.js is the only client
+       code that touches this path. Append-only by design: no
+       `update`/`delete` for anyone but Platform Super Admin,
+       because an activity log's value depends on entries never
+       being edited after the fact. COLLECTIONS.ACTIVITY is
+       declared and this rule is live, but — same "safe by
+       default before it's wired up" posture as the
+       subscriptions/{id} block above — nothing in the app calls
+       logActivity() yet (see activity.service.js's own header),
+       so no document will exist under this path until a later
+       phase adds a real caller.
+    ========================================= */
+
+    match /institutions/{institutionId}/activity/{activityId} {
+
+      // Same institution-scoped read boundary institutions/
+      // {institutionId} itself already uses — anyone who can
+      // read the institution doc can read its activity log.
+      allow get, list: if isPlatformSuperAdmin()
+                       || (isSignedIn() && myInstitutionId() == institutionId);
+
+      // A signed-in member of this institution may log an entry,
+      // but only ever as themselves — actor.uid must match the
+      // caller's own uid, and the denormalized institutionId
+      // field must match the path it's actually being written
+      // under, so a client can never backdate/misattribute an
+      // entry or write it into a different institution's log.
+      allow create: if isPlatformSuperAdmin()
+                    || (
+                         isSignedIn()
+                         && myInstitutionId() == institutionId
+                         && request.resource.data.institutionId == institutionId
+                         && request.resource.data.actor.uid == request.auth.uid
+                       );
+
+      // Append-only: once written, an entry is never edited or
+      // removed by a client, only by Platform Super Admin
+      // (e.g. compliance/data-retention cleanup).
+      allow update, delete: if isPlatformSuperAdmin();
+
+    }
+
+    /* =========================================
+       Everything else
+       ----------------------------------------
+       Firestore denies by default: any collection not matched
+       above (access_requests, staff, or anything added later)
+       is fully inaccessible until a rule is written for it.
+    ========================================= */
+
+  }
+}

@@ -1,0 +1,2251 @@
+/* ==========================================================
+   CampusOne
+   Institution Owner Dashboard
+   ----------------------------------------------------------
+   Part 2.2 — Executive Dashboard Implementation
+
+   Same visual language Institution Admin's own dashboard.css
+   established (accent-tinted icon tiles, hero gradient card,
+   premium empty states) — copied as a *pattern*, io-namespaced,
+   not shared by importing Institution Admin's file (per the
+   Part 2.1 audit, Section 4/7: the pattern is reusable, the
+   stylesheet itself isn't extracted to `shared/` yet).
+
+   Every card (`.io-kpi-card`, `.io-action-card`,
+   `.io-dashboard-card`) composes the shared `.co-card` component
+   (shared/styles/components.css — background, border, radius-lg,
+   shadow-sm, hover shadow-md) rather than re-declaring that box
+   model here. Everything resolves through variables.css tokens —
+   no literal colors, no inline styles.
+
+   Breakpoints (1200 / 992 / 768 / 480) are the same ones
+   Institution Admin and Super Admin already validated, kept
+   identical here so all three dashboards collapse at the same
+   widths, per the audit's Responsive Strategy section.
+========================================================== */
+
+.io-dashboard {
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-24);
+
+}
+
+/* ==========================================================
+   Section 1 — Welcome Hero
+   ----------------------------------------------------------
+   The one card here that intentionally does NOT use `.co-card`
+   — a gradient hero reads as a different surface than a flat
+   content card. Built entirely from tokens (--primary/
+   --secondary for the gradient stops, --radius-lg, --shadow-md).
+========================================================== */
+
+.io-hero-card {
+
+    position: relative;
+    overflow: hidden;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-24);
+
+    padding: var(--space-32) var(--space-40);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+
+}
+
+.io-hero-decor {
+
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+
+    pointer-events: none;
+
+}
+
+.io-hero-blob {
+
+    position: absolute;
+    border-radius: var(--radius-full);
+
+    background: color-mix(in srgb, var(--text-white) 30%, transparent);
+    filter: blur(32px);
+
+}
+
+.io-hero-blob-a {
+
+    width: 220px;
+    height: 220px;
+    top: -90px;
+    right: 60px;
+
+}
+
+.io-hero-blob-b {
+
+    width: 160px;
+    height: 160px;
+    bottom: -70px;
+    right: 220px;
+
+    background: color-mix(in srgb, var(--text-white) 18%, transparent);
+
+}
+
+.io-hero-main {
+
+    position: relative;
+    z-index: 1;
+
+    display: flex;
+    align-items: center;
+    gap: var(--space-20);
+
+}
+
+.io-hero-avatar {
+
+    position: relative;
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 64px;
+    height: 64px;
+
+    border-radius: var(--radius-full);
+    background: color-mix(in srgb, var(--text-white) 20%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid color-mix(in srgb, var(--text-white) 30%, transparent);
+
+}
+
+.io-hero-avatar-initial {
+
+    font-size: var(--text-xl);
+    font-weight: var(--weight-bold);
+    color: var(--text-white);
+
+}
+
+.io-hero-avatar-badge {
+
+    position: absolute;
+    right: -4px;
+    bottom: -4px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 22px;
+    height: 22px;
+
+    border-radius: var(--radius-full);
+    background: var(--surface);
+    color: var(--primary);
+    box-shadow: var(--shadow-sm);
+
+}
+
+.io-hero-avatar-badge svg {
+
+    width: 12px;
+    height: 12px;
+
+}
+
+.io-hero-content {
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+
+}
+
+.io-hero-top {
+
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-12);
+
+}
+
+.io-hero-greeting {
+
+    margin: 0;
+    font-size: var(--text-3xl);
+    font-weight: var(--weight-bold);
+    line-height: 1.2;
+    color: var(--text-white);
+
+}
+
+.io-hero-status {
+
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-8);
+
+    padding: var(--space-4) var(--space-12);
+    border-radius: var(--radius-full);
+
+    background: color-mix(in srgb, var(--text-white) 16%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    font-size: var(--text-xs);
+    font-weight: var(--weight-medium);
+    color: var(--text-white);
+
+}
+
+.io-hero-status-dot {
+
+    width: 7px;
+    height: 7px;
+    border-radius: var(--radius-full);
+
+    background: var(--success);
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--success) 60%, transparent);
+
+    animation: io-status-pulse 2.2s ease-out infinite;
+
+}
+
+@keyframes io-status-pulse {
+
+    0% {
+        box-shadow: 0 0 0 0 color-mix(in srgb, var(--success) 55%, transparent);
+    }
+
+    70% {
+        box-shadow: 0 0 0 7px color-mix(in srgb, var(--success) 0%, transparent);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 color-mix(in srgb, var(--success) 0%, transparent);
+    }
+
+}
+
+.io-hero-institution-row {
+
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-12);
+
+}
+
+.io-hero-institution {
+
+    margin: 0;
+    font-size: var(--text-md);
+    color: var(--text-white);
+    opacity: 0.88;
+
+}
+
+/* ==========================================================
+   Verification Badge
+   ----------------------------------------------------------
+   Two states only — "verified" (success token) and "pending"
+   (warning token), same accent-token pattern the KPI/Action/
+   Widget accent registries already use elsewhere in this file.
+   Defaults to "pending" in markup (dashboard.page.js) since
+   there's no real verification source yet — never rendered as
+   verified without real data behind it.
+========================================================== */
+
+.io-verify-badge {
+
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-4);
+
+    padding: var(--space-4) var(--space-12);
+    border-radius: var(--radius-full);
+
+    font-size: var(--text-xs);
+    font-weight: var(--weight-semibold);
+    white-space: nowrap;
+
+}
+
+.io-verify-badge--verified {
+
+    background: color-mix(in srgb, var(--success) 18%, transparent);
+    color: var(--text-white);
+    border: 1px solid color-mix(in srgb, var(--success) 50%, transparent);
+
+}
+
+.io-verify-badge--pending {
+
+    background: color-mix(in srgb, var(--warning) 20%, transparent);
+    color: var(--text-white);
+    border: 1px solid color-mix(in srgb, var(--warning) 50%, transparent);
+
+}
+
+.io-verify-badge-icon {
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.io-verify-badge-icon svg {
+
+    width: 12px;
+    height: 12px;
+
+}
+
+.io-hero-meta {
+
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-8);
+    margin-top: var(--space-8);
+
+}
+
+.io-hero-pill {
+
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-4);
+
+    padding: var(--space-8) var(--space-16);
+    border-radius: var(--radius-full);
+
+    background: color-mix(in srgb, var(--text-white) 16%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: var(--text-white);
+
+    font-size: var(--text-xs);
+    font-weight: var(--weight-medium);
+    letter-spacing: 0.01em;
+
+}
+
+.io-hero-pill svg {
+
+    width: 13px;
+    height: 13px;
+    flex-shrink: 0;
+
+}
+
+.io-hero-icon {
+
+    position: relative;
+    z-index: 1;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 60px;
+    height: 60px;
+    flex-shrink: 0;
+
+    border-radius: var(--radius-full);
+    background: color-mix(in srgb, var(--text-white) 16%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: var(--text-white);
+
+}
+
+.io-hero-icon svg {
+
+    width: 28px;
+    height: 28px;
+
+}
+
+/* ==========================================================
+   Welcome Header — Tablet (992px)
+   ----------------------------------------------------------
+   One step down from desktop: hero padding tightens and the
+   meta pill row is allowed to wrap onto a second line earlier
+   (io-hero-meta already wraps by default) — avatar/blob/icon
+   sizes stay at desktop scale, only spacing changes.
+========================================================== */
+
+@media (max-width: 992px) {
+
+    .io-hero-card {
+        padding: var(--space-24) var(--space-32);
+        gap: var(--space-16);
+    }
+
+    .io-hero-greeting {
+        font-size: var(--text-2xl);
+    }
+
+}
+
+/* ==========================================================
+   Welcome Header — Mobile (640px)
+========================================================== */
+
+@media (max-width: 640px) {
+
+    .io-hero-card {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: var(--space-24);
+    }
+
+    .io-hero-main {
+        width: 100%;
+    }
+
+    .io-hero-icon {
+        align-self: flex-end;
+        width: 48px;
+        height: 48px;
+    }
+
+    .io-hero-icon svg {
+        width: 22px;
+        height: 22px;
+    }
+
+    .io-hero-avatar {
+        width: 52px;
+        height: 52px;
+    }
+
+    .io-hero-blob-a {
+        width: 140px;
+        height: 140px;
+        top: -60px;
+        right: -20px;
+    }
+
+    .io-hero-blob-b {
+        display: none;
+    }
+
+    .io-hero-institution-row {
+        gap: var(--space-8);
+    }
+
+    .io-hero-pill {
+        padding: var(--space-4) var(--space-12);
+    }
+
+}
+
+/* ==========================================================
+   Welcome Header — Skeleton
+   ----------------------------------------------------------
+   `.io-hero-card` gives it the same box (padding/radius/
+   shadow) as the real hero minus the gradient — a flat
+   surface token instead, so the shimmer reads clearly. Shimmer
+   animation itself comes from `.co-skeleton` (shared/
+   components/skeleton/base/base.skeleton.css) — not redeclared
+   here.
+========================================================== */
+
+.io-hero-skeleton {
+
+    background: var(--surface-alt, var(--surface));
+    justify-content: flex-start;
+
+}
+
+.io-hero-skeleton-lines {
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+
+}
+
+.io-hero-skeleton-pills {
+
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-8);
+    margin-top: var(--space-4);
+
+}
+
+/* ==========================================================
+   Welcome Header — Error State
+========================================================== */
+
+.io-hero-error {
+
+    align-items: center;
+    justify-content: center;
+
+    padding: var(--space-24);
+    background: var(--surface);
+    color: var(--danger, var(--text-secondary));
+    font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
+
+}
+
+/* ==========================================================
+   Section 2 — KPI Grid Skeleton
+   ----------------------------------------------------------
+   Layout/box-model comes from the real `.io-kpi-grid` /
+   `.io-kpi-card` rules above (reused as-is, not duplicated) —
+   this only turns off the real cards' hover lift/shadow while
+   the skeleton is standing in for them.
+========================================================== */
+
+.io-kpi-skeleton .io-kpi-card {
+
+    pointer-events: none;
+
+}
+
+.io-kpi-skeleton .io-kpi-card:hover {
+
+    transform: none;
+    box-shadow: var(--shadow-md);
+
+}
+
+
+/* ==========================================================
+   Shared — Icon Badge
+========================================================== */
+
+.io-icon-badge {
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    border-radius: var(--radius-md);
+    background: var(--surface-secondary);
+    color: var(--primary);
+
+}
+
+.io-icon-badge-kpi,
+.io-icon-badge-action,
+.io-icon-badge-widget {
+
+    width: 40px;
+    height: 40px;
+
+}
+
+.io-icon-badge-kpi svg,
+.io-icon-badge-action svg,
+.io-icon-badge-widget svg {
+
+    width: 20px;
+    height: 20px;
+
+}
+
+/* ==========================================================
+   Section Title (shared by Quick Actions + Widgets)
+========================================================== */
+
+.io-section-title {
+
+    margin: 0;
+    font-size: var(--text-lg);
+    font-weight: var(--weight-semibold);
+    color: var(--text);
+
+}
+
+/* ==========================================================
+   Section 2 — KPI Grid
+========================================================== */
+
+.io-kpi-grid {
+
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: 1fr;
+    gap: var(--space-20);
+    align-items: stretch;
+
+}
+
+.io-kpi-card {
+
+    position: relative;
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-16);
+
+    min-height: 168px;
+    padding: var(--space-24);
+
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+
+    transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+
+    animation: io-kpi-card-in var(--animation-normal) var(--ease-premium) both;
+
+}
+
+.io-kpi-grid .io-kpi-card:nth-child(1) { animation-delay: 0ms; }
+.io-kpi-grid .io-kpi-card:nth-child(2) { animation-delay: 60ms; }
+.io-kpi-grid .io-kpi-card:nth-child(3) { animation-delay: 120ms; }
+.io-kpi-grid .io-kpi-card:nth-child(4) { animation-delay: 180ms; }
+
+@keyframes io-kpi-card-in {
+
+    from {
+
+        opacity: 0;
+        transform: translateY(10px);
+
+    }
+
+    to {
+
+        opacity: 1;
+        transform: translateY(0);
+
+    }
+
+}
+
+.io-kpi-card:hover {
+
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .io-kpi-card {
+
+        animation: none;
+        opacity: 1;
+
+    }
+
+    .io-kpi-card:hover {
+
+        transform: none;
+
+    }
+
+}
+
+.io-kpi-card--primary { --kpi-accent: var(--primary); }
+.io-kpi-card--secondary { --kpi-accent: var(--secondary); }
+.io-kpi-card--info { --kpi-accent: var(--info); }
+.io-kpi-card--success { --kpi-accent: var(--success); }
+.io-kpi-card--warning { --kpi-accent: var(--warning); }
+.io-kpi-card--default { --kpi-accent: var(--primary); }
+
+.io-kpi-card .io-icon-badge-kpi {
+
+    width: 48px;
+    height: 48px;
+
+    border-radius: var(--radius-md);
+    background: color-mix(in srgb, var(--kpi-accent, var(--primary)) 14%, var(--surface-secondary));
+    color: var(--kpi-accent, var(--primary));
+
+}
+
+.io-kpi-card .io-icon-badge-kpi svg {
+
+    width: 22px;
+    height: 22px;
+
+}
+
+.io-kpi-body {
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+
+}
+
+.io-kpi-label {
+
+    font-size: var(--text-xs);
+    font-weight: var(--weight-semibold);
+    color: var(--text-secondary);
+
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+
+}
+
+.io-kpi-value {
+
+    margin: 0;
+    font-size: var(--text-3xl);
+    font-weight: var(--weight-bold);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    color: var(--text);
+
+    font-variant-numeric: tabular-nums;
+
+}
+
+.io-kpi-trend {
+
+    font-size: var(--text-xs);
+    font-weight: var(--weight-medium);
+    color: var(--text-light);
+
+}
+
+/* ==========================================================
+   Section 3 — Quick Actions
+========================================================== */
+
+.io-quick-actions {
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-16);
+
+}
+
+.io-action-grid {
+
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: 1fr;
+    gap: var(--space-16);
+
+}
+
+.io-action-card {
+
+    position: relative;
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-16);
+
+    width: 100%;
+    min-width: 0;
+    min-height: 168px;
+    padding: var(--space-24);
+    box-shadow: var(--shadow-md);
+
+    font-family: inherit;
+    text-align: left;
+
+    cursor: pointer;
+
+    transition:
+        transform var(--animation-fast) var(--ease-premium),
+        box-shadow var(--animation-fast) var(--ease-premium),
+        border-color var(--animation-fast) var(--ease-premium);
+    will-change: transform;
+
+}
+
+.io-action-card--primary { --action-accent: var(--primary); }
+.io-action-card--secondary { --action-accent: var(--secondary); }
+.io-action-card--info { --action-accent: var(--info); }
+.io-action-card--success { --action-accent: var(--success); }
+.io-action-card--warning { --action-accent: var(--warning); }
+.io-action-card--default { --action-accent: var(--primary); }
+
+.io-action-card .io-icon-badge-action {
+
+    width: 48px;
+    height: 48px;
+
+    border-radius: var(--radius-md);
+    background: color-mix(in srgb, var(--action-accent, var(--primary)) 14%, var(--surface-secondary));
+    color: var(--action-accent, var(--primary));
+
+    transition: transform var(--animation-fast) var(--ease-premium);
+
+}
+
+.io-action-card .io-icon-badge-action svg {
+
+    width: 22px;
+    height: 22px;
+
+}
+
+.io-action-text {
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+
+    width: 100%;
+    min-width: 0;
+    padding-right: var(--space-24);
+
+}
+
+.io-action-title {
+
+    font-size: var(--text-md);
+    font-weight: var(--weight-semibold);
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+    color: var(--text);
+
+}
+
+.io-action-subtitle {
+
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+
+    font-size: var(--text-xs);
+    font-weight: var(--weight-medium);
+    line-height: 1.3;
+    color: var(--text-light);
+
+}
+
+.io-action-arrow {
+
+    position: absolute;
+    top: var(--space-24);
+    right: var(--space-24);
+    transform: translateY(-50%);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    color: var(--text-light);
+
+}
+
+.io-action-arrow svg {
+
+    width: 16px;
+    height: 16px;
+    transform: rotate(-90deg);
+
+    transition: transform var(--animation-fast) var(--ease-premium);
+
+}
+
+@media (hover: hover) and (pointer: fine) {
+
+    .io-action-card:hover {
+
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+        border-color: var(--border-dark);
+
+    }
+
+    .io-action-card:hover .io-icon-badge-action {
+
+        transform: scale(1.08);
+
+    }
+
+    .io-action-card:hover .io-action-arrow svg {
+
+        transform: rotate(-90deg) translateX(2px);
+
+    }
+
+}
+
+.io-action-card:active {
+
+    transform: translateY(0) scale(0.98);
+    box-shadow: var(--shadow-sm);
+
+}
+
+.io-action-card:focus-visible {
+
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary) 25%, transparent);
+
+}
+
+.io-action-card::after {
+
+    content: "";
+    position: absolute;
+    inset: 0;
+
+    border-radius: inherit;
+    background: radial-gradient(circle, color-mix(in srgb, var(--primary) 20%, transparent) 0%, transparent 70%);
+
+    opacity: 0;
+    transform: scale(.4);
+    transition: opacity .5s ease, transform .5s ease;
+    pointer-events: none;
+
+}
+
+.io-action-card:active::after {
+
+    opacity: 1;
+    transform: scale(1.4);
+    transition-duration: 0s;
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .io-action-card,
+    .io-action-card .io-icon-badge-action,
+    .io-action-arrow svg,
+    .io-action-card::after {
+
+        transition: none;
+
+    }
+
+    .io-action-card::after {
+
+        transform: none;
+
+    }
+
+    .io-action-card:active::after {
+
+        transform: none;
+
+    }
+
+    .io-action-card:hover,
+    .io-action-card:active {
+
+        transform: none;
+
+    }
+
+    .io-action-card:hover .io-icon-badge-action {
+
+        transform: none;
+
+    }
+
+    .io-action-card:hover .io-action-arrow svg {
+
+        transform: rotate(-90deg);
+
+    }
+
+}
+
+/* ==========================================================
+   Section 3 — Quick Actions Skeleton
+   ----------------------------------------------------------
+   Layout/box-model comes from the real `.io-action-grid` /
+   `.io-action-card` rules above (reused as-is, not duplicated)
+   — same "turn off hover while standing in" treatment as
+   Section 2's `.io-kpi-skeleton`.
+========================================================== */
+
+.io-quick-actions-skeleton .io-action-card {
+
+    pointer-events: none;
+
+}
+
+.io-quick-actions-skeleton .io-action-card:hover {
+
+    transform: none;
+    box-shadow: var(--shadow-md);
+
+}
+
+/* ==========================================================
+   Section 3 — Quick Actions Loading State
+   ----------------------------------------------------------
+   Applied to a single card on click while performQuickAction()
+   is pending (see loadQuickActions()/handleQuickActionClick()
+   in dashboard.page.js). `pointer-events: none` is redundant
+   with the `disabled` attribute for mouse/keyboard but guards
+   against any lingering `:hover` mismatch on disabled buttons
+   across browsers.
+========================================================== */
+
+.io-action-card--loading {
+
+    pointer-events: none;
+    opacity: 0.85;
+
+}
+
+.io-action-card--loading:hover {
+
+    transform: none;
+    box-shadow: var(--shadow-md);
+
+}
+
+.io-action-card--loading .io-action-arrow {
+
+    /* Spinner occupies the same top-right corner while loading. */
+    opacity: 0;
+
+}
+
+/**
+ * Reuses the shared `.btn-spinner` component's ring shape and
+ * its `button-spin` keyframe (shared/components/button/
+ * button.css, globally imported via main.css) rather than
+ * declaring a new spinner primitive — only the color changes,
+ * since `.btn-spinner` assumes a dark/filled button background
+ * and `.io-action-card` is a light surface.
+ */
+.io-action-spinner {
+
+    position: absolute;
+    top: var(--space-24);
+    right: var(--space-24);
+
+    width: 16px;
+    height: 16px;
+
+    border: 2px solid color-mix(in srgb, var(--action-accent, var(--primary)) 25%, transparent);
+    border-top-color: var(--action-accent, var(--primary));
+    border-radius: 50%;
+
+    animation: button-spin .8s linear infinite;
+
+}
+
+@media (max-width: 768px) {
+
+    .io-action-spinner {
+        top: var(--space-20);
+        right: var(--space-20);
+    }
+
+}
+
+@media (max-width: 480px) {
+
+    .io-action-spinner {
+        top: var(--space-16);
+        right: var(--space-16);
+    }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .io-action-spinner {
+        animation-duration: 1.6s;
+    }
+
+}
+
+/* ==========================================================
+   Section 4 — Information Widgets
+========================================================== */
+
+.io-dashboard-grid {
+
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: 1fr;
+    gap: var(--space-20);
+
+}
+
+.io-dashboard-card {
+
+    display: flex;
+    flex-direction: column;
+
+    box-shadow: var(--shadow-md);
+    transition: transform var(--animation-fast) var(--ease-premium), box-shadow var(--animation-fast) var(--ease-premium);
+
+}
+
+@media (hover: hover) and (pointer: fine) {
+
+    .io-dashboard-card:hover {
+
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+
+    }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .io-dashboard-card {
+
+        transition: none;
+
+    }
+
+    .io-dashboard-card:hover {
+
+        transform: none;
+
+    }
+
+}
+
+.io-dashboard-card--info { --widget-accent: var(--info); }
+.io-dashboard-card--warning { --widget-accent: var(--warning); }
+.io-dashboard-card--success { --widget-accent: var(--success); }
+.io-dashboard-card--secondary { --widget-accent: var(--secondary); }
+.io-dashboard-card--default { --widget-accent: var(--primary); }
+.io-dashboard-card--danger { --widget-accent: var(--danger); }
+
+/* ==========================================================
+   Widget Identity Color — Header Icon Badge + Empty-State Icon
+   ----------------------------------------------------------
+   Icon Polish (final pass) — Institution Health, Resource
+   Usage, Security Overview and Subscription Overview each get
+   a FIXED semantic identity color, per the official Semantic
+   Icon System, that never changes with live status. Same
+   specificity as the `--widget-accent` status modifiers above
+   (single class selector) — placed after them in source order
+   so this fixed identity always wins, in both the success card
+   (`io-dashboard-card--{status}`) and the empty-state card
+   (`io-dashboard-card--default`), for both `.io-icon-badge-widget`
+   (header) and `.io-dash-empty-icon` (empty state), since both
+   already read the same `--widget-accent` custom property.
+   Reuses that existing mechanism and existing tokens only — no
+   new CSS property, no new tokens, no hardcoded colors.
+
+     Institution Health   → Success (Green)
+     Resource Usage       → Info (Cyan)
+     Security Overview    → Secondary (Purple)
+     Subscription Overview→ Primary (Blue) — unchanged
+========================================================== */
+
+.io-health-card { --widget-accent: var(--success); }
+.io-resource-card { --widget-accent: var(--info); }
+.io-security-card { --widget-accent: var(--secondary); }
+.io-sub-card { --widget-accent: var(--primary); }
+
+.io-widget-header {
+
+    display: flex;
+    align-items: center;
+    gap: var(--space-12);
+    margin-bottom: var(--space-20);
+
+}
+
+.io-widget-header .io-icon-badge-widget {
+
+    background: color-mix(in srgb, var(--widget-accent, var(--primary)) 14%, var(--surface-secondary));
+    color: var(--widget-accent, var(--primary));
+
+}
+
+.io-widget-header .io-section-title {
+
+    margin: 0;
+    font-size: var(--text-xl);
+
+}
+
+.io-dash-empty {
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-12);
+
+    flex: 1;
+    min-height: 160px;
+    padding: var(--space-16) var(--space-8);
+    text-align: center;
+
+}
+
+.io-dash-empty-icon {
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    width: 56px;
+    height: 56px;
+
+    border-radius: var(--radius-full);
+    background: color-mix(in srgb, var(--widget-accent, var(--primary)) 10%, var(--surface-secondary));
+    color: var(--widget-accent, var(--primary));
+
+}
+
+.io-dash-empty-icon svg {
+
+    width: 24px;
+    height: 24px;
+
+}
+
+.io-dash-empty-title {
+
+    margin: 0;
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+    color: var(--text);
+
+}
+
+.io-dash-empty-description {
+
+    margin: 0;
+    max-width: 220px;
+
+    font-size: var(--text-xs);
+    font-weight: var(--weight-regular);
+    line-height: 1.5;
+    color: var(--text-light);
+
+}
+
+/* Pending Tasks celebration CTAs (Section 9 refinement) — the
+   only widget whose empty state carries actions, so scoped here
+   rather than added to the generic .io-dash-empty rules above. */
+
+.io-tasks-celebrate-actions {
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: var(--space-12);
+
+    margin-top: var(--space-8);
+
+}
+
+.io-tasks-celebrate-actions .btn {
+
+    width: auto;
+    min-width: 160px;
+
+}
+
+/* ==========================================================
+   Responsive
+   ----------------------------------------------------------
+   Same breakpoints as Institution Admin / Super Admin's own
+   dashboards (1200 / 992 / 768 / 480), per the Part 2.1 audit,
+   so all three collapse in lockstep.
+========================================================== */
+
+@media (max-width: 1200px) {
+
+    .io-kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+@media (max-width: 992px) {
+
+    .io-dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+@media (max-width: 768px) {
+
+    .io-kpi-card {
+        min-height: 140px;
+        padding: var(--space-20);
+    }
+
+    .io-kpi-card .io-icon-badge-kpi {
+        width: 42px;
+        height: 42px;
+    }
+
+    .io-kpi-card .io-icon-badge-kpi svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .io-kpi-value {
+        font-size: var(--text-2xl);
+    }
+
+    .io-action-card {
+        min-height: 140px;
+        width: 100%;
+        padding: var(--space-20);
+    }
+
+    .io-action-card .io-icon-badge-action {
+        width: 42px;
+        height: 42px;
+    }
+
+    .io-action-card .io-icon-badge-action svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .io-action-arrow {
+        top: var(--space-20);
+        right: var(--space-20);
+    }
+
+}
+
+@media (max-width: 480px) {
+
+    .io-hero-greeting {
+        font-size: var(--text-xl);
+    }
+
+    .io-kpi-grid {
+        gap: var(--space-12);
+    }
+
+    .io-kpi-card {
+        min-height: 128px;
+        padding: var(--space-16);
+    }
+
+    .io-kpi-card .io-icon-badge-kpi,
+    .io-icon-badge-kpi {
+        width: 36px;
+        height: 36px;
+    }
+
+    .io-kpi-card .io-icon-badge-kpi svg,
+    .io-icon-badge-kpi svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    .io-kpi-value {
+        font-size: var(--text-xl);
+    }
+
+    .io-action-grid {
+        gap: var(--space-12);
+    }
+
+    .io-action-card {
+        min-height: 128px;
+        padding: var(--space-16);
+    }
+
+    .io-action-card .io-icon-badge-action {
+        width: 36px;
+        height: 36px;
+    }
+
+    .io-action-card .io-icon-badge-action svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    .io-action-arrow {
+        top: var(--space-16);
+        right: var(--space-16);
+    }
+
+}
+
+/* ==========================================================
+   Quick Actions — Unavailable State
+   ----------------------------------------------------------
+   Phase 5.7 — Quick Action Dispatch Architecture
+
+   No "Coming Soon" toasts anywhere in this file. An action with
+   no destination module (`moduleId: null` in dashboard.
+   controller.js's QUICK_ACTIONS) renders `disabled` and gets
+   this dimmed treatment plus the shared `.co-badge` tag instead
+   — a graceful disable, not a dead click. Distinct from
+   `.io-action-card--loading` above, which is the opposite case:
+   a *real* module resolving mid-navigation.
+========================================================== */
+
+.io-action-card:disabled,
+.io-action-card--unavailable {
+
+    pointer-events: none;
+    cursor: not-allowed;
+    opacity: 0.85;
+
+}
+
+.io-action-card:disabled:hover,
+.io-action-card--unavailable:hover {
+
+    transform: none;
+    box-shadow: var(--shadow-md);
+
+}
+
+.io-action-text .co-badge {
+
+    margin-top: var(--space-4);
+    align-self: flex-start;
+
+}
+
+/* ==========================================================
+   Recent Activity — Entry List
+   ----------------------------------------------------------
+   Phase 5.7 — Section 4: Recent Activity
+
+   Only renders once getRecentActivity() (dashboard.controller.js)
+   returns real entries — until then the "Recent Activity" widget
+   keeps showing the existing `.io-dash-empty` state untouched, so
+   nothing here changes today's output.
+========================================================== */
+
+.io-activity-list {
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+
+}
+
+.io-activity-entry {
+
+    display: flex;
+    align-items: center;
+    gap: var(--space-12);
+
+}
+
+.io-icon-badge-activity {
+
+    width: 36px;
+    height: 36px;
+
+}
+
+.io-icon-badge-activity svg {
+
+    width: 18px;
+    height: 18px;
+
+}
+
+.io-activity-entry--primary .io-icon-badge-activity { background: color-mix(in srgb, var(--primary) 14%, var(--surface-secondary)); color: var(--primary); }
+.io-activity-entry--secondary .io-icon-badge-activity { background: color-mix(in srgb, var(--secondary) 14%, var(--surface-secondary)); color: var(--secondary); }
+.io-activity-entry--info .io-icon-badge-activity { background: color-mix(in srgb, var(--info) 14%, var(--surface-secondary)); color: var(--info); }
+.io-activity-entry--success .io-icon-badge-activity { background: color-mix(in srgb, var(--success) 14%, var(--surface-secondary)); color: var(--success); }
+.io-activity-entry--warning .io-icon-badge-activity { background: color-mix(in srgb, var(--warning) 14%, var(--surface-secondary)); color: var(--warning); }
+.io-activity-entry--default .io-icon-badge-activity { background: color-mix(in srgb, var(--primary) 14%, var(--surface-secondary)); color: var(--primary); }
+.io-activity-entry--danger .io-icon-badge-activity { background: color-mix(in srgb, var(--danger) 14%, var(--surface-secondary)); color: var(--danger); }
+
+.io-activity-entry-body {
+
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    min-width: 0;
+    flex: 1;
+
+}
+
+.io-activity-entry-title {
+
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+    color: var(--text);
+
+}
+
+.io-activity-entry-desc {
+
+    font-size: var(--text-xs);
+    font-weight: var(--weight-regular);
+    color: var(--text-light);
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+}
+
+.io-activity-entry-time {
+
+    flex-shrink: 0;
+
+    font-size: var(--text-xs);
+    font-weight: var(--weight-medium);
+    color: var(--text-light);
+
+}
+
+/* ==========================================================
+   Section 5 — Institution Health
+   ----------------------------------------------------------
+   Phase 5 / Section 5 — Institution Health (V1.0)
+
+   Same composition discipline as every section above: the card
+   itself is `.co-card` (background/border/radius-lg/shadow-sm
+   from shared/styles/components.css, not redeclared here), the
+   header reuses `.io-widget-header` / `.io-icon-badge-widget` /
+   `.io-section-title` from Section 4 verbatim, and the Empty
+   state reuses `.io-dash-empty` verbatim too — nothing in this
+   block duplicates a rule that already exists above. Only what's
+   genuinely new to this widget (score ring, status-band accent,
+   indicator rows, progress bar) gets new classes here.
+========================================================== */
+
+.io-health-card {
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-24);
+
+    padding: var(--space-24);
+
+}
+
+.io-health-card--excellent { --health-accent: var(--success); }
+.io-health-card--good { --health-accent: var(--primary); }
+.io-health-card--attention { --health-accent: var(--warning); }
+.io-health-card--critical { --health-accent: var(--danger); }
+
+.io-health-top {
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-12);
+    flex-wrap: wrap;
+
+}
+
+.io-health-top .io-icon-badge-widget {
+
+    background: color-mix(in srgb, var(--health-accent, var(--primary)) 14%, var(--surface-secondary));
+    color: var(--health-accent, var(--primary));
+
+}
+
+.io-health-top .io-section-title {
+
+    margin: 0;
+    font-size: var(--text-xl);
+
+}
+
+/* ----------------------------------------------------------
+   Score Row
+   ----------------------------------------------------------
+   The ring is a conic-gradient built from the same
+   `--health-score` custom property the inline style sets
+   (0-100, written by dashboard.page.js from the controller's
+   computed score — never a literal percentage in this file).
+---------------------------------------------------------- */
+
+.io-health-score-row {
+
+    display: flex;
+    align-items: center;
+    gap: var(--space-20);
+
+}
+
+.io-health-score-ring {
+
+    --health-score: 0;
+
+    position: relative;
+    flex-shrink: 0;
+
+    width: 96px;
+    height: 96px;
+    border-radius: var(--radius-full);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background:
+        radial-gradient(circle at center, var(--surface) 62%, transparent 63%),
+        conic-gradient(
+            var(--health-accent, var(--primary)) calc(var(--health-score) * 1%),
+            color-mix(in srgb, var(--health-accent, var(--primary)) 16%, var(--surface-secondary)) 0
+        );
+
+}
+
+.io-health-score-value {
+
+    font-size: var(--text-xl);
+    font-weight: var(--weight-bold);
+    color: var(--text);
+
+}
+
+.io-health-score-caption {
+
+    margin: 0;
+
+    font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
+    color: var(--text-secondary);
+
+}
+
+/* ----------------------------------------------------------
+   Indicators
+---------------------------------------------------------- */
+
+.io-health-indicators {
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-16);
+
+}
+
+.io-health-indicator {
+
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-12);
+
+    padding-top: var(--space-16);
+    border-top: 1px solid var(--border, var(--surface-secondary));
+
+}
+
+.io-health-indicators .io-health-indicator:first-child {
+
+    padding-top: 0;
+    border-top: none;
+
+}
+
+.io-health-indicator-icon {
+
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+
+}
+
+.io-health-indicator-icon svg {
+
+    width: 18px;
+    height: 18px;
+
+}
+
+/* Icon Consistency Audit — same one-tint-per-category pattern as
+   .io-task-icon / .io-kpi-card .io-icon-badge-kpi above, applied
+   here via INDICATOR_ACCENTS (dashboard.page.js) so Institution
+   Health / Security Overview / Resource Usage / Subscription
+   Usage rows no longer render every icon in the same flat
+   untinted default. Reuses the six existing semantic tokens only. */
+
+.io-health-indicator-icon--primary { background: color-mix(in srgb, var(--primary) 14%, var(--surface-secondary)); color: var(--primary); }
+.io-health-indicator-icon--secondary { background: color-mix(in srgb, var(--secondary) 14%, var(--surface-secondary)); color: var(--secondary); }
+.io-health-indicator-icon--success { background: color-mix(in srgb, var(--success) 14%, var(--surface-secondary)); color: var(--success); }
+.io-health-indicator-icon--warning { background: color-mix(in srgb, var(--warning) 14%, var(--surface-secondary)); color: var(--warning); }
+.io-health-indicator-icon--danger { background: color-mix(in srgb, var(--danger) 14%, var(--surface-secondary)); color: var(--danger); }
+.io-health-indicator-icon--info { background: color-mix(in srgb, var(--info) 14%, var(--surface-secondary)); color: var(--info); }
+.io-health-indicator-icon--default { background: color-mix(in srgb, var(--primary) 14%, var(--surface-secondary)); color: var(--primary); }
+
+.io-health-indicator-body {
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+
+    flex: 1;
+    min-width: 0;
+
+}
+
+.io-health-indicator-top {
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-8);
+
+}
+
+.io-health-indicator-label {
+
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+    color: var(--text);
+
+}
+
+.io-health-indicator-percent {
+
+    flex-shrink: 0;
+
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+    color: var(--health-accent, var(--primary));
+
+}
+
+.io-health-progress {
+
+    width: 100%;
+    height: 10px;
+    border-radius: var(--radius-full);
+
+    background: color-mix(in srgb, var(--health-accent, var(--primary)) 22%, var(--surface-secondary));
+    overflow: hidden;
+
+}
+
+.io-health-progress-fill {
+
+    height: 100%;
+    border-radius: var(--radius-full);
+    background: var(--health-accent, var(--primary));
+
+    transition: width var(--animation-fast) var(--ease-premium);
+
+}
+
+.io-health-indicator-detail {
+
+    font-size: var(--text-xs);
+    font-weight: var(--weight-regular);
+    color: var(--text-light);
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .io-health-progress-fill {
+
+        transition: none;
+
+    }
+
+}
+
+/* ----------------------------------------------------------
+   Skeleton
+   ----------------------------------------------------------
+   Box model comes from the real `.io-health-card` rules above —
+   only spacing for the placeholder rows is added here.
+---------------------------------------------------------- */
+
+.io-health-skeleton .io-health-top,
+.io-health-skeleton .io-health-score-row {
+
+    align-items: center;
+
+}
+
+.io-health-skeleton .io-health-indicators {
+
+    gap: var(--space-16);
+
+}
+
+.io-health-skeleton .io-health-indicator {
+
+    display: flex;
+    align-items: center;
+    gap: var(--space-12);
+
+    padding-top: var(--space-16);
+    border-top: 1px solid var(--border, var(--surface-secondary));
+
+}
+
+.io-health-skeleton .io-health-indicators .io-health-indicator:first-child {
+
+    padding-top: 0;
+    border-top: none;
+
+}
+
+.io-health-skeleton .io-health-indicator-body {
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+    flex: 1;
+
+}
+
+/* ----------------------------------------------------------
+   Responsive
+   ----------------------------------------------------------
+   Same 992/640 breakpoints Section 1's hero card already uses
+   above — kept in lockstep rather than introducing new ones.
+---------------------------------------------------------- */
+
+@media (max-width: 640px) {
+
+    .io-health-score-row {
+
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-12);
+
+    }
+
+}
+
+/* ==========================================================
+   Section 6 — Pending Tasks
+   ----------------------------------------------------------
+   Phase 5 / Section 6 — Pending Tasks (V1.0)
+
+   The card itself reuses `.co-card` + `.io-dashboard-card`
+   (Section 4, including its `--default`/`--success` accent
+   modifiers) verbatim — no new card shell declared here. Header
+   reuses `.io-widget-header` / `.io-icon-badge-widget` /
+   `.io-section-title`, and the Empty ("all caught up") state
+   reuses `.io-dash-empty` verbatim too. Only the task row layout
+   itself — genuinely new to this widget — gets new classes.
+========================================================== */
+
+.io-tasks-progress {
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+
+    margin-bottom: var(--space-20);
+    padding-bottom: var(--space-20);
+
+    border-bottom: 1px solid var(--border, var(--surface-secondary));
+
+}
+
+.io-tasks-progress-top {
+
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-12);
+
+}
+
+.io-tasks-progress-label {
+
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+    color: var(--text);
+
+}
+
+.io-tasks-progress-count {
+
+    flex-shrink: 0;
+
+    font-size: var(--text-xs);
+    font-weight: var(--weight-semibold);
+    color: var(--text-secondary);
+
+}
+
+.io-task-list {
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+
+}
+
+.io-task-row {
+
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-16);
+
+    padding: var(--space-20) var(--space-16);
+    margin: 0;
+
+    background: var(--surface);
+    border: 1px solid var(--border, var(--surface-secondary));
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+
+    transition:
+        background-color var(--duration-card-hover) var(--ease-standard),
+        border-color var(--duration-card-hover) var(--ease-standard),
+        box-shadow var(--duration-card-hover) var(--ease-standard);
+
+}
+
+@media (hover: hover) and (pointer: fine) {
+
+    .io-task-row:hover {
+
+        background: var(--surface-secondary);
+        border-color: color-mix(in srgb, var(--primary) 20%, var(--border));
+        box-shadow: var(--shadow-md);
+
+    }
+
+    .io-task-row:hover .io-task-icon {
+
+        transform: scale(1.05);
+
+    }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .io-task-row,
+    .io-task-icon {
+
+        transition: none;
+
+    }
+
+    .io-task-row:hover .io-task-icon {
+
+        transform: none;
+
+    }
+
+}
+
+.io-task-row--completed {
+
+    opacity: 0.6;
+    box-shadow: none;
+
+}
+
+/* Priority hierarchy (Section 3 refinement) — High stands out,
+   Low recedes, reusing the same badge colors already assigned in
+   TASK_PRIORITY_BADGE_VARIANTS rather than inventing new ones. The
+   coloured task icon already communicates category/urgency, so the
+   old left accent bar was redundant visual weight — hierarchy now
+   reads through typography only. */
+
+.io-task-row--high .io-task-title {
+
+    font-weight: var(--weight-bold);
+
+}
+
+.io-task-row--low .io-task-title {
+
+    color: var(--text-secondary);
+
+}
+
+.io-task-icon {
+
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+
+    transition: transform var(--duration-card-hover) var(--ease-standard);
+
+}
+
+/* Per-task accent (Section 2 refinement) — same color-mix tint
+   pattern as .io-kpi-card .io-icon-badge-kpi, keyed by the
+   TASK_ACCENTS registry in dashboard.page.js. Icon container
+   itself (size/shape) is untouched — only the tint changes. */
+
+.io-task-icon--primary { --task-accent: var(--primary); }
+.io-task-icon--secondary { --task-accent: var(--secondary); }
+.io-task-icon--success { --task-accent: var(--success); }
+.io-task-icon--warning { --task-accent: var(--warning); }
+.io-task-icon--danger { --task-accent: var(--danger); }
+.io-task-icon--info { --task-accent: var(--info); }
+
+.io-task-icon {
+
+    background: color-mix(in srgb, var(--task-accent, var(--primary)) 14%, var(--surface-secondary));
+    color: var(--task-accent, var(--primary));
+
+}
+
+.io-task-body {
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+
+    flex: 1;
+    min-width: 0;
+
+}
+
+.io-task-top {
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-12);
+    flex-wrap: wrap;
+
+}
+
+.io-task-title {
+
+    font-size: var(--text-md);
+    font-weight: var(--weight-semibold);
+    line-height: 1.3;
+    color: var(--text);
+
+}
+
+.io-task-badges {
+
+    display: flex;
+    align-items: center;
+    gap: var(--space-12);
+    flex-shrink: 0;
+
+}
+
+.io-task-description {
+
+    margin: 0;
+
+    font-size: var(--text-xs);
+    font-weight: var(--weight-regular);
+    line-height: 1.6;
+    color: var(--text-light);
+
+}
+
+.io-task-cta {
+
+    width: 150px;
+    max-width: 100%;
+    flex-shrink: 0;
+    margin-top: var(--space-4);
+
+}
+
+.io-task-cta .btn {
+
+    height: 40px;
+    font-size: var(--text-xs);
+
+}
+
+/* Premium Disabled CTA Audit (v2 — aligned to the Official Primary
+   Button spec) — every disabled/"Coming Soon" button in this
+   dashboard (Pending Tasks row CTA, the celebration state's Open
+   Dashboard/Explore buttons, Subscription's Upgrade/Manage buttons)
+   now matches the Primary Button system exactly: blue fill, white
+   text, blue glow — the same button, just quieter, never a separate
+   dark/outlined treatment. Reads as "premium feature, not available
+   yet", never as broken/inactive. Only this module's CSS, only the
+   :disabled state, only these three scopes. Opacity stays at 1 (the
+   shared .btn:disabled 55% fade would wash the blue out) and no new
+   tokens are introduced — everything below is var(--primary)/
+   var(--text-white) via color-mix, matching shell.css's `.io-shell
+   .btn-primary:disabled` rule. */
+
+.io-task-cta .btn-primary:disabled,
+.io-tasks-celebrate-actions .btn-primary:disabled,
+.io-sub-cta .btn-primary:disabled,
+.io-task-cta .btn-secondary:disabled,
+.io-tasks-celebrate-actions .btn-secondary:disabled,
+.io-sub-cta .btn-secondary:disabled {
+
+    opacity: 1;
+    filter: none;
+    cursor: not-allowed;
+
+    background: var(--primary);
+    color: var(--text-white);
+    border: none;
+
+    box-shadow: 0 8px 24px color-mix(in srgb, var(--primary) 18%, transparent);
+
+}
+
+/* ----------------------------------------------------------
+   Skeleton
+   ----------------------------------------------------------
+   Box model comes from the real `.io-task-row` rules above —
+   only placeholder alignment/spacing is added here.
+---------------------------------------------------------- */
+
+.io-tasks-skeleton .io-task-row {
+
+    align-items: center;
+
+}
+
+/* ----------------------------------------------------------
+   Responsive
+   ----------------------------------------------------------
+   Same 640px breakpoint Section 5's score row already uses
+   above — kept in lockstep rather than introducing a new one.
+---------------------------------------------------------- */
+
+@media (max-width: 640px) {
+
+    .io-task-row {
+
+        flex-wrap: wrap;
+
+    }
+
+    .io-task-cta {
+
+        width: calc(100% - (40px + var(--space-16)));
+        margin-left: calc(40px + var(--space-16));
+
+    }
+
+}
+
+/* ==========================================================
+   Section 7 — Subscription Overview
+   ----------------------------------------------------------
+   Phase 5 / Section 7 — Subscription Overview (V1.0)
+
+   Same reuse-first discipline as Section 6: the card shell is
+   `.co-card .io-dashboard-card .io-dashboard-card--{accent}`
+   (Section 4/6's own base, hover-lift and `--widget-accent`
+   included, nothing redeclared), the header is `.io-widget-header`
+   + `.io-icon-badge-widget`, the Empty state reuses `.io-dash-empty`
+   verbatim, the plan/status/billing badge row reuses `.io-task-badges`
+   (a plain flex/gap row, already generic), the usage rows reuse
+   `.io-health-indicator*` wholesale (icon + label + value + detail
+   is the exact same shape Section 5 already built, just without
+   the progress bar), and each usage value reuses
+   `.io-health-indicator-percent`'s accent-tinted number styling.
+   Only what's genuinely new to this widget — the renewal/days-
+   remaining meta pills (a *light-card* pill; `.io-hero-pill` is
+   hero-gradient-specific — white text/blur — and unreadable on a
+   plain `.co-card` surface, so it isn't reusable here) and the
+   CTA footer row — gets new classes below.
+========================================================== */
+
+.io-sub-meta {
+
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-8);
+    margin-bottom: var(--space-20);
+
+}
+
+.io-sub-pill {
+
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-4);
+
+    padding: var(--space-8) var(--space-16);
+    border-radius: var(--radius-full);
+
+    background: var(--surface-secondary);
+    color: var(--text-light);
+
+    font-size: var(--text-xs);
+    font-weight: var(--weight-medium);
+
+}
+
+.io-sub-pill svg {
+
+    width: 13px;
+    height: 13px;
+    flex-shrink: 0;
+
+}
+
+.io-sub-usage-heading {
+
+    margin: 0 0 var(--space-12);
+
+    font-size: var(--text-xs);
+    font-weight: var(--weight-semibold);
+    color: var(--text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+
+}
+
+.io-sub-cta {
+
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-12);
+
+    margin-top: var(--space-20);
+    padding-top: var(--space-20);
+    border-top: 1px solid var(--border, var(--surface-secondary));
+
+}
+
+.io-sub-cta .btn {
+
+    width: auto;
+
+}
+
+@media (max-width: 480px) {
+
+    .io-sub-cta {
+
+        flex-direction: column;
+        align-items: stretch;
+
+    }
+
+    .io-sub-cta .btn {
+
+        width: 100%;
+
+    }
+
+}

@@ -1,0 +1,53 @@
+/* ==========================================================
+   CampusOne Institution Admin Status Bar
+   ----------------------------------------------------------
+   Part 4.3 — mirrors modules/super-admin/status-bar/
+   status-bar.css 1:1 — same height, spacing, typography, and
+   the same max-width:768px hide. Only the class namespace
+   (ia- instead of sa-) differs.
+========================================================== */
+
+.ia-statusbar-layout{
+
+    height:48px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    padding:0 24px;
+
+    background:var(--surface);
+
+    border-top:1px solid var(--border);
+
+    color:var(--text-secondary);
+
+    font-size:13px;
+
+}
+
+.ia-status-left,
+.ia-status-center,
+.ia-status-right{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+}
+
+/* --bp-tablet (768px) */
+@media (max-width:768px){
+
+    .ia-statusbar-layout{
+
+        display:none;
+
+    }
+
+}

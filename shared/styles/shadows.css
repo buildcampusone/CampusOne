@@ -1,0 +1,41 @@
+/*=========================================
+=         CAMPUSONE SHADOWS               =
+=========================================*/
+
+/* Small */
+
+.co-shadow-sm{
+
+    box-shadow:var(--shadow-sm);
+
+}
+
+/* Medium */
+
+.co-shadow-md{
+
+    box-shadow:var(--shadow-md);
+
+}
+
+/* Large */
+
+.co-shadow-lg{
+
+    box-shadow:var(--shadow-lg);
+
+}
+
+/* Hover */
+
+.co-hover-shadow{
+
+    transition:box-shadow var(--transition-normal);
+
+}
+
+.co-hover-shadow:hover{
+
+    box-shadow:var(--shadow-lg);
+
+}

@@ -1,0 +1,227 @@
+/* ==========================================================
+   CampusOne
+   Super Admin Dashboard
+========================================================== */
+
+.sa-dashboard{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:28px;
+
+    padding:28px;
+
+}
+
+/* ==========================================================
+   Welcome Banner
+========================================================== */
+
+.sa-dashboard-banner{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:28px;
+
+    border-radius:22px;
+
+    background:var(--surface);
+
+    border:1px solid var(--border);
+
+}
+
+.sa-dashboard-banner h2{
+
+    margin:0;
+
+    font-size:30px;
+
+    font-weight:700;
+
+    color:var(--text);
+
+}
+
+.sa-dashboard-banner p{
+
+    margin-top:10px;
+
+    color:var(--text-secondary);
+
+    font-size:15px;
+
+}
+
+/* ==========================================================
+   KPI Grid
+========================================================== */
+
+.sa-kpi-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(4,1fr);
+
+    gap:20px;
+
+}
+
+/* ==========================================================
+   Dashboard Grid
+========================================================== */
+
+.sa-dashboard-grid{
+
+    display:grid;
+
+    grid-template-columns:2fr 1fr;
+
+    gap:20px;
+
+}
+
+/* ==========================================================
+   Shared Cards
+========================================================== */
+
+.sa-dashboard-card{
+
+    background:var(--surface);
+
+    border:1px solid var(--border);
+
+    border-radius:20px;
+
+    padding:24px;
+
+    min-height:220px;
+
+}
+
+/* ==========================================================
+   KPI Card — Label / Animated Value
+   ----------------------------------------------------------
+   font-variant-numeric:tabular-nums makes every digit the same
+   width, so the Counter engine's rAF-driven count-up doesn't
+   jitter the string's rendered width frame-to-frame. The engine
+   also sets an explicit min-width (in ch, based on the final
+   value) inline — tabular-nums keeps that reservation accurate
+   digit-for-digit instead of just "close enough".
+========================================================== */
+
+.sa-card-label{
+
+    display:block;
+
+    color:var(--text-secondary);
+
+    font-size:14px;
+
+    font-weight:500;
+
+}
+
+.sa-card-value{
+
+    display:inline-block;
+
+    margin-top:10px;
+
+    font-size:34px;
+
+    font-weight:700;
+
+    color:var(--text);
+
+    font-variant-numeric:tabular-nums;
+
+    white-space:nowrap;
+
+}
+
+/* ==========================================================
+   Quick Actions
+========================================================== */
+
+#quickActions{
+
+    display:grid;
+
+    grid-template-columns:repeat(4,1fr);
+
+    gap:20px;
+
+}
+
+/* ==========================================================
+   Responsive
+========================================================== */
+
+@media (max-width:1200px){
+
+    .sa-kpi-grid{
+
+        grid-template-columns:repeat(2,1fr);
+
+    }
+
+}
+
+@media (max-width:992px){
+
+    .sa-dashboard-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+}
+
+@media (max-width:768px){
+
+    .sa-dashboard{
+
+        padding:18px;
+
+    }
+
+    .sa-dashboard-banner{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+        gap:14px;
+
+    }
+
+    .sa-kpi-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+    #quickActions{
+
+        grid-template-columns:1fr;
+
+    }
+
+}
+
+@media (max-width:480px){
+
+    .sa-dashboard-banner h2{
+
+        font-size:24px;
+
+    }
+
+}

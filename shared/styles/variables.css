@@ -1,0 +1,259 @@
+:root{
+
+/*=========================================
+=            BRAND COLORS                 =
+=========================================*/
+
+--primary:#2563EB;
+--primary-light:#4F7EFF;
+--primary-dark:#1D4ED8;
+
+--primary-gradient:linear-gradient(135deg,#1D4ED8,#2563EB,#4F7EFF);
+
+--secondary:#7C3AED;
+--secondary-light:#9D6BFF;
+--secondary-dark:#6D28D9;
+
+/*=========================================
+=            STATUS COLORS                =
+=========================================*/
+
+--success:#10B981;
+--warning:#F59E0B;
+--danger:#EF4444;
+--info:#0EA5E9;
+
+/*=========================================
+=            BACKGROUND                   =
+=========================================*/
+
+--background:#F8FAFC;
+--surface:#FFFFFF;
+--surface-secondary:#F1F5F9;
+
+/*=========================================
+=            TEXT                         =
+=========================================*/
+
+--text:#0F172A;
+--text-secondary:#475569;
+--text-light:#94A3B8;
+--text-white:#FFFFFF;
+
+/*=========================================
+=            BORDER                       =
+=========================================*/
+
+--border:#E2E8F0;
+--border-dark:#CBD5E1;
+
+/*=========================================
+=            RADIUS                       =
+=========================================*/
+
+--radius-xs:6px;
+--radius-sm:10px;
+--radius-md:14px;
+--radius-lg:20px;
+--radius-xl:28px;
+--radius-full:999px;
+
+/*=========================================
+=            SPACING                      =
+=========================================*/
+
+--space-4:4px;
+--space-8:8px;
+--space-12:12px;
+--space-16:16px;
+--space-20:20px;
+--space-24:24px;
+--space-32:32px;
+--space-40:40px;
+--space-48:48px;
+--space-64:64px;
+
+/*=========================================
+=            FONT SIZE                    =
+=========================================*/
+
+--text-xs:12px;
+--text-sm:14px;
+--text-md:16px;
+--text-lg:18px;
+--text-xl:22px;
+--text-2xl:28px;
+--text-3xl:36px;
+--text-4xl:44px;
+
+/*=========================================
+=            FONT WEIGHT                  =
+=========================================*/
+
+--weight-regular:400;
+--weight-medium:500;
+--weight-semibold:600;
+--weight-bold:700;
+
+/*=========================================
+=            SHADOW                       =
+=========================================*/
+
+--shadow-sm:0 4px 12px rgba(15,23,42,.08);
+
+--shadow-md:0 10px 30px rgba(15,23,42,.10);
+
+--shadow-lg:0 20px 50px rgba(15,23,42,.15);
+
+/*=========================================
+=            TRANSITION                   =
+=========================================*/
+
+--transition-fast:.2s ease;
+
+--transition-normal:.3s ease;
+
+--transition-slow:.5s ease;
+
+/*=========================================
+=         SKELETON TOKENS                 =
+=========================================*/
+
+--skeleton-bg:#E5E7EB;
+--skeleton-highlight:#F3F4F6;
+
+--skeleton-radius:12px;
+
+--skeleton-speed:1.4s;
+
+--skeleton-opacity:.85;
+
+/*=========================================
+=         Z-INDEX                         =
+=========================================*/
+
+--z-loading:9999;
+--z-modal:9500;
+--z-toast:9000;
+--z-dropdown:8000;
+--z-header:7000;
+
+/*=========================================
+=         ANIMATION                       =
+=========================================*/
+
+--animation-fast:150ms;
+--animation-normal:300ms;
+--animation-slow:500ms;
+
+/* Expo-out — the "settles in gently, never overshoots" curve
+   behind most premium feed/skeleton transitions (Instagram,
+   LinkedIn). Used by the Animation Engine for fade/cross-fade;
+   linear stays on the shimmer sweep itself so its speed never
+   visibly steps. */
+--ease-premium:cubic-bezier(.22,1,.36,1);
+
+/*=========================================
+=   MOTION SYSTEM v1.0 — DURATIONS        =
+=   Apple x Linear x Stripe x Vercel.      =
+=   Named per-interaction so every module  =
+=   (Login, Dashboard, Attendance, Notices,=
+=   Super Admin, Faculty, Student) reaches =
+=   for the same token instead of picking  =
+=   its own ms value. See shared/styles/   =
+=   motion.css for the utility classes     =
+=   built on top of these.                 =
+=========================================*/
+
+--duration-button-press:80ms;
+--duration-hover:150ms;
+--duration-card-hover:180ms;
+--duration-ripple:220ms;
+--duration-modal:260ms;
+--duration-drawer:300ms;
+--duration-bottom-sheet:320ms;
+--duration-page:350ms;
+--duration-toast:250ms;
+--duration-skeleton-fade:500ms;
+
+/*=========================================
+=   MOTION SYSTEM v1.0 — EASING           =
+=========================================*/
+
+--ease-standard:cubic-bezier(.2,.8,.2,1);
+--ease-out:cubic-bezier(.16,1,.3,1);
+--ease-in:cubic-bezier(.7,0,.84,0);
+--ease-spring:cubic-bezier(.34,1.56,.64,1);
+
+/*=========================================
+=            LOGO                         =
+=========================================*/
+
+--logo-size:120px;
+
+/*=========================================
+=            BREAKPOINTS                  =
+=   Reference scale only. Native CSS       =
+=   custom properties cannot be evaluated  =
+=   inside @media conditions, so every     =
+=   @media rule keeps its literal px value =
+=   and cites its token name in an inline  =
+=   comment instead. This block is the     =
+=   single source of truth every           =
+=   stylesheet's breakpoints must match —  =
+=   do not introduce a new raw px value    =
+=   without adding/reusing a token here    =
+=   first. Values below are the exact set  =
+=   already in use across the Institution  =
+=   Admin shell (Part 1.1 audit) plus two  =
+=   new ultra-wide tiers.                  =
+=========================================*/
+
+--bp-phone-xs:340px;
+--bp-phone-sm:360px;
+--bp-phone:420px;
+--bp-phone-lg:480px;
+--bp-tablet:768px;
+--bp-tablet-lg:900px;
+--bp-laptop-sm:992px;
+--bp-laptop:1024px;
+--bp-desktop:1200px;
+--bp-desktop-lg:1440px;
+--bp-desktop-xl:1600px;
+
+--content-max-width:1600px;
+
+}
+
+/*=========================================
+=   DARK MODE TOKENS (Super Admin App)    =
+=   Activated via [data-theme="dark"] on  =
+=   <body>. Overrides the same variable   =
+=   names above so every component keeps  =
+=   working without any code changes.     =
+=========================================*/
+
+[data-theme="dark"]{
+
+--background:#030712;
+--surface:#111827;
+--surface-secondary:#1F2937;
+
+--text:#F8FAFC;
+--text-secondary:#94A3B8;
+--text-light:#64748B;
+--text-white:#FFFFFF;
+
+--skeleton-bg:#1F2937;
+--skeleton-highlight:#374151;
+
+--border:rgba(255,255,255,.08);
+--border-dark:rgba(255,255,255,.14);
+
+--shadow-sm:0 4px 12px rgba(0,0,0,.35);
+--shadow-md:0 10px 30px rgba(0,0,0,.45);
+--shadow-lg:0 20px 50px rgba(0,0,0,.55);
+
+--primary-gradient:linear-gradient(135deg,#2563EB,#3B82F6,#60A5FA);
+
+}

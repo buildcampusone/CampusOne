@@ -1,0 +1,33 @@
+/*=========================================
+=         CAMPUSONE ELEVATION             =
+=========================================*/
+
+/* Z-Index scale — reads the --z-* tokens already in
+   variables.css. These had no utility classes anywhere in the
+   codebase before this file; every dropdown/modal/toast/header
+   was setting z-index by hand at the point of use. */
+
+.co-z-loading{z-index:var(--z-loading);}
+.co-z-modal{z-index:var(--z-modal);}
+.co-z-toast{z-index:var(--z-toast);}
+.co-z-dropdown{z-index:var(--z-dropdown);}
+.co-z-header{z-index:var(--z-header);}
+
+/* Elevated Surface — for a panel that floats ABOVE the page
+   (dropdown menu, popover, command palette) rather than a
+   card that sits IN the page flow (that's .co-card, in
+   components.css). Distinct from .co-shadow-lg (shadows.css)
+   because a floating surface also needs its own stacking
+   context and a slightly stronger border treatment to read as
+   "above everything else," not just "has a shadow." */
+
+.co-elevated-surface{
+
+    position:relative;
+    z-index:var(--z-dropdown);
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius-md);
+    box-shadow:var(--shadow-lg);
+
+}
